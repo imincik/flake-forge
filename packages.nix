@@ -10,7 +10,7 @@
     }:
 
     {
-      flake-packages.packages = [
+      repo.packages = [
         pkgs.hello
         pkgs.cowsay
       ];
