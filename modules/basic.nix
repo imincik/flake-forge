@@ -33,6 +33,10 @@
                       };
                     };
                     requirements = {
+                      host = lib.mkOption {
+                        type = lib.types.listOf lib.types.package;
+                        default = [ ];
+                      };
                       build = lib.mkOption {
                         type = lib.types.listOf lib.types.package;
                         default = [ ];
@@ -67,6 +71,7 @@
                     url = pkg.source.url;
                     hash = pkg.source.hash;
                   };
+                  nativeBuildInputs = pkg.requirements.host;
                   buildInputs = pkg.requirements.build;
                 }
                 # Derivation end
