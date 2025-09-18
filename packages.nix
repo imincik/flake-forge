@@ -12,10 +12,23 @@
     {
       repo = {
         enable = true;
-        packages = [
-          pkgs.hello
-          pkgs.cowsay
-        ];
+
+        packages = {
+          builders = {
+            default = {
+              name = "hello";
+              source = {
+                url = "mirror://gnu/hello/hello-2.12.1.tar.gz";
+                hash = "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=";
+              };
+            };
+          };
+
+          nixpkgs = [
+            pkgs.cowsay
+            pkgs.jq
+          ];
+        };
       };
     };
 }
