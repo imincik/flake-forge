@@ -22,7 +22,9 @@
               hash = "sha256-8pPYzMa5j2F9uI+Fk+rjf35LMtSaYVssulztEse+va4=";
             };
             requirements = {
-              host = [ pkgs.cmake ];
+              host = [
+                pkgs.cmake
+              ];
               build = [
                 pkgs.proj
               ];
