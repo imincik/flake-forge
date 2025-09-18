@@ -9,8 +9,6 @@
     in
     {
       options.repo = {
-        enable = lib.mkEnableOption "enable repo";
-
         packages = {
           builders = {
             default = lib.mkOption {
@@ -82,8 +80,6 @@
               value = pkg;
             }) cfg.packages.nixpkgs
           );
-        in
-
-        lib.mkIf cfg.enable (packagesNixpkgs // builderDefault);
+        in (packagesNixpkgs // builderDefault);
     };
 }

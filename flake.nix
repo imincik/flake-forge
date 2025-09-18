@@ -27,7 +27,7 @@
 
       imports = [
         (inputs.import-tree ./modules)
-        ./packages.nix
+        (inputs.import-tree ./packages)
       ];
 
       _module.args.rootPath = ./.;
