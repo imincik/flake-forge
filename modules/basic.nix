@@ -18,13 +18,15 @@
         };
       };
 
-      config.packages = lib.mkIf cfg.enable (lib.listToAttrs (
-        map (pkg: {
-          name = pkg.pname + "-custom";
-          value = pkg.overrideAttrs (prev: {
-            pname = prev.pname + "-custom";
-          });
-        }) cfg.packages
-      ));
+      config.packages = lib.mkIf cfg.enable (
+        lib.listToAttrs (
+          map (pkg: {
+            name = pkg.pname + "-custom";
+            value = pkg.overrideAttrs (prev: {
+              pname = prev.pname + "-custom";
+            });
+          }) cfg.packages
+        )
+      );
     };
 }
