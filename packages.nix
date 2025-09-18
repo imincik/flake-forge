@@ -10,9 +10,12 @@
     }:
 
     {
-      repo.packages = [
-        pkgs.hello
-        pkgs.cowsay
-      ];
+      repo = {
+        enable = true;
+        packages = [
+          pkgs.hello
+          pkgs.cowsay
+        ];
+      };
     };
 }

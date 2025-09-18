@@ -9,6 +9,8 @@
     in
     {
       options.repo = {
+        enable = lib.mkEnableOption "enable repo";
+
         packages = lib.mkOption {
           type = lib.types.listOf lib.types.package;
           default = [ ];
@@ -16,13 +18,13 @@
         };
       };
 
-      config.packages = lib.listToAttrs (
+      config.packages = lib.mkIf cfg.enable (lib.listToAttrs (
         map (pkg: {
           name = pkg.pname + "-custom";
           value = pkg.overrideAttrs (prev: {
             pname = prev.pname + "-custom";
           });
         }) cfg.packages
-      );
+      ));
     };
 }
