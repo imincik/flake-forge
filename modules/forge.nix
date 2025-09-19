@@ -19,6 +19,10 @@
                       type = lib.types.str;
                       default = "my-package";
                     };
+                    description = lib.mkOption {
+                      type = lib.types.str;
+                      default = "";
+                    };
                     version = lib.mkOption {
                       type = lib.types.str;
                       default = "1.0.0";
@@ -85,6 +89,16 @@
               value = pkg;
             }) cfg.packages.nixpkgs
           );
-        in (packagesNixpkgs // builderDefault);
+
+        in
+        (packagesNixpkgs // builderDefault)
+        //
+          # forge-config package
+          {
+            forge-config = pkgs.writeTextFile {
+              name = "forge-config.json";
+              text = builtins.toJSON cfg;
+            };
+          };
     };
 }

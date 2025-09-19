@@ -15,7 +15,6 @@
       forge = {
         packages.nixpkgs = [
           pkgs.cowsay
-          pkgs.gdal
           pkgs.jq
         ];
       };
