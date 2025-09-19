@@ -1,5 +1,5 @@
 {
-  description = "TODO";
+  description = "Flake forge";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
