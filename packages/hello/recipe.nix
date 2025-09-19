@@ -1,7 +1,7 @@
 { inputs, ... }:
 
 {
-  debug = true;
+  # debug = true;
 
   perSystem =
     {
@@ -12,10 +12,11 @@
     }:
 
     {
-      repo = {
+      forge = {
         packages.builders.default = [
           {
             name = "hello";
+            version = "2.12.1";
             source = {
               url = "mirror://gnu/hello/hello-2.12.1.tar.gz";
               hash = "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=";

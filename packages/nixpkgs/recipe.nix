@@ -1,7 +1,7 @@
 { inputs, ... }:
 
 {
-  debug = true;
+  # debug = true;
 
   perSystem =
     {
@@ -12,7 +12,7 @@
     }:
 
     {
-      repo = {
+      forge = {
         packages.nixpkgs = [
           pkgs.cowsay
           pkgs.gdal

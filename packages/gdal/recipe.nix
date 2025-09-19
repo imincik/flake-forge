@@ -1,7 +1,7 @@
 { inputs, ... }:
 
 {
-  debug = true;
+  # debug = true;
 
   perSystem =
     {
@@ -12,7 +12,7 @@
     }:
 
     {
-      repo = {
+      forge = {
         packages.builders.default = [
           {
             name = "gdal";

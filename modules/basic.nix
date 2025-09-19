@@ -5,10 +5,10 @@
     { config, pkgs, ... }:
 
     let
-      cfg = config.repo;
+      cfg = config.forge;
     in
     {
-      options.repo = {
+      options.forge = {
         packages = {
           builders = {
             default = lib.mkOption {
