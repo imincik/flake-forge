@@ -13,12 +13,12 @@ import Json.Decode as Decode
 
 type alias Model =
     { nixpkgs : List String
-    , packages : List Pkg
+    , packages : List Package
     , error : Maybe String
     }
 
 
-type alias Pkg =
+type alias Package =
     { name : String
     , description : String
     , version : String
@@ -38,7 +38,7 @@ init _ =
 
 
 type Msg
-    = GotPackages (Result Http.Error ( List String, List Pkg ))
+    = GotPackages (Result Http.Error ( List String, List Package ))
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -131,16 +131,16 @@ getPackages =
         }
 
 
-packagesJsonDecoder : Decode.Decoder ( List String, List Pkg )
+packagesJsonDecoder : Decode.Decoder ( List String, List Package )
 packagesJsonDecoder =
     Decode.map2 Tuple.pair
         (Decode.field "nixpkgs" (Decode.list Decode.string))
         (Decode.field "packages" (Decode.list packageDecoder))
 
 
-packageDecoder : Decode.Decoder Pkg
+packageDecoder : Decode.Decoder Package
 packageDecoder =
-    Decode.map4 Pkg
+    Decode.map4 Package
         (Decode.field "name" Decode.string)
         (Decode.field "description" Decode.string)
         (Decode.field "version" Decode.string)
