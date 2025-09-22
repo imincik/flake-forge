@@ -27,6 +27,10 @@
                   type = lib.types.str;
                   default = "1.0.0";
                 };
+                homePage = lib.mkOption {
+                  type = lib.types.str;
+                  default = "";
+                };
                 source = {
                   url = lib.mkOption {
                     type = lib.types.str;
@@ -100,10 +104,15 @@
         in
         (defaultBuilderPkgs // nixpkgsPkgs)
         //
-          # Add forge-forge-ui package
-          {
-            flake-forge-ui = pkgs.callPackage ../ui/package.nix {
-              forgeConfig = cfg;
+          # Add forge-config and forge-ui packages
+          rec {
+            forge-config = pkgs.writeTextFile {
+              name = "forge-config.json";
+              text = builtins.toJSON cfg;
+            };
+
+            forge-ui = pkgs.callPackage ../ui/package.nix {
+              inherit forge-config;
             };
           };
     };

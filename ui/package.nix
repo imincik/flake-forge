@@ -1,19 +1,10 @@
 {
   stdenv,
-  writeTextFile,
 
   elmPackages,
-
-  forgeConfig,
+  forge-config,
 }:
 
-let
-  forgeConfigFile = writeTextFile {
-    name = "forge-config.json";
-    text = builtins.toJSON forgeConfig;
-  };
-
-in
 stdenv.mkDerivation {
   # FIXME: avoid this
   # nix build .#forge-config --option sandbox relaxed --builders ""
@@ -40,6 +31,8 @@ stdenv.mkDerivation {
     cp src/index.html $out
     cp build/main.js $out
 
-    ln -s ${forgeConfigFile} $out/forge-config.json 
+    cp -a src/resources $out
+
+    ln -s ${forge-config} $out/forge-config.json 
   '';
 }
