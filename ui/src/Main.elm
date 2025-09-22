@@ -22,7 +22,7 @@ type alias Pkg =
     { name : String
     , description : String
     , version : String
-    , homePage: String
+    , homePage : String
     }
 
 
@@ -58,30 +58,64 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div [ class "container" ]
-        [ h2 [] [ text "PACKAGES" ]
-        , hr [] []
+        -- header
+        [ div [ class "row" ]
+            [ div [ class "col-lg-10 border fw-bold fs-1 py-2 my-2" ]
+                [ p []
+                    [ span [ style "margin-right" "10px" ] [ text "FLAKE FORGE" ]
+                    , span [ class "fs-2 text-secondary" ] [ text "the sofware repository" ]
+                    ]
+                ]
+            ]
 
-        , div [ class "list-group" ]
-            (List.map
-                (\pkg ->
-                    a [ href "#", class "list-group-item list-group-item-action flex-column align-items-start" ]
-                        [ div [ class "d-flex w-100 justify-content-between" ]
-                            [ h5 [ class "mb-1" ] [ text pkg.name ]
-                            , small [] [ text ("v" ++ pkg.version) ]
-                            ]
-                        , p [ class "mb-1" ] [ text pkg.description ]
-                        , small [] [ text pkg.homePage ]
+        -- content
+        , div [ class "row" ]
+            [ div [ class "col-lg-10 border bg-light py-3 my-3" ]
+                [ div [ class "name d-flex justify-content-between align-items-center" ]
+                    [ -- search
+                      input [ class "form-control form-control-lg py-2 my-2", placeholder "Package name ...", value "" ] []
+                    , button [ class "btn btn-primary btn-lg" ] [ text "Search" ]
+                    ]
+
+                -- separator
+                , div [] [ hr [] [] ]
+
+                -- packages
+                , div [ class "list-group" ]
+                    (List.map
+                        (\pkg ->
+                            a [ href "#", class "list-group-item list-group-item-action flex-column align-items-start" ]
+                                [ div [ class "d-flex w-100 justify-content-between" ]
+                                    [ h5 [ class "mb-1" ] [ text pkg.name ]
+                                    , small [] [ text ("v" ++ pkg.version) ]
+                                    ]
+                                , p [ class "mb-1" ] [ text pkg.description ]
+                                , small [] [ text pkg.homePage ]
+                                ]
+                        )
+                        model.packages
+                    )
+
+                -- footer
+                , div [ class "col-sm-12" ]
+                    [ hr [] []
+                    , p [ class "text-center" ]
+                        [ span [ class "text-secondary fs-6" ] [ text "Developed by " ]
+                        , a [ href "https://github.com/imincik", target "_blank" ] [ text "@imincik" ]
+                        , text " . "
+                        , span [ class "text-secondary fs-6" ] [ text "Powered by " ]
+                        , a [ href "https://nixos.org", target "_blank" ] [ text "Nix and Nixpkgs" ]
+                        , text " ."
                         ]
-                )
-                model.packages
-            )
+                    ]
+                , case model.error of
+                    Just errMsg ->
+                        div [] [ text ("Error: " ++ errMsg) ]
 
-        , case model.error of
-            Just errMsg ->
-                div [] [ text ("Error: " ++ errMsg) ]
-
-            Nothing ->
-                text ""
+                    Nothing ->
+                        text ""
+                ]
+            ]
         ]
 
 
