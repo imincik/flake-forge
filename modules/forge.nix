@@ -14,6 +14,7 @@
           type = lib.types.listOf (
             lib.types.submodule {
               options = {
+                # General options
                 name = lib.mkOption {
                   type = lib.types.str;
                   default = "my-package";
@@ -36,6 +37,7 @@
                   };
                 };
 
+                # Package build configuration
                 build = {
                   defaultBuilder = {
                     enable = lib.mkEnableOption ''
@@ -52,7 +54,6 @@
                       };
                     };
                   };
-
                 };
               };
             }
@@ -99,11 +100,10 @@
         in
         (defaultBuilderPkgs // nixpkgsPkgs)
         //
-          # forge-config package
+          # Add forge-forge-ui package
           {
-            forge-config = pkgs.writeTextFile {
-              name = "forge-config.json";
-              text = builtins.toJSON cfg;
+            flake-forge-ui = pkgs.callPackage ../ui/package.nix {
+              forgeConfig = cfg;
             };
           };
     };
