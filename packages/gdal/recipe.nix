@@ -23,7 +23,7 @@
           build.defaultBuilder = {
             enable = true;
             requirements = {
-              host = [
+              native = [
                 pkgs.cmake
               ];
               build = [

@@ -42,7 +42,7 @@
                       Default builder.
                     '';
                     requirements = {
-                      host = lib.mkOption {
+                      native = lib.mkOption {
                         type = lib.types.listOf lib.types.package;
                         default = [ ];
                       };
@@ -81,7 +81,7 @@
                     url = pkg.source.url;
                     hash = pkg.source.hash;
                   };
-                  nativeBuildInputs = pkg.build.defaultBuilder.requirements.host;
+                  nativeBuildInputs = pkg.build.defaultBuilder.requirements.native;
                   buildInputs = pkg.build.defaultBuilder.requirements.build;
                 }
                 # Derivation end
