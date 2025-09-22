@@ -12,11 +12,9 @@
     }:
 
     {
-      forge = {
-        packages.nixpkgs = [
-          pkgs.cowsay
-          pkgs.jq
-        ];
-      };
+      forge.nixpkgs = [
+        pkgs.cowsay
+        pkgs.jq
+      ];
     };
 }

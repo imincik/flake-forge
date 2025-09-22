@@ -9,33 +9,38 @@
     in
     {
       options.forge = {
-        packages = {
-          builders = {
-            default = lib.mkOption {
-              type = lib.types.listOf (
-                lib.types.submodule {
-                  options = {
-                    name = lib.mkOption {
-                      type = lib.types.str;
-                      default = "my-package";
-                    };
-                    description = lib.mkOption {
-                      type = lib.types.str;
-                      default = "";
-                    };
-                    version = lib.mkOption {
-                      type = lib.types.str;
-                      default = "1.0.0";
-                    };
-                    source = {
-                      url = lib.mkOption {
-                        type = lib.types.str;
-                      };
-                      hash = lib.mkOption {
-                        type = lib.types.str;
-                        default = "";
-                      };
-                    };
+
+        packages = lib.mkOption {
+          type = lib.types.listOf (
+            lib.types.submodule {
+              options = {
+                name = lib.mkOption {
+                  type = lib.types.str;
+                  default = "my-package";
+                };
+                description = lib.mkOption {
+                  type = lib.types.str;
+                  default = "";
+                };
+                version = lib.mkOption {
+                  type = lib.types.str;
+                  default = "1.0.0";
+                };
+                source = {
+                  url = lib.mkOption {
+                    type = lib.types.str;
+                  };
+                  hash = lib.mkOption {
+                    type = lib.types.str;
+                    default = "";
+                  };
+                };
+
+                build = {
+                  defaultBuilder = {
+                    enable = lib.mkEnableOption ''
+                      Default builder.
+                    '';
                     requirements = {
                       host = lib.mkOption {
                         type = lib.types.listOf lib.types.package;
@@ -47,22 +52,23 @@
                       };
                     };
                   };
-                }
-              );
-            };
-          };
 
-          nixpkgs = lib.mkOption {
-            type = lib.types.listOf lib.types.package;
-            default = [ ];
-            description = "Nixpkgs packages to expose as flake.packages";
-          };
+                };
+              };
+            }
+          );
+        };
+
+        nixpkgs = lib.mkOption {
+          type = lib.types.listOf lib.types.package;
+          default = [ ];
+          description = "Nixpkgs packages to expose as flake.packages";
         };
       };
 
       config.packages =
         let
-          builderDefault = lib.listToAttrs (
+          defaultBuilderPkgs = lib.listToAttrs (
             map (pkg: {
               name = pkg.name;
               value = pkgs.callPackage (
@@ -75,23 +81,23 @@
                     url = pkg.source.url;
                     hash = pkg.source.hash;
                   };
-                  nativeBuildInputs = pkg.requirements.host;
-                  buildInputs = pkg.requirements.build;
+                  nativeBuildInputs = pkg.build.defaultBuilder.requirements.host;
+                  buildInputs = pkg.build.defaultBuilder.requirements.build;
                 }
                 # Derivation end
               ) { };
-            }) cfg.packages.builders.default
+            }) (lib.filter (p: p.build.defaultBuilder.enable == true) cfg.packages)
           );
 
-          packagesNixpkgs = lib.listToAttrs (
+          nixpkgsPkgs = lib.listToAttrs (
             map (pkg: {
               name = pkg.pname;
               value = pkg;
-            }) cfg.packages.nixpkgs
+            }) cfg.nixpkgs
           );
 
         in
-        (packagesNixpkgs // builderDefault)
+        (defaultBuilderPkgs // nixpkgsPkgs)
         //
           # forge-config package
           {
