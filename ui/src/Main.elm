@@ -1,11 +1,11 @@
 module Main exposing (main)
 
 import Browser
+import ConfigDecoder exposing (Package, configDecoder)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
-import Json.Decode as Decode
 import Texts exposing (..)
 
 
@@ -21,17 +21,13 @@ type alias Model =
     }
 
 
-type alias Package =
-    { name : String
-    , description : String
-    , version : String
-    , homePage : String
-    }
-
-
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { nixpkgs = [], packages = [], selectedPackage = "", error = Nothing }
+    ( { nixpkgs = []
+      , packages = []
+      , selectedPackage = ""
+      , error = Nothing
+      }
     , getPackages
     )
 
@@ -128,24 +124,8 @@ getPackages : Cmd Msg
 getPackages =
     Http.get
         { url = "forge-config.json"
-        , expect = Http.expectJson GotPackages packagesJsonDecoder
+        , expect = Http.expectJson GotPackages configDecoder
         }
-
-
-packagesJsonDecoder : Decode.Decoder ( List String, List Package )
-packagesJsonDecoder =
-    Decode.map2 Tuple.pair
-        (Decode.field "nixpkgs" (Decode.list Decode.string))
-        (Decode.field "packages" (Decode.list packageDecoder))
-
-
-packageDecoder : Decode.Decoder Package
-packageDecoder =
-    Decode.map4 Package
-        (Decode.field "name" Decode.string)
-        (Decode.field "description" Decode.string)
-        (Decode.field "version" Decode.string)
-        (Decode.field "homePage" Decode.string)
 
 
 httpErrorToString : Http.Error -> String
