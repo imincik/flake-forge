@@ -35,6 +35,10 @@
               ];
             };
           };
+
+          test.script = ''
+            gdalinfo --version | grep "GDAL"
+          '';
         }
       ];
     };

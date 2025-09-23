@@ -14,7 +14,7 @@
           type = lib.types.listOf (
             lib.types.submodule {
               options = {
-                # General options
+                # General configuration
                 name = lib.mkOption {
                   type = lib.types.str;
                   default = "my-package";
@@ -31,6 +31,8 @@
                   type = lib.types.str;
                   default = "";
                 };
+
+                # Source configuration
                 source = {
                   github = lib.mkOption {
                     type = lib.types.nullOr (lib.types.strMatching "^.*/.*/.*$");
@@ -48,7 +50,7 @@
                   };
                 };
 
-                # Package build configuration
+                # Build configuration
                 build = {
                   defaultBuilder = {
                     enable = lib.mkEnableOption ''
@@ -64,6 +66,20 @@
                         default = [ ];
                       };
                     };
+                  };
+                };
+
+                # Test configuration
+                test = {
+                  requirements = lib.mkOption {
+                    type = lib.types.listOf lib.types.package;
+                    default = [ ];
+                  };
+                  script = lib.mkOption {
+                    type = lib.types.str;
+                    default = ''
+                      echo "Hello from test script"
+                    '';
                   };
                 };
               };
@@ -110,13 +126,20 @@
                 value = pkgs.callPackage (
                   # Derivation start
                   { stdenv }:
-                  stdenv.mkDerivation {
+                  stdenv.mkDerivation (finalAttrs: {
                     pname = pkg.name;
                     version = pkg.version;
                     src = pkgSource pkg;
                     nativeBuildInputs = pkg.build.defaultBuilder.requirements.native;
                     buildInputs = pkg.build.defaultBuilder.requirements.build;
-                  }
+                    passthru = {
+                      test = pkgs.testers.runCommand {
+                        name = "${pkg.name}-test";
+                        buildInputs = [ finalAttrs.finalPackage ] ++ pkg.test.requirements;
+                        script = pkg.test.script + "\ntouch $out";
+                      };
+                    };
+                  })
                   # Derivation end
                 ) { };
               }) (lib.filter (p: p.build.defaultBuilder.enable == true) cfg.packages)
