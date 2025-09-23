@@ -167,8 +167,7 @@ headerHtml =
 
 searchHtml : List (Html Msg)
 searchHtml =
-    [ input [ class "form-control form-control-lg py-2 my-2", placeholder "Package name ...", value "" ] []
-    , button [ class "btn btn-primary btn-lg" ] [ text "Search" ]
+    [ input [ class "form-control form-control-lg py-2 my-2", placeholder "Search for package ...", value "" ] []
     ]
 
 
