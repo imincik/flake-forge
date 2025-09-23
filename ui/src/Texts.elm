@@ -38,7 +38,7 @@ curl --proto '=https' --tlsv1.2 -sSf \\
 clickOnPackageText : String
 clickOnPackageText =
     """
-and select a package to show usage instructions.
+and select a package to see how to use it.
 """
 
 
@@ -56,7 +56,7 @@ nix shell github:imincik/flake-forge#"""
         ++ pkg
         ++ """
 
-<PROGRAM-TO-RUN>
+<PROGRAM>
 """
 
 runInContainerComment : String
