@@ -32,8 +32,15 @@
                   default = "";
                 };
                 source = {
+                  github = lib.mkOption {
+                    type = lib.types.nullOr (lib.types.strMatching "^.*/.*/.*$");
+                    default = null;
+                    example = "my-user/my-repo/v1.0.0";
+                  };
                   url = lib.mkOption {
-                    type = lib.types.str;
+                    type = lib.types.nullOr (lib.types.strMatching "^.*://.*");
+                    default = null;
+                    example = "https://downloads.my-project/my-package-1.0.0.tar.gz";
                   };
                   hash = lib.mkOption {
                     type = lib.types.str;
@@ -71,49 +78,71 @@
         };
       };
 
-      config.packages =
-        let
-          defaultBuilderPkgs = lib.listToAttrs (
-            map (pkg: {
-              name = pkg.name;
-              value = pkgs.callPackage (
-                # Derivation start
-                { stdenv, fetchurl }:
-                stdenv.mkDerivation {
-                  pname = pkg.name;
-                  version = pkg.version;
-                  src = fetchurl {
-                    url = pkg.source.url;
-                    hash = pkg.source.hash;
-                  };
-                  nativeBuildInputs = pkg.build.defaultBuilder.requirements.native;
-                  buildInputs = pkg.build.defaultBuilder.requirements.build;
+      config = {
+        packages =
+          let
+            pkgSource =
+              pkg:
+              assert
+                (pkg.source.github == null && pkg.source.url == null)
+                -> throw "'source.github' or 'source.url' must be defined for ${pkg.name}";
+              # By default, try to use github
+              if pkg.source.github != null then
+                let
+                  ghParams = lib.splitString "/" pkg.source.github;
+                in
+                pkgs.fetchFromGitHub {
+                  owner = lib.lists.elemAt ghParams 0;
+                  repo = lib.lists.elemAt ghParams 1;
+                  rev = lib.lists.elemAt ghParams 2;
+                  hash = pkg.source.hash;
                 }
-                # Derivation end
-              ) { };
-            }) (lib.filter (p: p.build.defaultBuilder.enable == true) cfg.packages)
-          );
+              # Fallback to tarball dowload
+              else
+                pkgs.fetchurl {
+                  url = pkg.source.url;
+                  hash = pkg.source.hash;
+                };
 
-          nixpkgsPkgs = lib.listToAttrs (
-            map (pkg: {
-              name = pkg.pname;
-              value = pkg;
-            }) cfg.nixpkgs
-          );
+            defaultBuilderPkgs = lib.listToAttrs (
+              map (pkg: {
+                name = pkg.name;
+                value = pkgs.callPackage (
+                  # Derivation start
+                  { stdenv }:
+                  stdenv.mkDerivation {
+                    pname = pkg.name;
+                    version = pkg.version;
+                    src = pkgSource pkg;
+                    nativeBuildInputs = pkg.build.defaultBuilder.requirements.native;
+                    buildInputs = pkg.build.defaultBuilder.requirements.build;
+                  }
+                  # Derivation end
+                ) { };
+              }) (lib.filter (p: p.build.defaultBuilder.enable == true) cfg.packages)
+            );
 
-        in
-        (defaultBuilderPkgs // nixpkgsPkgs)
-        //
-          # Add forge-config and forge-ui packages
-          rec {
-            forge-config = pkgs.writeTextFile {
-              name = "forge-config.json";
-              text = builtins.toJSON cfg;
+            nixpkgsPkgs = lib.listToAttrs (
+              map (pkg: {
+                name = pkg.pname;
+                value = pkg;
+              }) cfg.nixpkgs
+            );
+
+          in
+          (defaultBuilderPkgs // nixpkgsPkgs)
+          //
+            # Add forge-config and forge-ui packages
+            rec {
+              forge-config = pkgs.writeTextFile {
+                name = "forge-config.json";
+                text = builtins.toJSON cfg;
+              };
+
+              forge-ui = pkgs.callPackage ../../ui/package.nix {
+                inherit forge-config;
+              };
             };
-
-            forge-ui = pkgs.callPackage ../../ui/package.nix {
-              inherit forge-config;
-            };
-          };
+      };
     };
 }
