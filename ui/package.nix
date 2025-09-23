@@ -2,7 +2,7 @@
   stdenv,
 
   elmPackages,
-  forge-config,
+  _forge-config,
 }:
 
 stdenv.mkDerivation {
@@ -33,6 +33,6 @@ stdenv.mkDerivation {
 
     cp -a src/resources $out
 
-    ln -s ${forge-config} $out/forge-config.json 
+    ln -s ${_forge-config} $out/forge-config.json 
   '';
 }

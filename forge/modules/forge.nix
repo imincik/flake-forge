@@ -157,13 +157,13 @@
           //
             # Add forge-config and forge-ui packages
             rec {
-              forge-config = pkgs.writeTextFile {
+              _forge-config = pkgs.writeTextFile {
                 name = "forge-config.json";
                 text = builtins.toJSON cfg;
               };
 
-              forge-ui = pkgs.callPackage ../../ui/package.nix {
-                inherit forge-config;
+              _forge-ui = pkgs.callPackage ../../ui/package.nix {
+                inherit _forge-config;
               };
             };
       };
