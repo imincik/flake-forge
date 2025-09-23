@@ -26,7 +26,7 @@
       ];
 
       imports = [
-        (inputs.import-tree ./modules)
+        (inputs.import-tree ./forge/modules)
         (inputs.import-tree ./packages)
       ];
 

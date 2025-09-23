@@ -111,7 +111,7 @@
               text = builtins.toJSON cfg;
             };
 
-            forge-ui = pkgs.callPackage ../ui/package.nix {
+            forge-ui = pkgs.callPackage ../../ui/package.nix {
               inherit forge-config;
             };
           };
