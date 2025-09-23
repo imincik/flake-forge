@@ -3,9 +3,10 @@ module Main exposing (main)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Http
 import Json.Decode as Decode
-import Texts exposing (aboutText, clickOnPackageText, installNixTemplate, installNixTemplateComment)
+import Texts exposing (..)
 
 
 
@@ -15,6 +16,7 @@ import Texts exposing (aboutText, clickOnPackageText, installNixTemplate, instal
 type alias Model =
     { nixpkgs : List String
     , packages : List Package
+    , selectedPackage : String
     , error : Maybe String
     }
 
@@ -29,7 +31,7 @@ type alias Package =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { nixpkgs = [], packages = [], error = Nothing }
+    ( { nixpkgs = [], packages = [], selectedPackage = "", error = Nothing }
     , getPackages
     )
 
@@ -40,6 +42,7 @@ init _ =
 
 type Msg
     = GotPackages (Result Http.Error ( List String, List Package ))
+    | SelectPackage String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -50,6 +53,9 @@ update msg model =
 
         GotPackages (Err err) ->
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )
+
+        SelectPackage pkg ->
+            ( { model | selectedPackage = pkg }, Cmd.none )
 
 
 
@@ -85,7 +91,7 @@ view model =
                 , div [ class "list-group" ]
                     (List.map
                         (\pkg ->
-                            a [ href "#", class "list-group-item list-group-item-action flex-column align-items-start" ]
+                            a [ href "#", class "list-group-item list-group-item-action flex-column align-items-start", onClick (SelectPackage pkg.name) ]
                                 [ div [ class "d-flex w-100 justify-content-between" ]
                                     [ h5 [ class "mb-1" ] [ text pkg.name ]
                                     , small [] [ text ("v" ++ pkg.version) ]
@@ -106,14 +112,32 @@ view model =
 
             -- instructions
             , div [ class "col-lg-6 bg-dark text-white py-3 my-3" ]
-                [ div []
-                    [ h2 [] [ text "ABOUT" ]
-                    , p [] [ text aboutText ]
-                    , h2 [] [ text "INSTALL NIX" ]
-                    , p [ style "margin-bottom" "0em" ] installNixTemplateComment
-                    , pre [ class "text-warning" ] [ text installNixTemplate ]
-                    , p [ style "margin-bottom" "0em" ] [ text clickOnPackageText ]
-                    ]
+                [ if String.isEmpty model.selectedPackage then
+                    div []
+                        [ h2 [] [ text "ABOUT" ]
+                        , p [] [ text aboutText ]
+                        , h2 [] [ text "INSTALL NIX" ]
+                        , p [ style "margin-bottom" "0em" ] installNixTemplateComment
+                        , pre [ class "text-warning" ] [ text installNixTemplate ]
+                        , p [ style "margin-bottom" "0em" ] [ text clickOnPackageText ]
+                        ]
+
+                  else
+                    div []
+                        [ h2 [] [ text ("PACKAGE: " ++ model.selectedPackage) ]
+                        , p [ style "margin-bottom" "0em" ] [ text runPackageInShellComment ]
+                        , pre [ class "text-warning" ] [ text (stringFromTemplate model.selectedPackage runPackageInShellTemplate) ]
+                        , p [ style "margin-bottom" "0em" ] [ text runPackageInContainerComment ]
+                        , pre [ class "text-warning" ] [ text (stringFromTemplate model.selectedPackage buildContainerImageTemplate) ]
+                        , pre [ class "text-warning" ] [ text runContainerTemplate ]
+                        , hr [] []
+                        , text "Recipe: "
+                        , a
+                            [ href ("https://github.com/imincik/flake-forge/blob/master/packages/" ++ model.selectedPackage ++ "/recipe.nix")
+                            , target "_blank"
+                            ]
+                            [ text (model.selectedPackage ++ "/recipe.nix") ]
+                        ]
                 ]
             ]
 
@@ -178,6 +202,11 @@ httpErrorToString err =
 
         Http.BadBody s ->
             "Bad body: " ++ s
+
+
+stringFromTemplate : String -> String -> String
+stringFromTemplate s template =
+    String.replace "<s>" s template
 
 
 
