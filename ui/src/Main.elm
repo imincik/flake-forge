@@ -16,7 +16,7 @@ import Texts exposing (..)
 type alias Model =
     { nixpkgs : List String
     , packages : List Package
-    , selectedPackage : String
+    , selectedPackage : Package
     , error : Maybe String
     }
 
@@ -25,7 +25,12 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( { nixpkgs = []
       , packages = []
-      , selectedPackage = ""
+      , selectedPackage =
+            { name = ""
+            , description = ""
+            , version = ""
+            , homePage = ""
+            }
       , error = Nothing
       }
     , getPackages
@@ -38,7 +43,7 @@ init _ =
 
 type Msg
     = GotPackages (Result Http.Error ( List String, List Package ))
-    | SelectPackage String
+    | SelectPackage Package
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -95,13 +100,14 @@ view model =
 
             -- instructions panel
             , div [ class "col-lg-6 bg-dark text-white py-3 my-3" ]
-                [ if String.isEmpty model.selectedPackage then
+                [ if String.isEmpty model.selectedPackage.name then
                     div []
                         -- install instructions
                         installInstructionsHtml
 
                   else
                     div []
+                        -- usage instructions
                         (packageInstructionsHtml model.selectedPackage)
                 ]
             ]
@@ -168,7 +174,11 @@ searchHtml =
 
 packageHtml : Package -> Html Msg
 packageHtml pkg =
-    a [ href "#", class "list-group-item list-group-item-action flex-column align-items-start", onClick (SelectPackage pkg.name) ]
+    a
+        [ href "#"
+        , class "list-group-item list-group-item-action flex-column align-items-start"
+        , onClick (SelectPackage pkg)
+        ]
         [ div [ class "d-flex w-100 justify-content-between" ]
             [ h5 [ class "mb-1" ] [ text pkg.name ]
             , small [] [ text ("v" ++ pkg.version) ]
@@ -202,20 +212,20 @@ installInstructionsHtml =
     ]
 
 
-packageInstructionsHtml : String -> List (Html Msg)
+packageInstructionsHtml : Package -> List (Html Msg)
 packageInstructionsHtml pkg =
-    [ h2 [] [ text ("PACKAGE: " ++ pkg) ]
+    [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
     , p [ style "margin-bottom" "0em" ] [ text runInShellComment ]
-    , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
+    , pre [ class "text-warning" ] [ text (runInShellCmd pkg.name) ]
     , p [ style "margin-bottom" "0em" ] [ text runInContainerComment ]
-    , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
+    , pre [ class "text-warning" ] [ text (runContainerCmd pkg.name) ]
     , hr [] []
     , text "Recipe: "
     , a
-        [ href ("https://github.com/imincik/flake-forge/blob/master/packages/" ++ pkg ++ "/recipe.nix")
+        [ href ("https://github.com/imincik/flake-forge/blob/master/packages/" ++ pkg.name ++ "/recipe.nix")
         , target "_blank"
         ]
-        [ text (pkg ++ "/recipe.nix") ]
+        [ text (pkg.name ++ "/recipe.nix") ]
     ]
 
 
