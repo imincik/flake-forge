@@ -206,10 +206,9 @@ packageInstructionsHtml : String -> List (Html Msg)
 packageInstructionsHtml pkg =
     [ h2 [] [ text ("PACKAGE: " ++ pkg) ]
     , p [ style "margin-bottom" "0em" ] [ text runInShellComment ]
-    , pre [ class "text-warning" ] [ text (parseStringTemplate pkg runInShellCmd) ]
+    , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
     , p [ style "margin-bottom" "0em" ] [ text runInContainerComment ]
-    , pre [ class "text-warning" ] [ text (parseStringTemplate pkg buildContainerImageCmd) ]
-    , pre [ class "text-warning" ] [ text (parseStringTemplate pkg runContainerCmd) ]
+    , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
     , hr [] []
     , text "Recipe: "
     , a
@@ -218,15 +217,6 @@ packageInstructionsHtml pkg =
         ]
         [ text (pkg ++ "/recipe.nix") ]
     ]
-
-
-
--- utils
-
-
-parseStringTemplate : String -> String -> String
-parseStringTemplate s template =
-    String.replace "<s>" s template
 
 
 
