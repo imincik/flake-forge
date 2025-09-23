@@ -1,13 +1,13 @@
 module Texts exposing
     ( aboutText
-    , buildContainerImageTemplate
+    , buildContainerImageCmd
     , clickOnPackageText
-    , installNixTemplate
-    , installNixTemplateComment
-    , runContainerTemplate
-    , runPackageInContainerComment
-    , runPackageInShellComment
-    , runPackageInShellTemplate
+    , installNixCmd
+    , installNixText
+    , runContainerCmd
+    , runInContainerComment
+    , runInShellComment
+    , runInShellCmd
     )
 
 import Html exposing (a, text)
@@ -20,14 +20,14 @@ Friendly, self hosted software build system and repository.
 """
 
 
-installNixTemplateComment =
+installNixText =
     [ text "Install Nix "
     , a [ href "https://zero-to-nix.com/start/install", target "_blank" ]
         [ text "(learn more about this installer)" ]
     ]
 
 
-installNixTemplate =
+installNixCmd =
     """
 curl --proto '=https' --tlsv1.2 -sSf \\
     -L https://install.determinate.systems/nix \\
@@ -41,13 +41,13 @@ and select a package to show usage instructions.
 """
 
 
-runPackageInShellComment =
+runInShellComment =
     """
 1. Run package in a temporary shell environment
 """
 
 
-runPackageInShellTemplate =
+runInShellCmd =
     """
 nix shell github:imincik/flake-forge#<s>
 
@@ -55,19 +55,19 @@ nix shell github:imincik/flake-forge#<s>
 """
 
 
-runPackageInContainerComment =
+runInContainerComment =
     """
 2. Run package in a container
 """
 
 
-buildContainerImageTemplate =
+buildContainerImageCmd =
     """
 nix build github:imincik/flake-forge#<s>.passthru.container-image
 """
 
 
-runContainerTemplate =
+runContainerCmd =
     """podman load < ./result
 podman run -it localhost/<s>-image:latest
 """
