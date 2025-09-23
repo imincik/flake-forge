@@ -194,7 +194,8 @@ footerHtml =
         , a [ href "https://github.com/imincik", target "_blank" ] [ text "@imincik" ]
         , text " . "
         , span [ class "text-secondary fs-8" ] [ text "Powered by " ]
-        , a [ href "https://nixos.org", target "_blank" ] [ text "Nix, Nixpkgs" ]
+        , a [ href "https://nixos.org", target "_blank" ] [ text "Nix," ]
+        , a [ href "https://github.com/NixOS/nixpkgs", target "_blank" ] [ text " Nixpkgs" ]
         , a [ href "https://elm-lang.org", target "_blank" ] [ text " and Elm" ]
         , text " ."
         ]
