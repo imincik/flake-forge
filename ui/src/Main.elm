@@ -62,7 +62,7 @@ view model =
         [ div [ class "row" ]
             [ div [ class "col-lg-10 border fw-bold fs-1 py-2 my-2" ]
                 [ p []
-                    [ span [ style "margin-right" "10px" ] [ text "Flake Forge" ]
+                    [ span [ style "margin-right" "10px" ] [ text "[Flake Forge]" ]
                     , span [ class "fs-2 text-secondary" ] [ text "the sofware repository" ]
                     ]
                 ]
@@ -104,7 +104,8 @@ view model =
                         , a [ href "https://github.com/imincik", target "_blank" ] [ text "@imincik" ]
                         , text " . "
                         , span [ class "text-secondary fs-8" ] [ text "Powered by " ]
-                        , a [ href "https://nixos.org", target "_blank" ] [ text "Nix and Nixpkgs" ]
+                        , a [ href "https://nixos.org", target "_blank" ] [ text "Nix, Nixpkgs" ]
+                        , a [ href "https://elm-lang.org", target "_blank" ] [ text " and Elm" ]
                         , text " ."
                         ]
                     ]
