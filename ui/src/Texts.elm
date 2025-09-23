@@ -63,11 +63,11 @@ runPackageInContainerComment =
 
 buildContainerImageTemplate =
     """
-nix build github:imincik/flake-forge#<s>.container.image
+nix build github:imincik/flake-forge#<s>.passthru.container-image
 """
 
 
 runContainerTemplate =
     """podman load < ./result
-podman run TODO
+podman run -it localhost/<s>-image:latest
 """

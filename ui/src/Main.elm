@@ -129,7 +129,7 @@ view model =
                         , pre [ class "text-warning" ] [ text (stringFromTemplate model.selectedPackage runPackageInShellTemplate) ]
                         , p [ style "margin-bottom" "0em" ] [ text runPackageInContainerComment ]
                         , pre [ class "text-warning" ] [ text (stringFromTemplate model.selectedPackage buildContainerImageTemplate) ]
-                        , pre [ class "text-warning" ] [ text runContainerTemplate ]
+                        , pre [ class "text-warning" ] [ text (stringFromTemplate model.selectedPackage runContainerTemplate) ]
                         , hr [] []
                         , text "Recipe: "
                         , a

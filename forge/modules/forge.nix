@@ -138,6 +138,16 @@
                         buildInputs = [ finalAttrs.finalPackage ] ++ pkg.test.requirements;
                         script = pkg.test.script + "\ntouch $out";
                       };
+                      container-image = pkgs.dockerTools.buildImage {
+                        name = "${pkg.name}-image";
+                        tag = "latest";
+                        copyToRoot = [
+                          finalAttrs.finalPackage
+                        ];
+                        config = {
+                          Entrypoint = [ "${pkgs.bashInteractive}/bin/bash" ];
+                        };
+                      };
                     };
                   })
                   # Derivation end
