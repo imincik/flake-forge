@@ -16,7 +16,7 @@ import Html.Attributes exposing (href, target)
 aboutText : String
 aboutText =
     """
-Friendly, self hosted software build system and repository.
+Friendly, self hosted software distribution system.
 """
 
 installNixText : List (Html msg)
