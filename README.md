@@ -7,7 +7,8 @@ The friendly software distribution system with Nix super powers.
 
 ## Features
 
-* Build process configuration using simple (JSON like) language
+* Build process configuration using simple
+  ([conda-forge](https://conda-forge.org/) style) language
 * Out-of-box container image output
 * [Web UI](https://imincik.github.io/flake-forge)
 * Simple for self hosting
@@ -25,7 +26,9 @@ The friendly software distribution system with Nix super powers.
 nix build .#my-package
 ```
 
-3. Publish package by merging the recipe file
+3. Submit PR and wait for tests
+
+3. Publish package by merging the PR
 
 
 ## TODOs
