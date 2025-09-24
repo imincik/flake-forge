@@ -33,7 +33,7 @@ init _ =
             }
       , error = Nothing
       }
-    , getPackages
+    , getConfig
     )
 
 
@@ -42,17 +42,17 @@ init _ =
 
 
 type Msg
-    = GotPackages (Result Http.Error ( List String, List Package ))
+    = GetConfig (Result Http.Error ( List String, List Package ))
     | SelectPackage Package
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GotPackages (Ok ( nixpkgs, pkgs )) ->
+        GetConfig (Ok ( nixpkgs, pkgs )) ->
             ( { model | nixpkgs = nixpkgs, packages = pkgs, error = Nothing }, Cmd.none )
 
-        GotPackages (Err err) ->
+        GetConfig (Err err) ->
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )
 
         SelectPackage pkg ->
@@ -126,11 +126,11 @@ view model =
 -- HTTP
 
 
-getPackages : Cmd Msg
-getPackages =
+getConfig : Cmd Msg
+getConfig =
     Http.get
         { url = "forge-config.json"
-        , expect = Http.expectJson GotPackages configDecoder
+        , expect = Http.expectJson GetConfig configDecoder
         }
 
 
