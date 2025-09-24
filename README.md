@@ -4,6 +4,7 @@
 
 The friendly software distribution system with Nix super powers.
 
+
 ## Features
 
 * Build process configuration using simple (JSON like) language
@@ -12,8 +13,23 @@ The friendly software distribution system with Nix super powers.
 * Simple for self hosting
 * Not hiding Nix super powers
 
+
+## Packaging workflow
+
+1. Create a new package recipe file in `packages/<my-package>/recipe.nix` and
+   add it to git. Check out existing examples in [packages](packages) directory.
+
+2. Test build
+
+```bash
+nix build .#my-package
+```
+
+3. Publish package by merging recipe file
+
+
 ## TODOs
 
-* Much more builder configuration options
+* Many more builder configuration options
 * Configuration options for container images
 
