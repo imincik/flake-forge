@@ -14,8 +14,7 @@ import Texts exposing (..)
 
 
 type alias Model =
-    { nixpkgs : List String
-    , packages : List Package
+    { packages : List Package
     , selectedPackage : Package
     , error : Maybe String
     }
@@ -23,8 +22,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { nixpkgs = []
-      , packages = []
+    ( { packages = []
       , selectedPackage =
             { name = ""
             , description = ""
@@ -43,15 +41,15 @@ init _ =
 
 
 type Msg
-    = GetConfig (Result Http.Error ( List String, List Package ))
+    = GetConfig (Result Http.Error ( List Package ))
     | SelectPackage Package
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetConfig (Ok ( nixpkgs, pkgs )) ->
-            ( { model | nixpkgs = nixpkgs, packages = pkgs, error = Nothing }, Cmd.none )
+        GetConfig (Ok ( pkgs )) ->
+            ( { model | packages = pkgs, error = Nothing }, Cmd.none )
 
         GetConfig (Err err) ->
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )

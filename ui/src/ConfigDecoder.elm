@@ -12,11 +12,12 @@ type alias Package =
     }
 
 
-configDecoder : Decode.Decoder ( List String, List Package )
+configDecoder : Decode.Decoder ( List Package )
 configDecoder =
-    Decode.map2 Tuple.pair
-        (Decode.field "nixpkgs" (Decode.list Decode.string))
-        (Decode.field "packages" (Decode.list packageDecoder))
+    -- Decode.map Tuple.pair
+    --     (Decode.field "config" (Decode.list packageDecoder))
+    --     (Decode.field "packages" (Decode.list packageDecoder))
+        Decode.field "packages" (Decode.list packageDecoder)
 
 
 packageDecoder : Decode.Decoder Package

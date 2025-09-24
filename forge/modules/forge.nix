@@ -91,12 +91,6 @@
             }
           );
         };
-
-        nixpkgs = lib.mkOption {
-          type = lib.types.listOf lib.types.package;
-          default = [ ];
-          description = "Nixpkgs packages to expose as flake.packages";
-        };
       };
 
       config = {
@@ -161,15 +155,11 @@
               }) (lib.filter (p: p.build.defaultBuilder.enable == true) cfg.packages)
             );
 
-            nixpkgsPkgs = lib.listToAttrs (
-              map (pkg: {
-                name = pkg.pname;
-                value = pkg;
-              }) cfg.nixpkgs
-            );
+            # TODO: replace this with some real other builder package set
+            otherBuilderPkgs = { };
 
           in
-          (defaultBuilderPkgs // nixpkgsPkgs)
+          (defaultBuilderPkgs // otherBuilderPkgs)
           //
             # Add forge-config and forge-ui packages
             rec {
