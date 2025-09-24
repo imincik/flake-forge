@@ -28,6 +28,7 @@
       imports = [
         (inputs.import-tree ./forge/modules)
         (inputs.import-tree ./packages)
+        ./ui/develop.nix
       ];
 
       _module.args.rootPath = ./.;
