@@ -16,6 +16,16 @@ import Html exposing (Html, a, text)
 import Html.Attributes exposing (href, target)
 
 
+format : String -> List String -> String
+format template replacements =
+    let
+        replace index replacement result =
+            String.replace ("{" ++ String.fromInt index ++ "}") replacement result
+    in
+    List.indexedMap Tuple.pair replacements
+        |> List.foldl (\( i, r ) acc -> replace i r acc) template
+
+
 aboutText : String
 aboutText =
     """
@@ -56,9 +66,9 @@ runPackageComment =
 
 runPackageCmd : Package -> String
 runPackageCmd pkg =
-    """
-nix run github:imincik/flake-forge#"""
-        ++ pkg.name
+    format """
+  nix run github:imincik/flake-forge#{0}
+""" [ pkg.name ]
 
 
 runInShellComment : String
@@ -70,13 +80,10 @@ runInShellComment =
 
 runInShellCmd : Package -> String
 runInShellCmd pkg =
-    """
-nix shell github:imincik/flake-forge#"""
-        ++ pkg.name
-        ++ """
-
-"""
-        ++ pkg.mainProgram
+    format """
+  nix shell github:imincik/flake-forge#{0}
+  {1}
+""" [ pkg.name, pkg.mainProgram ]
 
 
 runInContainerComment : String
@@ -88,14 +95,9 @@ runInContainerComment =
 
 runContainerCmd : Package -> String
 runContainerCmd pkg =
-    """
-nix build github:imincik/flake-forge#"""
-        ++ pkg.name
-        ++ """.passthru.container-image"""
-        ++ """
+    format """
+  nix build github:imincik/flake-forge#{0}.passthru.container-image
 
-podman load < ./result
-"""
-        ++ "podman run -it localhost/"
-        ++ pkg.name
-        ++ "-image:latest"
+  podman load < ./result
+  podman run -it localhost/{0}-image:latest
+""" [ pkg.name ]
