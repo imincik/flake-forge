@@ -213,7 +213,7 @@ installInstructionsHtml : List (Html Msg)
 installInstructionsHtml =
     [ h2 [] [ text "ABOUT" ]
     , p [] [ text aboutText ]
-    , h2 [] [ text "INSTALL NIX" ]
+    , h2 [] [ text "QUICK START" ]
     , p [ style "margin-bottom" "0em" ] installNixText
     , pre [ class "text-warning" ] [ text installNixCmd ]
     , p [ style "margin-bottom" "0em" ] [ text clickOnPackageText ]
