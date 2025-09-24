@@ -98,6 +98,7 @@ runInShellCmd : Package -> String
 runInShellCmd pkg =
     format """
   nix shell github:imincik/flake-forge#{0}
+
   {1}
 """ [ pkg.name, pkg.mainProgram ]
 
