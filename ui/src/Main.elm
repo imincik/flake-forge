@@ -87,7 +87,7 @@ view model =
                 -- packages
                 , div [ class "list-group" ]
                     (List.map
-                        (\pkg -> packageHtml pkg)
+                        (\pkg -> packageHtml pkg model.selectedPackage)
                         model.packages
                     )
                 , case model.error of
@@ -171,14 +171,22 @@ searchHtml =
     ]
 
 
-packageHtml : Package -> Html Msg
-packageHtml pkg =
+packageHtml : Package -> Package -> Html Msg
+packageHtml pkg selectedPkg =
     a
-        [ href "#"
-        , class "list-group-item list-group-item-action flex-column align-items-start"
+        [ href ("#package-" ++ pkg.name)
+        , class
+            ("list-group-item list-group-item-action flex-column align-items-start"
+                ++ (if pkg.name == selectedPkg.name then
+                        " active"
+
+                    else
+                        " inactive"
+                   )
+            )
         , onClick (SelectPackage pkg)
         ]
-        [ div [ class "d-flex w-100 justify-content-between" ]
+        [ div [ name ("package-" ++ pkg.name), class "d-flex w-100 justify-content-between" ]
             [ h5 [ class "mb-1" ] [ text pkg.name ]
             , small [] [ text ("v" ++ pkg.version) ]
             ]
