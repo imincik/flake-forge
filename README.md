@@ -25,7 +25,7 @@ The friendly software distribution system with Nix super powers.
 nix build .#my-package
 ```
 
-3. Publish package by merging recipe file
+3. Publish package by merging the recipe file
 
 
 ## TODOs
