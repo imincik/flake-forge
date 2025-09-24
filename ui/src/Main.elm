@@ -161,8 +161,8 @@ httpErrorToString err =
 headerHtml : Html Msg
 headerHtml =
     p []
-        [ span [ style "margin-right" "10px" ] [ text "[Flake Forge]" ]
-        , span [ class "fs-2 text-secondary" ] [ text "the software distribution system" ]
+        [ span [ style "margin-right" "10px" ] [ text mainTitle ]
+        , span [ class "fs-2 text-secondary" ] [ text mainSubTitle ]
         ]
 
 

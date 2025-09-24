@@ -3,6 +3,8 @@ module Texts exposing
     , clickOnPackageText
     , installNixCmd
     , installNixText
+    , mainSubTitle
+    , mainTitle
     , runContainerCmd
     , runInContainerComment
     , runInShellCmd
@@ -24,6 +26,20 @@ format template replacements =
     in
     List.indexedMap Tuple.pair replacements
         |> List.foldl (\( i, r ) acc -> replace i r acc) template
+
+
+mainTitle : String
+mainTitle =
+    """
+[Flake Forge]
+"""
+
+
+mainSubTitle : String
+mainSubTitle =
+    """
+the software distribution system
+"""
 
 
 aboutText : String
