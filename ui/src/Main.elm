@@ -224,9 +224,9 @@ packageInstructionsHtml : Package -> List (Html Msg)
 packageInstructionsHtml pkg =
     [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
     , p [ style "margin-bottom" "0em" ] [ text runInShellComment ]
-    , pre [ class "text-warning" ] [ text (runInShellCmd pkg.name) ]
+    , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
     , p [ style "margin-bottom" "0em" ] [ text runInContainerComment ]
-    , pre [ class "text-warning" ] [ text (runContainerCmd pkg.name) ]
+    , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
     , hr [] []
     , text "Recipe: "
     , a

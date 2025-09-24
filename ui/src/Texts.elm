@@ -9,6 +9,7 @@ module Texts exposing
     , runInShellComment
     )
 
+import ConfigDecoder exposing (Package)
 import Html exposing (Html, a, text)
 import Html.Attributes exposing (href, target)
 
@@ -18,6 +19,7 @@ aboutText =
     """
 Friendly, self hosted software distribution system.
 """
+
 
 installNixText : List (Html msg)
 installNixText =
@@ -35,6 +37,7 @@ curl --proto '=https' --tlsv1.2 -sSf \\
     | sh -s -- install
 """
 
+
 clickOnPackageText : String
 clickOnPackageText =
     """
@@ -49,15 +52,16 @@ runInShellComment =
 """
 
 
-runInShellCmd : String -> String
+runInShellCmd : Package -> String
 runInShellCmd pkg =
     """
 nix shell github:imincik/flake-forge#"""
-        ++ pkg
+        ++ pkg.name
         ++ """
 
 <PROGRAM>
 """
+
 
 runInContainerComment : String
 runInContainerComment =
@@ -66,16 +70,16 @@ runInContainerComment =
 """
 
 
-runContainerCmd : String -> String
+runContainerCmd : Package -> String
 runContainerCmd pkg =
     """
 nix build github:imincik/flake-forge#"""
-        ++ pkg
+        ++ pkg.name
         ++ """.passthru.container-image"""
         ++ """
 
 podman load < ./result
 """
         ++ "podman run -it localhost/"
-        ++ pkg
+        ++ pkg.name
         ++ "-image:latest"
