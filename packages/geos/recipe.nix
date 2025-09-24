@@ -18,6 +18,7 @@
           version = "3.9.6";
           description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
           homePage = "https://libgeos.org";
+          mainProgram = "geos-config";
 
           source = {
             url = "https://download.osgeo.org/geos/geos-3.9.6.tar.bz2";

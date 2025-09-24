@@ -18,6 +18,7 @@
           version = "2025-09-23";
           description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
           homePage = "https://libgeos.org";
+          mainProgram = "geosop";
 
           source = {
             github = "libgeos/geos/69cce6b85195d4010e5b066f62a4c1137da92173";

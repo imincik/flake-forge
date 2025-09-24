@@ -31,6 +31,11 @@
                   type = lib.types.str;
                   default = "";
                 };
+                mainProgram = lib.mkOption {
+                  type = lib.types.str;
+                  default = "my-program";
+                  example = "hello";
+                };
 
                 # Source configuration
                 source = {
@@ -149,6 +154,7 @@
                         };
                       };
                     };
+                    meta.mainProgram = pkg.mainProgram;
                   })
                   # Derivation end
                 ) { };

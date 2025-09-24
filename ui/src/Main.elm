@@ -30,6 +30,7 @@ init _ =
             , description = ""
             , version = ""
             , homePage = ""
+            , mainProgram = ""
             }
       , error = Nothing
       }
@@ -223,6 +224,8 @@ installInstructionsHtml =
 packageInstructionsHtml : Package -> List (Html Msg)
 packageInstructionsHtml pkg =
     [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
+    , p [ style "margin-bottom" "0em" ] [ text runPackageComment ]
+    , pre [ class "text-warning" ] [ text (runPackageCmd pkg) ]
     , p [ style "margin-bottom" "0em" ] [ text runInShellComment ]
     , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
     , p [ style "margin-bottom" "0em" ] [ text runInContainerComment ]

@@ -7,6 +7,8 @@ module Texts exposing
     , runInContainerComment
     , runInShellCmd
     , runInShellComment
+    , runPackageCmd
+    , runPackageComment
     )
 
 import ConfigDecoder exposing (Package)
@@ -45,10 +47,24 @@ and select a package to see how to use it.
 """
 
 
+runPackageComment : String
+runPackageComment =
+    """
+1. Run package (main program)
+"""
+
+
+runPackageCmd : Package -> String
+runPackageCmd pkg =
+    """
+nix run github:imincik/flake-forge#"""
+        ++ pkg.name
+
+
 runInShellComment : String
 runInShellComment =
     """
-1. Run package in a temporary shell environment
+2. Run package in a temporary shell environment
 """
 
 
@@ -59,14 +75,14 @@ nix shell github:imincik/flake-forge#"""
         ++ pkg.name
         ++ """
 
-<PROGRAM>
 """
+        ++ pkg.mainProgram
 
 
 runInContainerComment : String
 runInContainerComment =
     """
-2. Run package in a container
+3. Run package in a container
 """
 
 

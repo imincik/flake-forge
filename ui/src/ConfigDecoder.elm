@@ -8,6 +8,7 @@ type alias Package =
     , description : String
     , version : String
     , homePage : String
+    , mainProgram: String
     }
 
 
@@ -20,8 +21,9 @@ configDecoder =
 
 packageDecoder : Decode.Decoder Package
 packageDecoder =
-    Decode.map4 Package
+    Decode.map5 Package
         (Decode.field "name" Decode.string)
         (Decode.field "description" Decode.string)
         (Decode.field "version" Decode.string)
         (Decode.field "homePage" Decode.string)
+        (Decode.field "mainProgram" Decode.string)

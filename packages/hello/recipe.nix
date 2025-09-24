@@ -18,6 +18,7 @@
           version = "2.12.1";
           description = "Program that produces a familiar, friendly greeting";
           homePage = "https://www.gnu.org/software/hello";
+          mainProgram = "hello";
 
           source = {
             url = "mirror://gnu/hello/hello-2.12.1.tar.gz";

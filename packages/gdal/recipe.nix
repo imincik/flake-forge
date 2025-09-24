@@ -18,6 +18,7 @@
           version = "3.9.3";
           description = "Translator library for raster geospatial data formats";
           homePage = "https://gdal.org";
+          mainProgram = "gdalinfo";
 
           source = {
             url = "https://download.osgeo.org/gdal/3.9.3/gdal-3.9.3.tar.gz";
