@@ -159,7 +159,7 @@
               };
               image = pkgs.dockerTools.buildImage {
                 name = "${pkg.name}";
-                tag = "latest";
+                tag = pkg.version;
                 copyToRoot = [
                   finalPkg
                 ];

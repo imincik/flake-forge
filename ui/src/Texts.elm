@@ -116,5 +116,5 @@ runContainerCmd pkg =
   nix build github:imincik/flake-forge#{0}.passthru.image
 
   podman load < ./result
-  podman run -it --rm localhost/{0}:latest
-""" [ pkg.name ]
+  podman run -it --rm localhost/{0}:{1}
+""" [ pkg.name, pkg.version ]
