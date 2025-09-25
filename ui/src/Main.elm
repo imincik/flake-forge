@@ -231,7 +231,7 @@ packageInstructionsHtml pkg =
     , hr [] []
     , text "Recipe: "
     , a
-        [ href ("https://github.com/imincik/flake-forge/blob/master/packages/" ++ pkg.name ++ "/recipe.nix")
+        [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/" ++ pkg.name ++ "/recipe.nix")
         , target "_blank"
         ]
         [ text (pkg.name ++ "/recipe.nix") ]
