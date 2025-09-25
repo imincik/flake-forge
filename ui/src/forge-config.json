@@ -2,6 +2,17 @@
   "packages": [
     {
       "build": {
+        "plainBuilder": {
+          "build": "echo 'Build phase'",
+          "check": "echo 'Check phase'",
+          "configure": "echo 'Configure phase'",
+          "enable": false,
+          "install": "echo 'Install phase'",
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        },
         "standardBuilder": {
           "enable": true,
           "requirements": {
@@ -31,12 +42,24 @@
     },
     {
       "build": {
+        "plainBuilder": {
+          "build": "echo 'Build phase'",
+          "check": "echo 'Check phase'",
+          "configure": "echo 'Configure phase'",
+          "enable": false,
+          "install": "echo 'Install phase'",
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        },
         "standardBuilder": {
           "enable": true,
           "requirements": {
             "build": [],
             "native": [
-              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"
+              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7",
+              "/nix/store/7bgiqc706pzzb1gmwgpzdfg491w4a8nx-ninja-1.13.1"
             ]
           }
         }
@@ -52,18 +75,30 @@
       },
       "test": {
         "requirements": [],
-        "script": "echo \"Hello from test script\"\n"
+        "script": "echo \"Test script\"\n"
       },
       "version": "3.9.6"
     },
     {
       "build": {
+        "plainBuilder": {
+          "build": "echo 'Build phase'",
+          "check": "echo 'Check phase'",
+          "configure": "echo 'Configure phase'",
+          "enable": false,
+          "install": "echo 'Install phase'",
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        },
         "standardBuilder": {
           "enable": true,
           "requirements": {
             "build": [],
             "native": [
-              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"
+              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7",
+              "/nix/store/7bgiqc706pzzb1gmwgpzdfg491w4a8nx-ninja-1.13.1"
             ]
           }
         }
@@ -79,12 +114,62 @@
       },
       "test": {
         "requirements": [],
-        "script": "echo \"Hello from test script\"\n"
+        "script": "echo \"Test script\"\n"
       },
       "version": "2025-09-23"
     },
     {
       "build": {
+        "plainBuilder": {
+          "build": "make -j $NIX_BUILD_CORES\n",
+          "check": "ctest --output-on-failure\n",
+          "configure": "mkdir build && cd build\n\ncmake ${CMAKE_ARGS} \\\n  -D CMAKE_BUILD_TYPE=Release \\\n  -D CMAKE_INSTALL_PREFIX=$out \\\n  ..\n",
+          "enable": true,
+          "install": "make install -j $NIX_BUILD_CORES\n",
+          "requirements": {
+            "build": [],
+            "native": [
+              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7",
+              "/nix/store/7bgiqc706pzzb1gmwgpzdfg491w4a8nx-ninja-1.13.1"
+            ]
+          }
+        },
+        "standardBuilder": {
+          "enable": false,
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        }
+      },
+      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "homePage": "https://libgeos.org",
+      "mainProgram": "geos-config",
+      "name": "geos-plain-build",
+      "source": {
+        "github": null,
+        "hash": "sha256-jChKNBWS+WDYSBPrujwv1PyesLZlggon9vi+shGrawA=",
+        "url": "https://download.osgeo.org/geos/geos-3.9.6.tar.bz2"
+      },
+      "test": {
+        "requirements": [],
+        "script": "geos-config --version | grep -E \"[0-9]\\.[0-9]\\.[0-9]\"\n"
+      },
+      "version": "3.9.6"
+    },
+    {
+      "build": {
+        "plainBuilder": {
+          "build": "echo 'Build phase'",
+          "check": "echo 'Check phase'",
+          "configure": "echo 'Configure phase'",
+          "enable": false,
+          "install": "echo 'Install phase'",
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        },
         "standardBuilder": {
           "enable": true,
           "requirements": {

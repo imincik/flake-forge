@@ -57,9 +57,41 @@
 
                 # Build configuration
                 build = {
+                  plainBuilder = {
+                    enable = lib.mkEnableOption ''
+                      Plain builder.
+                    '';
+                    requirements = {
+                      native = lib.mkOption {
+                        type = lib.types.listOf lib.types.package;
+                        default = [ ];
+                      };
+                      build = lib.mkOption {
+                        type = lib.types.listOf lib.types.package;
+                        default = [ ];
+                      };
+                    };
+                    configure = lib.mkOption {
+                      type = lib.types.str;
+                      default = "echo 'Configure phase'";
+                    };
+                    build = lib.mkOption {
+                      type = lib.types.str;
+                      default = "echo 'Build phase'";
+                    };
+                    check = lib.mkOption {
+                      type = lib.types.str;
+                      default = "echo 'Check phase'";
+                    };
+                    install = lib.mkOption {
+                      type = lib.types.str;
+                      default = "echo 'Install phase'";
+                    };
+                  };
+
                   standardBuilder = {
                     enable = lib.mkEnableOption ''
-                      Default builder.
+                      Standard builder.
                     '';
                     requirements = {
                       native = lib.mkOption {
@@ -83,7 +115,7 @@
                   script = lib.mkOption {
                     type = lib.types.str;
                     default = ''
-                      echo "Hello from test script"
+                      echo "Test script"
                     '';
                   };
                 };
@@ -119,6 +151,55 @@
                   hash = pkg.source.hash;
                 };
 
+            pkgPassthru = pkg: finalPkg: {
+              test = pkgs.testers.runCommand {
+                name = "${pkg.name}-test";
+                buildInputs = [ finalPkg ] ++ pkg.test.requirements;
+                script = pkg.test.script + "\ntouch $out";
+              };
+              container-image = pkgs.dockerTools.buildImage {
+                name = "${pkg.name}-image";
+                tag = "latest";
+                copyToRoot = [
+                  finalPkg
+                ];
+                config = {
+                  Entrypoint = [ "${pkgs.bashInteractive}/bin/bash" ];
+                };
+              };
+            };
+
+            pkgMeta = pkg: {
+              description = pkg.description;
+              mainProgram = pkg.mainProgram;
+            };
+
+            plainBuilderPkgs = lib.listToAttrs (
+              map (pkg: {
+                name = pkg.name;
+                value = pkgs.callPackage (
+                  # Derivation start
+                  { stdenv }:
+                  stdenv.mkDerivation (finalAttrs: {
+                    pname = pkg.name;
+                    version = pkg.version;
+                    src = pkgSource pkg;
+                    nativeBuildInputs = pkg.build.plainBuilder.requirements.native;
+                    buildInputs = pkg.build.plainBuilder.requirements.build;
+                    configurePhase = pkg.build.plainBuilder.configure;
+                    buildPhase = pkg.build.plainBuilder.build;
+                    installPhase = pkg.build.plainBuilder.install;
+                    checkPhase = pkg.build.plainBuilder.check;
+                    doCheck = true;
+                    doInstallCheck = true;
+                    passthru = pkgPassthru pkg finalAttrs.finalPackage;
+                    meta = pkgMeta pkg;
+                  })
+                  # Derivation end
+                ) { };
+              }) (lib.filter (p: p.build.plainBuilder.enable == true) cfg.packages)
+            );
+
             standardBuilderPkgs = lib.listToAttrs (
               map (pkg: {
                 name = pkg.name;
@@ -131,35 +212,16 @@
                     src = pkgSource pkg;
                     nativeBuildInputs = pkg.build.standardBuilder.requirements.native;
                     buildInputs = pkg.build.standardBuilder.requirements.build;
-                    passthru = {
-                      test = pkgs.testers.runCommand {
-                        name = "${pkg.name}-test";
-                        buildInputs = [ finalAttrs.finalPackage ] ++ pkg.test.requirements;
-                        script = pkg.test.script + "\ntouch $out";
-                      };
-                      container-image = pkgs.dockerTools.buildImage {
-                        name = "${pkg.name}-image";
-                        tag = "latest";
-                        copyToRoot = [
-                          finalAttrs.finalPackage
-                        ];
-                        config = {
-                          Entrypoint = [ "${pkgs.bashInteractive}/bin/bash" ];
-                        };
-                      };
-                    };
-                    meta.mainProgram = pkg.mainProgram;
+                    passthru = pkgPassthru pkg finalAttrs.finalPackage;
+                    meta = pkgMeta pkg;
                   })
                   # Derivation end
                 ) { };
               }) (lib.filter (p: p.build.standardBuilder.enable == true) cfg.packages)
             );
 
-            # TODO: replace this with some real other builder package set
-            otherBuilderPkgs = { };
-
           in
-          (standardBuilderPkgs // otherBuilderPkgs)
+          (plainBuilderPkgs // standardBuilderPkgs)
           //
             # Add forge-config package
             {
