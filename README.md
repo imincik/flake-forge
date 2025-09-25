@@ -7,32 +7,46 @@ The friendly software distribution system with Nix super powers.
 
 ## Features
 
-* Build process configuration using simple
+* Software build process configuration using simple
   ([conda-forge](https://conda-forge.org/) style) language
-* Out-of-box container image output
+
+* Outputs:
+  * Nix package
+  * Container image containing Nix package
+  * Configurable application container image
+
 * [Web UI](https://imincik.github.io/flake-forge)
+
 * Simple for self hosting
-* Not hiding Nix super powers
 
 
 ## Packaging workflow
 
 1. Create a new package recipe file in `packages/<my-package>/recipe.nix` and
-   add it to git. Check out existing examples in [packages](packages) directory.
+   add it to git.
 
-2. Test build
+1. Test build
 
 ```bash
 nix build .#my-package
 ```
 
-3. Submit PR and wait for tests
+1. Inspect and test build output in `./result` directory
 
-3. Publish package by merging the PR
+1. Submit PR and wait for tests
+
+1. Publish package by merging the PR
+
+### Examples
+
+Check out existing package recipe examples in [packages](packages) directory.
 
 
 ## TODOs
 
+* CI checks and workflows (dependencies updates, ...)
+
 * Many more builder configuration options
-* Configuration options for container images
+
+* Application container images
 
