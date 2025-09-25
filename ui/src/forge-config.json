@@ -1,1 +1,112 @@
-{"packages":[{"build":{"standardBuilder":{"enable":true,"requirements":{"build":["/nix/store/njhrpc02gq7501vi1kr2jl1ml603hid0-proj-9.6.1"],"native":["/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"]}}},"description":"Translator library for raster geospatial data formats","homePage":"https://gdal.org","mainProgram":"gdalinfo","name":"gdal","source":{"github":null,"hash":"sha256-8pPYzMa5j2F9uI+Fk+rjf35LMtSaYVssulztEse+va4=","url":"https://download.osgeo.org/gdal/3.9.3/gdal-3.9.3.tar.gz"},"test":{"requirements":[],"script":"gdalinfo --version | grep \"GDAL\"\n"},"version":"3.9.3"},{"build":{"standardBuilder":{"enable":true,"requirements":{"build":[],"native":["/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"]}}},"description":"C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software","homePage":"https://libgeos.org","mainProgram":"geos-config","name":"geos","source":{"github":null,"hash":"sha256-jChKNBWS+WDYSBPrujwv1PyesLZlggon9vi+shGrawA=","url":"https://download.osgeo.org/geos/geos-3.9.6.tar.bz2"},"test":{"requirements":[],"script":"echo \"Hello from test script\"\n"},"version":"3.9.6"},{"build":{"standardBuilder":{"enable":true,"requirements":{"build":[],"native":["/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"]}}},"description":"C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software","homePage":"https://libgeos.org","mainProgram":"geosop","name":"geos-github","source":{"github":"libgeos/geos/69cce6b85195d4010e5b066f62a4c1137da92173","hash":"sha256-sYMzgV+B3iA7gj3hP9zpYPN7N2t5NRMVJAJ1dga3neM=","url":null},"test":{"requirements":[],"script":"echo \"Hello from test script\"\n"},"version":"2025-09-23"},{"build":{"standardBuilder":{"enable":true,"requirements":{"build":[],"native":[]}}},"description":"Program that produces a familiar, friendly greeting","homePage":"https://www.gnu.org/software/hello","mainProgram":"hello","name":"hello","source":{"github":null,"hash":"sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=","url":"mirror://gnu/hello/hello-2.12.1.tar.gz"},"test":{"requirements":[],"script":"hello | grep \"Hello, world\"\n"},"version":"2.12.1"}]}
+{
+  "packages": [
+    {
+      "build": {
+        "standardBuilder": {
+          "enable": true,
+          "requirements": {
+            "build": [
+              "/nix/store/njhrpc02gq7501vi1kr2jl1ml603hid0-proj-9.6.1"
+            ],
+            "native": [
+              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"
+            ]
+          }
+        }
+      },
+      "description": "Translator library for raster geospatial data formats",
+      "homePage": "https://gdal.org",
+      "mainProgram": "gdalinfo",
+      "name": "gdal",
+      "source": {
+        "github": null,
+        "hash": "sha256-8pPYzMa5j2F9uI+Fk+rjf35LMtSaYVssulztEse+va4=",
+        "url": "https://download.osgeo.org/gdal/3.9.3/gdal-3.9.3.tar.gz"
+      },
+      "test": {
+        "requirements": [],
+        "script": "gdalinfo --version | grep \"GDAL\"\n"
+      },
+      "version": "3.9.3"
+    },
+    {
+      "build": {
+        "standardBuilder": {
+          "enable": true,
+          "requirements": {
+            "build": [],
+            "native": [
+              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"
+            ]
+          }
+        }
+      },
+      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "homePage": "https://libgeos.org",
+      "mainProgram": "geos-config",
+      "name": "geos",
+      "source": {
+        "github": null,
+        "hash": "sha256-jChKNBWS+WDYSBPrujwv1PyesLZlggon9vi+shGrawA=",
+        "url": "https://download.osgeo.org/geos/geos-3.9.6.tar.bz2"
+      },
+      "test": {
+        "requirements": [],
+        "script": "echo \"Hello from test script\"\n"
+      },
+      "version": "3.9.6"
+    },
+    {
+      "build": {
+        "standardBuilder": {
+          "enable": true,
+          "requirements": {
+            "build": [],
+            "native": [
+              "/nix/store/a94d5zmalqava26y3hqsnj5l11l5kl5y-cmake-3.31.7"
+            ]
+          }
+        }
+      },
+      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "homePage": "https://libgeos.org",
+      "mainProgram": "geosop",
+      "name": "geos-github",
+      "source": {
+        "github": "libgeos/geos/69cce6b85195d4010e5b066f62a4c1137da92173",
+        "hash": "sha256-sYMzgV+B3iA7gj3hP9zpYPN7N2t5NRMVJAJ1dga3neM=",
+        "url": null
+      },
+      "test": {
+        "requirements": [],
+        "script": "echo \"Hello from test script\"\n"
+      },
+      "version": "2025-09-23"
+    },
+    {
+      "build": {
+        "standardBuilder": {
+          "enable": true,
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        }
+      },
+      "description": "Program that produces a familiar, friendly greeting",
+      "homePage": "https://www.gnu.org/software/hello",
+      "mainProgram": "hello",
+      "name": "hello",
+      "source": {
+        "github": null,
+        "hash": "sha256-jZkUKv2SV28wsM18tCqNxoCZmLxdYH2Idh9RLibH2yA=",
+        "url": "mirror://gnu/hello/hello-2.12.1.tar.gz"
+      },
+      "test": {
+        "requirements": [],
+        "script": "hello | grep \"Hello, world\"\n"
+      },
+      "version": "2.12.1"
+    }
+  ]
+}

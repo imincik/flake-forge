@@ -16,6 +16,7 @@
         packages = with pkgs; [
           entr
           elmPackages.elm
+          jq
           python3Packages.python
         ];
 
@@ -33,7 +34,7 @@
               echo "  find src/ -name "*.elm" | entr -rn elm make src/Main.elm --output=src/main.js"
               echo
               echo "Re-generate forge-config file:"
-              echo "  cat \$(nix build .#_forge-config --print-out-paths) > src/forge-config.json"
+              echo "  cat \$(nix build .#_forge-config --print-out-paths) | jq > src/forge-config.json"
               echo
               echo "Run 'dev-help' to see this message again."
             }
