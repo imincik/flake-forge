@@ -26,8 +26,10 @@
       ];
 
       imports = [
-        (inputs.import-tree ./forge/modules)
         (inputs.import-tree ./packages)
+
+        ./forge/packages.nix
+        ./forge/modules/forge.nix
         ./ui/develop.nix
       ];
 

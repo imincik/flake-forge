@@ -161,15 +161,11 @@
           in
           (defaultBuilderPkgs // otherBuilderPkgs)
           //
-            # Add forge-config and forge-ui packages
-            rec {
+            # Add forge-config package
+            {
               _forge-config = pkgs.writeTextFile {
                 name = "forge-config.json";
                 text = builtins.toJSON cfg;
-              };
-
-              _forge-ui = pkgs.callPackage ../../ui/package.nix {
-                inherit _forge-config;
               };
             };
       };
