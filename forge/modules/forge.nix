@@ -57,7 +57,7 @@
 
                 # Build configuration
                 build = {
-                  defaultBuilder = {
+                  standardBuilder = {
                     enable = lib.mkEnableOption ''
                       Default builder.
                     '';
@@ -119,7 +119,7 @@
                   hash = pkg.source.hash;
                 };
 
-            defaultBuilderPkgs = lib.listToAttrs (
+            standardBuilderPkgs = lib.listToAttrs (
               map (pkg: {
                 name = pkg.name;
                 value = pkgs.callPackage (
@@ -129,8 +129,8 @@
                     pname = pkg.name;
                     version = pkg.version;
                     src = pkgSource pkg;
-                    nativeBuildInputs = pkg.build.defaultBuilder.requirements.native;
-                    buildInputs = pkg.build.defaultBuilder.requirements.build;
+                    nativeBuildInputs = pkg.build.standardBuilder.requirements.native;
+                    buildInputs = pkg.build.standardBuilder.requirements.build;
                     passthru = {
                       test = pkgs.testers.runCommand {
                         name = "${pkg.name}-test";
@@ -152,14 +152,14 @@
                   })
                   # Derivation end
                 ) { };
-              }) (lib.filter (p: p.build.defaultBuilder.enable == true) cfg.packages)
+              }) (lib.filter (p: p.build.standardBuilder.enable == true) cfg.packages)
             );
 
             # TODO: replace this with some real other builder package set
             otherBuilderPkgs = { };
 
           in
-          (defaultBuilderPkgs // otherBuilderPkgs)
+          (standardBuilderPkgs // otherBuilderPkgs)
           //
             # Add forge-config package
             {

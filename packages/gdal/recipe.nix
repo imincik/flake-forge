@@ -25,7 +25,7 @@
             hash = "sha256-8pPYzMa5j2F9uI+Fk+rjf35LMtSaYVssulztEse+va4=";
           };
 
-          build.defaultBuilder = {
+          build.standardBuilder = {
             enable = true;
             requirements = {
               native = [

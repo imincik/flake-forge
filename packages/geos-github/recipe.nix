@@ -25,7 +25,7 @@
             hash = "sha256-sYMzgV+B3iA7gj3hP9zpYPN7N2t5NRMVJAJ1dga3neM=";
           };
 
-          build.defaultBuilder = {
+          build.standardBuilder = {
             enable = true;
             requirements = {
               native = [ pkgs.cmake ];
