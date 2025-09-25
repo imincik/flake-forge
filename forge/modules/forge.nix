@@ -157,8 +157,8 @@
                 buildInputs = [ finalPkg ] ++ pkg.test.requirements;
                 script = pkg.test.script + "\ntouch $out";
               };
-              container-image = pkgs.dockerTools.buildImage {
-                name = "${pkg.name}-image";
+              image = pkgs.dockerTools.buildImage {
+                name = "${pkg.name}";
                 tag = "latest";
                 copyToRoot = [
                   finalPkg

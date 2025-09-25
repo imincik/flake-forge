@@ -113,8 +113,8 @@ runInContainerComment =
 runContainerCmd : Package -> String
 runContainerCmd pkg =
     format """
-  nix build github:imincik/flake-forge#{0}.passthru.container-image
+  nix build github:imincik/flake-forge#{0}.passthru.image
 
   podman load < ./result
-  podman run -it localhost/{0}-image:latest
+  podman run -it --rm localhost/{0}:latest
 """ [ pkg.name ]
