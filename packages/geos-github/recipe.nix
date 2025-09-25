@@ -28,7 +28,10 @@
           build.standardBuilder = {
             enable = true;
             requirements = {
-              native = [ pkgs.cmake ];
+              native = [
+                pkgs.cmake
+                pkgs.ninja
+              ];
             };
           };
         }
