@@ -11,9 +11,9 @@ The friendly software distribution system with Nix super powers.
   ([conda-forge](https://conda-forge.org/) style) language
 
 * Outputs:
-  * Nix package
-  * Container image containing Nix package
-  * Configurable application container image
+  * Nix packages
+  * Out-of-box package container images
+  * Configurable multi-container application images
 
 * [Web UI](https://imincik.github.io/flake-forge)
 
@@ -48,5 +48,5 @@ Check out existing package recipe examples in [outputs](outputs) directory.
 
 * Many more builder configuration options
 
-* Application container images
+* Multi-container application images
 
