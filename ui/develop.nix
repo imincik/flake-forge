@@ -15,8 +15,9 @@
       devShells.ui = pkgs.mkShell {
         packages = with pkgs; [
           entr
-          elmPackages.elm
           jq
+
+          elmPackages.elm
           python3Packages.python
         ];
 
@@ -31,13 +32,21 @@
               echo "  cat \$(nix build .#_forge-config --print-out-paths) | jq > src/forge-config.json"
               echo
               echo "Launch Python web server:"
-              echo "  python3 -m http.server &"
+              echo "  python3 -m http.server & echo \$! > python-http.pid"
               echo
               echo "Re-build Elm app on change:"
               echo "  find src/ -name "*.elm" | entr -rn elm make src/Main.elm --output=src/main.js"
               echo
               echo "Run 'dev-help' to see this message again."
             }
+
+            function cleanup {
+              echo "Stopping python server ..."
+              kill -9 $(cat python-http.pid) || echo ".. failed to stop python server"
+              rm -f python-http.pid
+            }
+
+            trap cleanup EXIT
 
             dev-help
           '';
