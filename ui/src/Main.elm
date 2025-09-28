@@ -89,10 +89,10 @@ view model =
 
                 -- packages
                 , div [ class "list-group" ]
-                    (List.map
-                        (\pkg -> packageHtml pkg model.selectedPackage)
-                        model.packages
-                    )
+                    -- packages
+                    (packagesHtml model.packages model.selectedPackage)
+
+                -- error message
                 , case model.error of
                     Just errMsg ->
                         div [] [ text ("Error: " ++ errMsg) ]
@@ -171,19 +171,21 @@ searchHtml =
     ]
 
 
+packageActiveState : Package -> Package -> String
+packageActiveState pkg selectedPkg =
+    if pkg.name == selectedPkg.name then
+        " active"
+
+    else
+        " inactive"
+
+
 packageHtml : Package -> Package -> Html Msg
 packageHtml pkg selectedPkg =
     a
         [ href ("#package-" ++ pkg.name)
         , class
-            ("list-group-item list-group-item-action flex-column align-items-start"
-                ++ (if pkg.name == selectedPkg.name then
-                        " active"
-
-                    else
-                        " inactive"
-                   )
-            )
+            ("list-group-item list-group-item-action flex-column align-items-start" ++ packageActiveState pkg selectedPkg)
         , onClick (SelectPackage pkg)
         ]
         [ div
@@ -199,6 +201,13 @@ packageHtml pkg selectedPkg =
             [ text pkg.description ]
         , small [] [ text pkg.homePage ]
         ]
+
+
+packagesHtml : List Package -> Package -> List (Html Msg)
+packagesHtml pkgs selectedPkg =
+    List.map
+        (\pkg -> packageHtml pkg selectedPkg)
+        pkgs
 
 
 
