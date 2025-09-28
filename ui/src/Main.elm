@@ -2,11 +2,11 @@ module Main exposing (main)
 
 import Browser
 import ConfigDecoder exposing (Package, configDecoder)
-import Html exposing (Html, a, div, h2, h5, hr, input, p, pre, small, span, text)
-import Html.Attributes exposing (class, href, name, placeholder, style, target, value)
+import Html exposing (Html, a, div, h5, hr, input, p, small, text)
+import Html.Attributes exposing (class, href, name, placeholder, value)
 import Html.Events exposing (onClick)
 import Http
-import Texts exposing (..)
+import Texts exposing (footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
 
 
 
@@ -67,7 +67,9 @@ view model =
     div [ class "container" ]
         -- header
         [ div [ class "row" ]
-            [ div [ class "col-lg-12 border fw-bold fs-1 py-2 my-2" ]
+            [ div
+                [ class "col-lg-12 border fw-bold fs-1 py-2 my-2"
+                ]
                 -- header
                 [ headerHtml ]
             ]
@@ -76,7 +78,9 @@ view model =
         , div [ class "row" ]
             -- packages panel
             [ div [ class "col-lg-6 border bg-light py-3 my-3" ]
-                [ div [ class "name d-flex justify-content-between align-items-center" ]
+                [ div
+                    [ class "name d-flex justify-content-between align-items-center"
+                    ]
                     --search
                     searchHtml
 
@@ -153,20 +157,17 @@ httpErrorToString err =
 
 
 
--- html functions
-
-
-headerHtml : Html Msg
-headerHtml =
-    p []
-        [ span [ style "margin-right" "10px" ] [ text mainTitle ]
-        , span [ class "fs-2 text-secondary" ] [ text mainSubTitle ]
-        ]
+-- HTML functions
 
 
 searchHtml : List (Html Msg)
 searchHtml =
-    [ input [ class "form-control form-control-lg py-2 my-2", placeholder "Search for package ...", value "" ] []
+    [ input
+        [ class "form-control form-control-lg py-2 my-2"
+        , placeholder "Search for package ..."
+        , value ""
+        ]
+        []
     ]
 
 
@@ -185,57 +186,19 @@ packageHtml pkg selectedPkg =
             )
         , onClick (SelectPackage pkg)
         ]
-        [ div [ name ("package-" ++ pkg.name), class "d-flex w-100 justify-content-between" ]
+        [ div
+            [ name ("package-" ++ pkg.name)
+            , class "d-flex w-100 justify-content-between"
+            ]
             [ h5 [ class "mb-1" ] [ text pkg.name ]
             , small [] [ text ("v" ++ pkg.version) ]
             ]
-        , p [ class "mb-1" ] [ text pkg.description ]
+        , p
+            [ class "mb-1"
+            ]
+            [ text pkg.description ]
         , small [] [ text pkg.homePage ]
         ]
-
-
-footerHtml : Html Msg
-footerHtml =
-    p [ class "text-center" ]
-        [ span [ class "text-secondary fs-8" ] [ text "Developed by " ]
-        , a [ href "https://github.com/imincik", target "_blank" ] [ text "@imincik" ]
-        , text " . "
-        , span [ class "text-secondary fs-8" ] [ text "Powered by " ]
-        , a [ href "https://nixos.org", target "_blank" ] [ text "Nix," ]
-        , a [ href "https://github.com/NixOS/nixpkgs", target "_blank" ] [ text " Nixpkgs" ]
-        , a [ href "https://elm-lang.org", target "_blank" ] [ text " and Elm" ]
-        , text " ."
-        ]
-
-
-installInstructionsHtml : List (Html Msg)
-installInstructionsHtml =
-    [ h2 [] [ text "ABOUT" ]
-    , p [] [ text aboutText ]
-    , h2 [] [ text "QUICK START" ]
-    , p [ style "margin-bottom" "0em" ] installNixText
-    , pre [ class "text-warning" ] [ text installNixCmd ]
-    , p [ style "margin-bottom" "0em" ] [ text clickOnPackageText ]
-    ]
-
-
-packageInstructionsHtml : Package -> List (Html Msg)
-packageInstructionsHtml pkg =
-    [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
-    , p [ style "margin-bottom" "0em" ] [ text runPackageComment ]
-    , pre [ class "text-warning" ] [ text (runPackageCmd pkg) ]
-    , p [ style "margin-bottom" "0em" ] [ text runInShellComment ]
-    , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
-    , p [ style "margin-bottom" "0em" ] [ text runInContainerComment ]
-    , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
-    , hr [] []
-    , text "Recipe: "
-    , a
-        [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/" ++ pkg.name ++ "/recipe.nix")
-        , target "_blank"
-        ]
-        [ text (pkg.name ++ "/recipe.nix") ]
-    ]
 
 
 
