@@ -2,9 +2,9 @@ module Main exposing (main)
 
 import Browser
 import ConfigDecoder exposing (Package, configDecoder)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html exposing (Html, a, div, h2, h5, hr, input, p, pre, small, span, text)
+import Html.Attributes exposing (class, href, name, placeholder, style, target, value)
+import Html.Events exposing (onClick)
 import Http
 import Texts exposing (..)
 
@@ -41,14 +41,14 @@ init _ =
 
 
 type Msg
-    = GetConfig (Result Http.Error ( List Package ))
+    = GetConfig (Result Http.Error (List Package))
     | SelectPackage Package
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetConfig (Ok ( pkgs )) ->
+        GetConfig (Ok pkgs) ->
             ( { model | packages = pkgs, error = Nothing }, Cmd.none )
 
         GetConfig (Err err) ->
