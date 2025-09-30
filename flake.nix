@@ -29,6 +29,7 @@
         ./forge/packages.nix
         ./forge/modules/forge.nix
         ./ui/develop.nix
+        ./checks.nix
 
         (inputs.import-tree ./outputs)
       ];
