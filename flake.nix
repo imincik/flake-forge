@@ -27,7 +27,7 @@
 
       imports = [
         ./forge/packages.nix
-        ./forge/modules/forge.nix
+        ./forge/modules/packages.nix
         ./ui/develop.nix
         ./checks.nix
 
