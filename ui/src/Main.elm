@@ -1,12 +1,12 @@
 module Main exposing (main)
 
 import Browser
-import ConfigDecoder exposing (Package, configDecoder)
-import Html exposing (Html, a, div, h5, hr, input, p, small, text)
+import ConfigDecoder exposing (App, Config, Package, configDecoder)
+import Html exposing (Html, a, button, div, h5, hr, input, p, small, text)
 import Html.Attributes exposing (class, href, name, placeholder, value)
 import Html.Events exposing (onClick)
 import Http
-import Texts exposing (footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
+import Texts exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
 
 
 
@@ -14,7 +14,10 @@ import Texts exposing (footerHtml, headerHtml, installInstructionsHtml, packageI
 
 
 type alias Model =
-    { packages : List Package
+    { apps : List App
+    , packages : List Package
+    , selectedOutput : String
+    , selectedApp : App
     , selectedPackage : Package
     , error : Maybe String
     }
@@ -22,7 +25,14 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { packages = []
+    ( { apps = []
+      , packages = []
+      , selectedOutput = "packages"
+      , selectedApp =
+            { name = ""
+            , description = ""
+            , version = ""
+            }
       , selectedPackage =
             { name = ""
             , description = ""
@@ -41,18 +51,26 @@ init _ =
 
 
 type Msg
-    = GetConfig (Result Http.Error (List Package))
+    = GetConfig (Result Http.Error Config)
+    | SelectOutput String
+    | SelectApp App
     | SelectPackage Package
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetConfig (Ok pkgs) ->
-            ( { model | packages = pkgs, error = Nothing }, Cmd.none )
+        GetConfig (Ok config) ->
+            ( { model | apps = config.apps, packages = config.packages, error = Nothing }, Cmd.none )
 
         GetConfig (Err err) ->
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )
+
+        SelectOutput output ->
+            ( { model | selectedOutput = output }, Cmd.none )
+
+        SelectApp app ->
+            ( { model | selectedApp = app }, Cmd.none )
 
         SelectPackage pkg ->
             ( { model | selectedPackage = pkg }, Cmd.none )
@@ -83,14 +101,25 @@ view model =
                     ]
                     --search
                     searchHtml
+                , div [ class "d-flex btn-group align-items-center" ]
+                    (outputsTabHtml [ "PACKAGES", "APPLICATIONS" ] model.selectedOutput)
 
                 -- separator
                 , div [] [ hr [] [] ]
 
                 -- packages
-                , div [ class "list-group" ]
-                    -- packages
-                    (packagesHtml model.packages model.selectedPackage)
+                , optionalDivHtml (model.selectedOutput == "packages")
+                    (div [ class "list-group" ]
+                        -- packages
+                        (packagesHtml model.packages model.selectedPackage)
+                    )
+
+                -- applications
+                , optionalDivHtml (model.selectedOutput == "applications")
+                    (div [ class "list-group" ]
+                        -- applications
+                        (appsHtml model.apps model.selectedApp)
+                    )
 
                 -- error message
                 , case model.error of
@@ -103,15 +132,19 @@ view model =
 
             -- instructions panel
             , div [ class "col-lg-6 bg-dark text-white py-3 my-3" ]
-                [ if String.isEmpty model.selectedPackage.name then
+                [ if String.isEmpty model.selectedPackage.name && String.isEmpty model.selectedApp.name then
+                    -- install instructions
                     div []
-                        -- install instructions
                         installInstructionsHtml
+
+                  else if model.selectedOutput == "packages" then
+                    -- usage instructions
+                    div []
+                        (packageInstructionsHtml model.selectedPackage)
 
                   else
                     div []
-                        -- usage instructions
-                        (packageInstructionsHtml model.selectedPackage)
+                        (appInstructionsHtml model.selectedApp)
                 ]
             ]
 
@@ -164,11 +197,42 @@ searchHtml : List (Html Msg)
 searchHtml =
     [ input
         [ class "form-control form-control-lg py-2 my-2"
-        , placeholder "Search for package ..."
+        , placeholder "Search for package or application ..."
         , value ""
         ]
         []
     ]
+
+
+outputsTabHtml : List String -> String -> List (Html Msg)
+outputsTabHtml buttons activeButton =
+    let
+        buttonItem =
+            \item ->
+                button
+                    [ class
+                        ("btn btn-lg "
+                            ++ (if String.toLower item == activeButton then
+                                    "btn-dark"
+
+                                else
+                                    "btn-secondary"
+                               )
+                        )
+                    , onClick (SelectOutput (String.toLower item))
+                    ]
+                    [ text item ]
+    in
+    List.map buttonItem buttons
+
+
+optionalDivHtml : Bool -> Html Msg -> Html Msg
+optionalDivHtml condition divElement =
+    if condition then
+        divElement
+
+    else
+        div [] []
 
 
 packageActiveState : Package -> Package -> String
@@ -208,6 +272,44 @@ packagesHtml pkgs selectedPkg =
     List.map
         (\pkg -> packageHtml pkg selectedPkg)
         pkgs
+
+
+appActiveState : App -> App -> String
+appActiveState app selectedApp =
+    if app.name == selectedApp.name then
+        " active"
+
+    else
+        " inactive"
+
+
+appHtml : App -> App -> Html Msg
+appHtml app selectedApp =
+    a
+        [ href ("#app-" ++ app.name)
+        , class
+            ("list-group-item list-group-item-action flex-column align-items-start" ++ appActiveState app selectedApp)
+        , onClick (SelectApp app)
+        ]
+        [ div
+            [ name ("app-" ++ app.name)
+            , class "d-flex w-100 justify-content-between"
+            ]
+            [ h5 [ class "mb-1" ] [ text app.name ]
+            , small [] [ text ("v" ++ app.version) ]
+            ]
+        , p
+            [ class "mb-1"
+            ]
+            [ text app.description ]
+        ]
+
+
+appsHtml : List App -> App -> List (Html Msg)
+appsHtml apps selectedApp =
+    List.map
+        (\app -> appHtml app selectedApp)
+        apps
 
 
 

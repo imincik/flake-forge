@@ -1,4 +1,53 @@
 {
+  "apps": [
+    {
+      "composeFile": "services:\n  hello-english:\n    image: localhost/hello-english:latest\n  hello-italian:\n    image: localhost/hello-italian:latest\n  hello-spanish:\n    image: localhost/hello-spanish:latest\n",
+      "containers": [
+        {
+          "config": {
+            "Cmd": [
+              "hello",
+              "--greeting",
+              "Hello"
+            ]
+          },
+          "name": "hello-english",
+          "requirements": [
+            "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
+          ]
+        },
+        {
+          "config": {
+            "Cmd": [
+              "hello",
+              "--greeting",
+              "Ciao"
+            ]
+          },
+          "name": "hello-italian",
+          "requirements": [
+            "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
+          ]
+        },
+        {
+          "config": {
+            "Cmd": [
+              "hello",
+              "--greeting",
+              "Hola"
+            ]
+          },
+          "name": "hello-spanish",
+          "requirements": [
+            "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
+          ]
+        }
+      ],
+      "description": "Say hello in multiple languages.",
+      "name": "hello",
+      "version": "1.0.0"
+    }
+  ],
   "packages": [
     {
       "build": {

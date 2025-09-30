@@ -1,5 +1,6 @@
 module Texts exposing
-    ( footerHtml
+    ( appInstructionsHtml
+    , footerHtml
     , headerHtml
     , installInstructionsHtml
     , installNixCmd
@@ -9,7 +10,7 @@ module Texts exposing
     , runPackageCmd
     )
 
-import ConfigDecoder exposing (Package)
+import ConfigDecoder exposing (App, Package)
 import Html exposing (Html, a, h2, hr, p, pre, span, text)
 import Html.Attributes exposing (class, href, style, target)
 
@@ -81,16 +82,14 @@ curl --proto '=https' --tlsv1.2 -sSf \\
 
 installInstructionsHtml : List (Html msg)
 installInstructionsHtml =
-    [ h2 [] [ text "ABOUT" ]
-    , p [] [ text "Friendly, self hosted software distribution system." ]
-    , h2 [] [ text "QUICK START" ]
+    [ h2 [] [ text "QUICK START" ]
     , p [ style "margin-bottom" "0em" ]
         [ text "Install Nix "
         , a [ href "https://zero-to-nix.com/start/install", target "_blank" ]
             [ text "(learn more about this installer)" ]
         ]
     , pre [ class "text-warning" ] [ text installNixCmd ]
-    , p [ style "margin-bottom" "0em" ] [ text "and select a package to see how to use it." ]
+    , p [ style "margin-bottom" "0em" ] [ text "and select a package or application to see the usage instructions." ]
     ]
 
 
@@ -122,27 +121,69 @@ runContainerCmd pkg =
 
 packageInstructionsHtml : Package -> List (Html msg)
 packageInstructionsHtml pkg =
-    [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
-    , p
-        [ style "margin-bottom" "0em"
+    if not (String.isEmpty pkg.name) then
+        [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
+        , p
+            [ style "margin-bottom" "0em"
+            ]
+            [ text "1. Run package (main program)" ]
+        , pre [ class "text-warning" ] [ text (runPackageCmd pkg) ]
+        , p
+            [ style "margin-bottom" "0em"
+            ]
+            [ text "2. Run package in a temporary shell environment" ]
+        , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
+        , p
+            [ style "margin-bottom" "0em"
+            ]
+            [ text "3. Run package in a container" ]
+        , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
+        , hr [] []
+        , text "Recipe: "
+        , a
+            [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/packages/" ++ pkg.name ++ "/recipe.nix")
+            , target "_blank"
+            ]
+            [ text ("packages/" ++ pkg.name ++ "/recipe.nix") ]
         ]
-        [ text "1. Run package (main program)" ]
-    , pre [ class "text-warning" ] [ text (runPackageCmd pkg) ]
-    , p
-        [ style "margin-bottom" "0em"
+
+    else
+        [ text "No package is selected."
         ]
-        [ text "2. Run package in a temporary shell environment" ]
-    , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
-    , p
-        [ style "margin-bottom" "0em"
+
+
+runAppCmd : App -> String
+runAppCmd app =
+    format """
+  nix build github:imincik/flake-forge#{0}-app
+
+  for image in ./result/*.tar.gz; do
+    podman load < $image
+  done
+
+  podman-compose --file $(pwd)/result/compose.yaml up
+
+""" [ app.name ]
+
+
+appInstructionsHtml : App -> List (Html msg)
+appInstructionsHtml app =
+    if not (String.isEmpty app.name) then
+        [ h2 [] [ text ("APP: " ++ app.name) ]
+        , p
+            [ style "margin-bottom" "0em"
+            ]
+            [ text "1. Run application in containers" ]
+        , pre [ class "text-warning" ] [ text (runAppCmd app) ]
+        , hr [] []
+        , text "Recipe: "
+        , a
+            [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/apps/" ++ app.name ++ "/recipe.nix")
+            , target "_blank"
+            ]
+            [ text ("apps/" ++ app.name ++ "/recipe.nix") ]
         ]
-        [ text "3. Run package in a container" ]
-    , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
-    , hr [] []
-    , text "Recipe: "
-    , a
-        [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/packages/" ++ pkg.name ++ "/recipe.nix")
-        , target "_blank"
+
+    else
+        [ text "No application is selected."
         ]
-        [ text (pkg.name ++ "/recipe.nix") ]
-    ]

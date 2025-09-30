@@ -1,6 +1,19 @@
-module ConfigDecoder exposing (Package, packageDecoder, configDecoder)
+module ConfigDecoder exposing (App, Config, Package, configDecoder, packageDecoder)
 
 import Json.Decode as Decode
+
+
+type alias Config =
+    { apps : List App
+    , packages : List Package
+    }
+
+
+type alias App =
+    { name : String
+    , description : String
+    , version : String
+    }
 
 
 type alias Package =
@@ -8,16 +21,23 @@ type alias Package =
     , description : String
     , version : String
     , homePage : String
-    , mainProgram: String
+    , mainProgram : String
     }
 
 
-configDecoder : Decode.Decoder ( List Package )
+configDecoder : Decode.Decoder Config
 configDecoder =
-    -- Decode.map Tuple.pair
-    --     (Decode.field "config" (Decode.list packageDecoder))
-    --     (Decode.field "packages" (Decode.list packageDecoder))
-        Decode.field "packages" (Decode.list packageDecoder)
+    Decode.map2 Config
+        (Decode.field "apps" (Decode.list appDecoder))
+        (Decode.field "packages" (Decode.list packageDecoder))
+
+
+appDecoder : Decode.Decoder App
+appDecoder =
+    Decode.map3 App
+        (Decode.field "name" Decode.string)
+        (Decode.field "description" Decode.string)
+        (Decode.field "version" Decode.string)
 
 
 packageDecoder : Decode.Decoder Package
