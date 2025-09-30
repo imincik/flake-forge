@@ -22,7 +22,7 @@ The friendly software distribution system with Nix super powers.
 
 ## Packaging workflow
 
-1. Create a new package recipe file in `outputs/<my-package>/recipe.nix` and
+1. Create a new package recipe file in `outputs/packages/<my-package>/recipe.nix` and
    add it to git.
 
 1. Test build
@@ -39,7 +39,7 @@ nix build .#my-package
 
 ### Examples
 
-Check out existing package recipe examples in [outputs](outputs) directory.
+Check out existing recipe examples in [outputs](outputs) directory.
 
 
 ## TODOs

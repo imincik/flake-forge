@@ -221,15 +221,7 @@
             );
 
           in
-          (plainBuilderPkgs // standardBuilderPkgs)
-          //
-            # Add forge-config package
-            {
-              _forge-config = pkgs.writeTextFile {
-                name = "forge-config.json";
-                text = builtins.toJSON cfg;
-              };
-            };
+          (plainBuilderPkgs // standardBuilderPkgs);
       };
     };
 }
