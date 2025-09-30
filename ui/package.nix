@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation {
-  # FIXME: avoid this
+  # FIXME: avoid building with disabled sandbox
   # nix build .#forge-config --option sandbox relaxed --builders ""
   __noChroot = true;
 
