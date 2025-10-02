@@ -4,7 +4,7 @@ import Browser
 import ConfigDecoder exposing (App, Config, Package, configDecoder)
 import Html exposing (Html, a, button, div, h5, hr, input, p, small, text)
 import Html.Attributes exposing (class, href, name, placeholder, value)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onInput)
 import Http
 import Texts exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
 
@@ -19,6 +19,7 @@ type alias Model =
     , selectedOutput : String
     , selectedApp : App
     , selectedPackage : Package
+    , searchString : String
     , error : Maybe String
     }
 
@@ -40,6 +41,7 @@ init _ =
             , homePage = ""
             , mainProgram = ""
             }
+      , searchString = ""
       , error = Nothing
       }
     , getConfig
@@ -55,6 +57,7 @@ type Msg
     | SelectOutput String
     | SelectApp App
     | SelectPackage Package
+    | Search String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -74,6 +77,9 @@ update msg model =
 
         SelectPackage pkg ->
             ( { model | selectedPackage = pkg }, Cmd.none )
+
+        Search string ->
+            ( { model | searchString = string }, Cmd.none )
 
 
 
@@ -100,7 +106,7 @@ view model =
                     [ class "name d-flex justify-content-between align-items-center"
                     ]
                     --search
-                    searchHtml
+                    (searchHtml model.searchString)
                 , div [ class "d-flex btn-group align-items-center" ]
                     (outputsTabHtml [ "PACKAGES", "APPLICATIONS" ] model.selectedOutput)
 
@@ -111,14 +117,14 @@ view model =
                 , optionalDivHtml (model.selectedOutput == "packages")
                     (div [ class "list-group" ]
                         -- packages
-                        (packagesHtml model.packages model.selectedPackage)
+                        (packagesHtml model.packages model.selectedPackage model.searchString)
                     )
 
                 -- applications
                 , optionalDivHtml (model.selectedOutput == "applications")
                     (div [ class "list-group" ]
                         -- applications
-                        (appsHtml model.apps model.selectedApp)
+                        (appsHtml model.apps model.selectedApp model.searchString)
                     )
 
                 -- error message
@@ -193,12 +199,13 @@ httpErrorToString err =
 -- HTML functions
 
 
-searchHtml : List (Html Msg)
-searchHtml =
+searchHtml : String -> List (Html Msg)
+searchHtml searchString =
     [ input
         [ class "form-control form-control-lg py-2 my-2"
         , placeholder "Search for package or application ..."
-        , value ""
+        , value searchString
+        , onInput Search
         ]
         []
     ]
@@ -267,11 +274,15 @@ packageHtml pkg selectedPkg =
         ]
 
 
-packagesHtml : List Package -> Package -> List (Html Msg)
-packagesHtml pkgs selectedPkg =
+packagesHtml : List Package -> Package -> String -> List (Html Msg)
+packagesHtml pkgs selectedPkg filter =
+    let
+        filteredPkgs =
+            List.filter (\pkg -> String.contains filter pkg.name) pkgs
+    in
     List.map
         (\pkg -> packageHtml pkg selectedPkg)
-        pkgs
+        filteredPkgs
 
 
 appActiveState : App -> App -> String
@@ -305,11 +316,15 @@ appHtml app selectedApp =
         ]
 
 
-appsHtml : List App -> App -> List (Html Msg)
-appsHtml apps selectedApp =
+appsHtml : List App -> App -> String -> List (Html Msg)
+appsHtml apps selectedApp filter =
+    let
+        filteredApps =
+            List.filter (\app -> String.contains filter app.name) apps
+    in
     List.map
         (\app -> appHtml app selectedApp)
-        apps
+        filteredApps
 
 
 
