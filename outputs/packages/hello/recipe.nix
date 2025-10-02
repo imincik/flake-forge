@@ -16,7 +16,7 @@
         {
           name = "hello";
           version = "2.12.1";
-          description = "Program that produces a familiar, friendly greeting";
+          description = "Hello package built from tarball using standardBuilder.";
           homePage = "https://www.gnu.org/software/hello";
           mainProgram = "hello";
 

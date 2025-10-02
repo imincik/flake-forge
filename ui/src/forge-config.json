@@ -75,7 +75,7 @@
           }
         }
       },
-      "description": "Translator library for raster geospatial data formats",
+      "description": "GDAL package built from tarball using standardBuilder.",
       "homePage": "https://gdal.org",
       "mainProgram": "gdalinfo",
       "name": "gdal",
@@ -115,7 +115,7 @@
           }
         }
       },
-      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "description": "GEOS package built from tarball using standardBuilder.",
       "homePage": "https://libgeos.org",
       "mainProgram": "geos-config",
       "name": "geos",
@@ -155,7 +155,7 @@
           }
         }
       },
-      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "description": "GEOS package built from GitHub using standardBuilder.",
       "homePage": "https://libgeos.org",
       "mainProgram": "geosop",
       "name": "geos-github",
@@ -195,7 +195,7 @@
           }
         }
       },
-      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "description": "GEOS package built from tarball using plainBuilder.",
       "homePage": "https://libgeos.org",
       "mainProgram": "geos-config",
       "name": "geos-plain-build",
@@ -232,7 +232,7 @@
           }
         }
       },
-      "description": "Program that produces a familiar, friendly greeting",
+      "description": "Hello package built from tarball using standardBuilder.",
       "homePage": "https://www.gnu.org/software/hello",
       "mainProgram": "hello",
       "name": "hello",

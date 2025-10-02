@@ -16,7 +16,7 @@
         {
           name = "gdal";
           version = "3.9.3";
-          description = "Translator library for raster geospatial data formats";
+          description = "GDAL package built from tarball using standardBuilder.";
           homePage = "https://gdal.org";
           mainProgram = "gdalinfo";
 
