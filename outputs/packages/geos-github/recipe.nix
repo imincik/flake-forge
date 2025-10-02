@@ -16,7 +16,7 @@
         {
           name = "geos-github";
           version = "2025-09-23";
-          description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
+          description = "GEOS package built from GitHub using standardBuilder.";
           homePage = "https://libgeos.org";
           mainProgram = "geosop";
 

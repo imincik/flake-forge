@@ -5,7 +5,7 @@
       "containers": [
         {
           "config": {
-            "Cmd": [
+            "CMD": [
               "hello",
               "--greeting",
               "Hello"
@@ -18,7 +18,7 @@
         },
         {
           "config": {
-            "Cmd": [
+            "CMD": [
               "hello",
               "--greeting",
               "Ciao"
@@ -31,7 +31,7 @@
         },
         {
           "config": {
-            "Cmd": [
+            "CMD": [
               "hello",
               "--greeting",
               "Hola"
@@ -64,6 +64,7 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [
               "/nix/store/njhrpc02gq7501vi1kr2jl1ml603hid0-proj-9.6.1"
@@ -74,7 +75,7 @@
           }
         }
       },
-      "description": "Translator library for raster geospatial data formats",
+      "description": "GDAL package built from tarball using standardBuilder.",
       "homePage": "https://gdal.org",
       "mainProgram": "gdalinfo",
       "name": "gdal",
@@ -104,6 +105,7 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": [
@@ -113,7 +115,7 @@
           }
         }
       },
-      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "description": "GEOS package built from tarball using standardBuilder.",
       "homePage": "https://libgeos.org",
       "mainProgram": "geos-config",
       "name": "geos",
@@ -143,6 +145,7 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": [
@@ -152,7 +155,7 @@
           }
         }
       },
-      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "description": "GEOS package built from GitHub using standardBuilder.",
       "homePage": "https://libgeos.org",
       "mainProgram": "geosop",
       "name": "geos-github",
@@ -185,13 +188,14 @@
         },
         "standardBuilder": {
           "enable": false,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": []
           }
         }
       },
-      "description": "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software",
+      "description": "GEOS package built from tarball using plainBuilder.",
       "homePage": "https://libgeos.org",
       "mainProgram": "geos-config",
       "name": "geos-plain-build",
@@ -221,13 +225,14 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": []
           }
         }
       },
-      "description": "Program that produces a familiar, friendly greeting",
+      "description": "Hello package built from tarball using standardBuilder.",
       "homePage": "https://www.gnu.org/software/hello",
       "mainProgram": "hello",
       "name": "hello",

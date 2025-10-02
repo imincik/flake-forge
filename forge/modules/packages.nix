@@ -103,6 +103,21 @@
                         default = [ ];
                       };
                     };
+                    extraDrvAttrs = lib.mkOption {
+                      type = lib.types.attrsOf lib.types.anything;
+                      default = { };
+                      description = ''
+                        Expert option.
+
+                        Set extra Nix derivation attributes.
+                      '';
+                      example = lib.literalExpression ''
+                        {
+                          preConfigure = "export HOME=$(mktemp -d)"
+                          postInstall = "rm $out/somefile.txt"
+                        }
+                      '';
+                    };
                   };
                 };
 
@@ -206,15 +221,19 @@
                 value = pkgs.callPackage (
                   # Derivation start
                   { stdenv }:
-                  stdenv.mkDerivation (finalAttrs: {
-                    pname = pkg.name;
-                    version = pkg.version;
-                    src = pkgSource pkg;
-                    nativeBuildInputs = pkg.build.standardBuilder.requirements.native;
-                    buildInputs = pkg.build.standardBuilder.requirements.build;
-                    passthru = pkgPassthru pkg finalAttrs.finalPackage;
-                    meta = pkgMeta pkg;
-                  })
+                  stdenv.mkDerivation (
+                    finalAttrs:
+                    {
+                      pname = pkg.name;
+                      version = pkg.version;
+                      src = pkgSource pkg;
+                      nativeBuildInputs = pkg.build.standardBuilder.requirements.native;
+                      buildInputs = pkg.build.standardBuilder.requirements.build;
+                      passthru = pkgPassthru pkg finalAttrs.finalPackage;
+                      meta = pkgMeta pkg;
+                    }
+                    // pkg.build.standardBuilder.extraDrvAttrs
+                  )
                   # Derivation end
                 ) { };
               }) (lib.filter (p: p.build.standardBuilder.enable == true) cfg.packages)

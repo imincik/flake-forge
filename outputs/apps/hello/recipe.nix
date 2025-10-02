@@ -22,7 +22,7 @@
             {
               name = "hello-english";
               requirements = [ config.packages.hello ];
-              config.Cmd = [
+              config.CMD = [
                 "hello"
                 "--greeting"
                 "Hello"
@@ -31,7 +31,7 @@
             {
               name = "hello-italian";
               requirements = [ config.packages.hello ];
-              config.Cmd = [
+              config.CMD = [
                 "hello"
                 "--greeting"
                 "Ciao"
@@ -40,7 +40,7 @@
             {
               name = "hello-spanish";
               requirements = [ config.packages.hello ];
-              config.Cmd = [
+              config.CMD = [
                 "hello"
                 "--greeting"
                 "Hola"

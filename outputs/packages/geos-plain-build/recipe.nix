@@ -16,7 +16,7 @@
         {
           name = "geos-plain-build";
           version = "3.9.6";
-          description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
+          description = "GEOS package built from tarball using plainBuilder.";
           homePage = "https://libgeos.org";
           mainProgram = "geos-config";
 
