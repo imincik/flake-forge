@@ -42,7 +42,7 @@
                           default = [ ];
                         };
                         config = {
-                          Cmd = lib.mkOption {
+                          CMD = lib.mkOption {
                             type = lib.types.listOf lib.types.str;
                             default = [ ];
                           };
@@ -76,7 +76,7 @@
                 pathsToLink = [ "/bin" ];
               };
               config = {
-                Cmd = image.config.Cmd;
+                Cmd = image.config.CMD;
               };
             };
 
