@@ -5,7 +5,7 @@
       "containers": [
         {
           "config": {
-            "Cmd": [
+            "CMD": [
               "hello",
               "--greeting",
               "Hello"
@@ -18,7 +18,7 @@
         },
         {
           "config": {
-            "Cmd": [
+            "CMD": [
               "hello",
               "--greeting",
               "Ciao"
@@ -31,7 +31,7 @@
         },
         {
           "config": {
-            "Cmd": [
+            "CMD": [
               "hello",
               "--greeting",
               "Hola"
@@ -64,6 +64,7 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [
               "/nix/store/njhrpc02gq7501vi1kr2jl1ml603hid0-proj-9.6.1"
@@ -104,6 +105,7 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": [
@@ -143,6 +145,7 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": [
@@ -185,6 +188,7 @@
         },
         "standardBuilder": {
           "enable": false,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": []
@@ -221,6 +225,7 @@
         },
         "standardBuilder": {
           "enable": true,
+          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": []
