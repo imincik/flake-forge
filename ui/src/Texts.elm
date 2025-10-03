@@ -5,8 +5,8 @@ module Texts exposing
     , installInstructionsHtml
     , installNixCmd
     , packageInstructionsHtml
-    , runContainerCmd
-    , runInShellCmd
+    , runPackageContainerCmd
+    , runPackageShellCmd
     )
 
 import ConfigDecoder exposing (App, Package)
@@ -92,8 +92,8 @@ installInstructionsHtml =
     ]
 
 
-runInShellCmd : Package -> String
-runInShellCmd pkg =
+runPackageShellCmd : Package -> String
+runPackageShellCmd pkg =
     format """
   nix shell github:imincik/flake-forge#{0}
 
@@ -101,8 +101,8 @@ runInShellCmd pkg =
 """ [ pkg.name, pkg.mainProgram ]
 
 
-runContainerCmd : Package -> String
-runContainerCmd pkg =
+runPackageContainerCmd : Package -> String
+runPackageContainerCmd pkg =
     format """
   nix build github:imincik/flake-forge#{0}.passthru.image
 
@@ -118,13 +118,13 @@ packageInstructionsHtml pkg =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "1. Run package in a temporary shell environment" ]
-        , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
+            [ text "A. Run package in a temporary shell environment" ]
+        , pre [ class "text-warning" ] [ text (runPackageShellCmd pkg) ]
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "2. Run package in a container" ]
-        , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
+            [ text "B. Run package in a container" ]
+        , pre [ class "text-warning" ] [ text (runPackageContainerCmd pkg) ]
         , hr [] []
         , text "Recipe: "
         , a
@@ -139,8 +139,23 @@ packageInstructionsHtml pkg =
         ]
 
 
-runAppCmd : App -> String
-runAppCmd app =
+runAppShellCmd : App -> String
+runAppShellCmd app =
+    format """
+  nix shell github:imincik/flake-forge#{0}-shell
+
+  nix build github:imincik/flake-forge#{0}-app
+
+  for image in ./result/*.tar.gz; do
+    podman load < $image
+  done
+
+  podman-compose --profile shell --file $(pwd)/result/compose.yaml up
+
+""" [ app.name ]
+
+runAppContainerCmd : App -> String
+runAppContainerCmd app =
     format """
   nix build github:imincik/flake-forge#{0}-app
 
@@ -148,7 +163,7 @@ runAppCmd app =
     podman load < $image
   done
 
-  podman-compose --file $(pwd)/result/compose.yaml up
+  podman-compose --profile app --file $(pwd)/result/compose.yaml up
 
 """ [ app.name ]
 
@@ -160,8 +175,13 @@ appInstructionsHtml app =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "1. Run application in containers" ]
-        , pre [ class "text-warning" ] [ text (runAppCmd app) ]
+            [ text "A. Run application in a mixed shell/container environment" ]
+        , pre [ class "text-warning" ] [ text (runAppShellCmd app) ]
+        , p
+            [ style "margin-bottom" "0em"
+            ]
+            [ text "B. Run application only in containers" ]
+        , pre [ class "text-warning" ] [ text (runAppContainerCmd app) ]
         , hr [] []
         , text "Recipe: "
         , a
