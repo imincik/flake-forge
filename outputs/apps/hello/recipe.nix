@@ -18,6 +18,12 @@
           version = "1.0.0";
           description = "Say hello in multiple languages.";
 
+          shell = {
+            requirements = [
+              config.packages.hello
+            ];
+          };
+
           containers = [
             {
               name = "hello-english";
@@ -52,10 +58,19 @@
             services:
               hello-english:
                 image: localhost/hello-english:latest
+                profiles:
+                  - app
+
               hello-italian:
                 image: localhost/hello-italian:latest
+                profiles:
+                  - app
+
               hello-spanish:
                 image: localhost/hello-spanish:latest
+                profiles:
+                  - app
+                  - shell
           '';
         }
       ];

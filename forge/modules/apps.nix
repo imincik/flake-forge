@@ -28,6 +28,14 @@
                   default = "1.0.0";
                 };
 
+                # Shell configuration
+                shell = {
+                  requirements = lib.mkOption {
+                    type = lib.types.listOf lib.types.package;
+                    default = [ ];
+                  };
+                };
+
                 # Container configuration
                 containers = lib.mkOption {
                   type = lib.types.listOf (
@@ -80,7 +88,14 @@
               };
             };
 
-          appBundle =
+          shellBundle =
+            app:
+            pkgs.symlinkJoin {
+              name = "${app.name}-${app.version}";
+              paths = app.shell.requirements;
+            };
+
+          containerBundle =
             app:
             pkgs.linkFarm "${app.name}-${app.version}" (
               (map (image: {
@@ -99,14 +114,22 @@
               ]
             );
 
-        in
-        {
-          packages = lib.listToAttrs (
+          shellPackages = lib.listToAttrs (
             map (app: {
-              name = "${app.name}-app";
-              value = appBundle app;
+              name = "${app.name}-shell";
+              value = shellBundle app;
             }) cfg
           );
+
+          containerPackages = lib.listToAttrs (
+            map (app: {
+              name = "${app.name}-app";
+              value = containerBundle app;
+            }) cfg
+          );
+        in
+        {
+          packages = shellPackages // containerPackages;
         };
     };
 }
