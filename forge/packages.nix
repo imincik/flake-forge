@@ -26,7 +26,6 @@
         _forge-ui = pkgs.callPackage ../ui/package.nix {
           inherit (config.packages) _forge-config;
         };
-
       };
     };
 }

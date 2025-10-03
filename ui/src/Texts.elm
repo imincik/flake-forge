@@ -7,7 +7,6 @@ module Texts exposing
     , packageInstructionsHtml
     , runContainerCmd
     , runInShellCmd
-    , runPackageCmd
     )
 
 import ConfigDecoder exposing (App, Package)
@@ -93,13 +92,6 @@ installInstructionsHtml =
     ]
 
 
-runPackageCmd : Package -> String
-runPackageCmd pkg =
-    format """
-  nix run github:imincik/flake-forge#{0}
-""" [ pkg.name ]
-
-
 runInShellCmd : Package -> String
 runInShellCmd pkg =
     format """
@@ -126,17 +118,12 @@ packageInstructionsHtml pkg =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "1. Run package (main program)" ]
-        , pre [ class "text-warning" ] [ text (runPackageCmd pkg) ]
-        , p
-            [ style "margin-bottom" "0em"
-            ]
-            [ text "2. Run package in a temporary shell environment" ]
+            [ text "1. Run package in a temporary shell environment" ]
         , pre [ class "text-warning" ] [ text (runInShellCmd pkg) ]
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "3. Run package in a container" ]
+            [ text "2. Run package in a container" ]
         , pre [ class "text-warning" ] [ text (runContainerCmd pkg) ]
         , hr [] []
         , text "Recipe: "
