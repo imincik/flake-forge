@@ -56,54 +56,9 @@
                 };
 
                 # Build configuration
-                build = {
-                  plainBuilder = {
-                    enable = lib.mkEnableOption ''
-                      Plain builder.
-                    '';
-                    requirements = {
-                      native = lib.mkOption {
-                        type = lib.types.listOf lib.types.package;
-                        default = [ ];
-                      };
-                      build = lib.mkOption {
-                        type = lib.types.listOf lib.types.package;
-                        default = [ ];
-                      };
-                    };
-                    configure = lib.mkOption {
-                      type = lib.types.str;
-                      default = "echo 'Configure phase'";
-                    };
-                    build = lib.mkOption {
-                      type = lib.types.str;
-                      default = "echo 'Build phase'";
-                    };
-                    check = lib.mkOption {
-                      type = lib.types.str;
-                      default = "echo 'Check phase'";
-                    };
-                    install = lib.mkOption {
-                      type = lib.types.str;
-                      default = "echo 'Install phase'";
-                    };
-                  };
-
-                  standardBuilder = {
-                    enable = lib.mkEnableOption ''
-                      Standard builder.
-                    '';
-                    requirements = {
-                      native = lib.mkOption {
-                        type = lib.types.listOf lib.types.package;
-                        default = [ ];
-                      };
-                      build = lib.mkOption {
-                        type = lib.types.listOf lib.types.package;
-                        default = [ ];
-                      };
-                    };
-                    extraDrvAttrs = lib.mkOption {
+                build =
+                  let
+                    extraDrvAttrsOption = lib.mkOption {
                       type = lib.types.attrsOf lib.types.anything;
                       default = { };
                       description = ''
@@ -118,8 +73,74 @@
                         }
                       '';
                     };
+                  in
+                  {
+                    plainBuilder = {
+                      enable = lib.mkEnableOption ''
+                        Plain builder.
+                      '';
+                      requirements = {
+                        native = lib.mkOption {
+                          type = lib.types.listOf lib.types.package;
+                          default = [ ];
+                        };
+                        build = lib.mkOption {
+                          type = lib.types.listOf lib.types.package;
+                          default = [ ];
+                        };
+                      };
+                      configure = lib.mkOption {
+                        type = lib.types.str;
+                        default = "echo 'Configure phase'";
+                      };
+                      build = lib.mkOption {
+                        type = lib.types.str;
+                        default = "echo 'Build phase'";
+                      };
+                      check = lib.mkOption {
+                        type = lib.types.str;
+                        default = "echo 'Check phase'";
+                      };
+                      install = lib.mkOption {
+                        type = lib.types.str;
+                        default = "echo 'Install phase'";
+                      };
+                    };
+
+                    standardBuilder = {
+                      enable = lib.mkEnableOption ''
+                        Standard builder.
+                      '';
+                      requirements = {
+                        native = lib.mkOption {
+                          type = lib.types.listOf lib.types.package;
+                          default = [ ];
+                        };
+                        build = lib.mkOption {
+                          type = lib.types.listOf lib.types.package;
+                          default = [ ];
+                        };
+                      };
+                      extraDrvAttrs = extraDrvAttrsOption;
+                    };
+
+                    pythonAppBuilder = {
+                      enable = lib.mkEnableOption ''
+                        Python application builder.
+                      '';
+                      requirements = {
+                        build-system = lib.mkOption {
+                          type = lib.types.listOf lib.types.package;
+                          default = [ ];
+                        };
+                        dependencies = lib.mkOption {
+                          type = lib.types.listOf lib.types.package;
+                          default = [ ];
+                        };
+                      };
+                      extraDrvAttrs = extraDrvAttrsOption;
+                    };
                   };
-                };
 
                 # Test configuration
                 test = {
@@ -239,8 +260,31 @@
               }) (lib.filter (p: p.build.standardBuilder.enable == true) cfg.packages)
             );
 
+            pythonAppBuilderPkgs = lib.listToAttrs (
+              map (pkg: rec {
+                name = pkg.name;
+                value = pkgs.callPackage (
+                  # Derivation start
+                  # buildPythonPackage doesn't support finalAttrs function.
+                  # Passing thePackage to derivation is used as workaround.
+                  { stdenv, thePackage }:
+                  pkgs.python3Packages.buildPythonApplication {
+                    pname = pkg.name;
+                    version = pkg.version;
+                    format = "pyproject";
+                    src = pkgSource pkg;
+                    build-system = pkg.build.pythonAppBuilder.requirements.build-system;
+                    dependencies = pkg.build.pythonAppBuilder.requirements.dependencies;
+                    passthru = pkgPassthru pkg thePackage;
+                    meta = pkgMeta pkg;
+                  }
+                  // pkg.build.pythonAppBuilder.extraDrvAttrs
+                  # Derivation end
+                ) { thePackage = value; };
+              }) (lib.filter (p: p.build.pythonAppBuilder.enable == true) cfg.packages)
+            );
           in
-          (plainBuilderPkgs // standardBuilderPkgs);
+          (plainBuilderPkgs // standardBuilderPkgs // pythonAppBuilderPkgs);
       };
     };
 }
