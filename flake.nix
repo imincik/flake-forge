@@ -8,6 +8,11 @@
 
     import-tree.url = "github:vic/import-tree";
 
+    nix-utils = {
+      url = "github:imincik/nix-utils";
+      flake = false;
+    };
+
     # git-hooks = {
     #   url = "github:cachix/git-hooks.nix";
     #   inputs.nixpkgs.follows = "nixpkgs";

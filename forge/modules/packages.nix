@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ inputs, lib, ... }:
 
 {
   perSystem =
@@ -73,12 +73,30 @@
                         }
                       '';
                     };
+
+                    buildDebugOption = lib.mkOption {
+                      type = lib.types.bool;
+                      default = false;
+                      description = ''
+                        Enable interactive package build process for debugging.
+
+                        Launch debug build:
+
+                        ```
+                        mkdir dev && cd dev
+                        nix develop .#<package>
+                        ```
+
+                        and follow instructions.
+                      '';
+                    };
                   in
                   {
                     plainBuilder = {
                       enable = lib.mkEnableOption ''
                         Plain builder.
                       '';
+                      debug = buildDebugOption;
                       requirements = {
                         native = lib.mkOption {
                           type = lib.types.listOf lib.types.package;
@@ -111,6 +129,7 @@
                       enable = lib.mkEnableOption ''
                         Standard builder.
                       '';
+                      debug = buildDebugOption;
                       requirements = {
                         native = lib.mkOption {
                           type = lib.types.listOf lib.types.package;
@@ -128,6 +147,7 @@
                       enable = lib.mkEnableOption ''
                         Python application builder.
                       '';
+                      debug = buildDebugOption;
                       requirements = {
                         build-system = lib.mkOption {
                           type = lib.types.listOf lib.types.package;
@@ -210,27 +230,35 @@
               mainProgram = pkg.mainProgram;
             };
 
+            debugShellHookAttr = {
+              shellHook = "source ${inputs.nix-utils}/nix-develop-interactive.bash";
+            };
+
             plainBuilderPkgs = lib.listToAttrs (
               map (pkg: {
                 name = pkg.name;
                 value = pkgs.callPackage (
                   # Derivation start
                   { stdenv }:
-                  stdenv.mkDerivation (finalAttrs: {
-                    pname = pkg.name;
-                    version = pkg.version;
-                    src = pkgSource pkg;
-                    nativeBuildInputs = pkg.build.plainBuilder.requirements.native;
-                    buildInputs = pkg.build.plainBuilder.requirements.build;
-                    configurePhase = pkg.build.plainBuilder.configure;
-                    buildPhase = pkg.build.plainBuilder.build;
-                    installPhase = pkg.build.plainBuilder.install;
-                    checkPhase = pkg.build.plainBuilder.check;
-                    doCheck = true;
-                    doInstallCheck = true;
-                    passthru = pkgPassthru pkg finalAttrs.finalPackage;
-                    meta = pkgMeta pkg;
-                  })
+                  stdenv.mkDerivation (
+                    finalAttrs:
+                    {
+                      pname = pkg.name;
+                      version = pkg.version;
+                      src = pkgSource pkg;
+                      nativeBuildInputs = pkg.build.plainBuilder.requirements.native;
+                      buildInputs = pkg.build.plainBuilder.requirements.build;
+                      configurePhase = pkg.build.plainBuilder.configure;
+                      buildPhase = pkg.build.plainBuilder.build;
+                      installPhase = pkg.build.plainBuilder.install;
+                      checkPhase = pkg.build.plainBuilder.check;
+                      doCheck = true;
+                      doInstallCheck = true;
+                      passthru = pkgPassthru pkg finalAttrs.finalPackage;
+                      meta = pkgMeta pkg;
+                    }
+                    // lib.optionalAttrs pkg.build.plainBuilder.debug debugShellHookAttr
+                  )
                   # Derivation end
                 ) { };
               }) (lib.filter (p: p.build.plainBuilder.enable == true) cfg.packages)
@@ -254,6 +282,7 @@
                       meta = pkgMeta pkg;
                     }
                     // pkg.build.standardBuilder.extraDrvAttrs
+                    // lib.optionalAttrs pkg.build.standardBuilder.debug debugShellHookAttr
                   )
                   # Derivation end
                 ) { };
@@ -279,6 +308,7 @@
                     meta = pkgMeta pkg;
                   }
                   // pkg.build.pythonAppBuilder.extraDrvAttrs
+                  // lib.optionalAttrs pkg.build.pythonAppBuilder.debug debugShellHookAttr
                   # Derivation end
                 ) { thePackage = value; };
               }) (lib.filter (p: p.build.pythonAppBuilder.enable == true) cfg.packages)
