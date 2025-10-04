@@ -33,6 +33,22 @@
         "type": "github"
       }
     },
+    "nix-utils": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1759611167,
+        "narHash": "sha256-opywuWZGKtRDb5uLQlxQvG8iuihHt8gM3lLkePCmwlY=",
+        "owner": "imincik",
+        "repo": "nix-utils",
+        "rev": "f0e102cc767951364949cbb9965d2d7120ea4fa7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "imincik",
+        "repo": "nix-utils",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1758035966,
@@ -68,6 +84,7 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "import-tree": "import-tree",
+        "nix-utils": "nix-utils",
         "nixpkgs": "nixpkgs"
       }
     }
