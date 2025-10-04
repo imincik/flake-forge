@@ -139,32 +139,30 @@ packageInstructionsHtml pkg =
         ]
 
 
-runAppShellCmd : App -> String
-runAppShellCmd app =
+runAppBuildCmd : App -> String
+runAppBuildCmd app =
     format """
-  nix shell github:imincik/flake-forge#{0}-shell
-
   nix build github:imincik/flake-forge#{0}-app
 
   for image in ./result/*.tar.gz; do
     podman load < $image
   done
-
-  podman-compose --profile shell --file $(pwd)/result/compose.yaml up
-
 """ [ app.name ]
+
+
+runAppShellCmd : App -> String
+runAppShellCmd app =
+    format """
+  podman-compose --profile shell -f $(pwd)/result/compose.yaml up -d
+
+  nix shell github:imincik/flake-forge#{0}-shell
+""" [ app.name ]
+
 
 runAppContainerCmd : App -> String
 runAppContainerCmd app =
     format """
-  nix build github:imincik/flake-forge#{0}-app
-
-  for image in ./result/*.tar.gz; do
-    podman load < $image
-  done
-
-  podman-compose --profile app --file $(pwd)/result/compose.yaml up
-
+  podman-compose --profile app -f $(pwd)/result/compose.yaml up
 """ [ app.name ]
 
 
@@ -175,7 +173,12 @@ appInstructionsHtml app =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "A. Run application in a mixed shell/container environment" ]
+            [ text "First, build and load the application" ]
+        , pre [ class "text-warning" ] [ text (runAppBuildCmd app) ]
+        , p
+            [ style "margin-bottom" "0em"
+            ]
+            [ text "A. Run application in a mixed container/shell environment" ]
         , pre [ class "text-warning" ] [ text (runAppShellCmd app) ]
         , p
             [ style "margin-bottom" "0em"

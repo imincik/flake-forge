@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "composeFile": "services:\n  hello-english:\n    image: localhost/hello-english:latest\n  hello-italian:\n    image: localhost/hello-italian:latest\n  hello-spanish:\n    image: localhost/hello-spanish:latest\n",
+      "composeFile": "services:\n  hello-english:\n    image: localhost/hello-english:latest\n    profiles:\n      - app\n\n  hello-italian:\n    image: localhost/hello-italian:latest\n    profiles:\n      - app\n\n  hello-spanish:\n    image: localhost/hello-spanish:latest\n    profiles:\n      - app\n      - shell\n",
       "containers": [
         {
           "config": {
@@ -45,6 +45,35 @@
       ],
       "description": "Say hello in multiple languages.",
       "name": "hello",
+      "shell": {
+        "requirements": [
+          "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
+        ]
+      },
+      "version": "1.0.0"
+    },
+    {
+      "composeFile": "services:\n  frontend:\n    image: localhost/frontend:latest\n    environment:\n      - DB_HOST=database\n      - DB_NAME=postgres\n      - DB_USER=postgres\n    ports:\n      - 5000:5000\n\n    profiles:\n      - app\n\n  database:\n    image: postgres:latest\n    environment:\n      - POSTGRES_HOST_AUTH_METHOD=trust\n    ports:\n      - 5432:5432\n\n    profiles:\n      - app\n      - shell\n",
+      "containers": [
+        {
+          "config": {
+            "CMD": [
+              "python-web"
+            ]
+          },
+          "name": "frontend",
+          "requirements": [
+            "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1"
+          ]
+        }
+      ],
+      "description": "Simple web application with database backend.",
+      "name": "python-web",
+      "shell": {
+        "requirements": [
+          "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1"
+        ]
+      },
       "version": "1.0.0"
     }
   ],
@@ -60,6 +89,14 @@
           "requirements": {
             "build": [],
             "native": []
+          }
+        },
+        "pythonAppBuilder": {
+          "enable": false,
+          "extraDrvAttrs": {},
+          "requirements": {
+            "build-system": [],
+            "dependencies": []
           }
         },
         "standardBuilder": {
@@ -103,6 +140,14 @@
             "native": []
           }
         },
+        "pythonAppBuilder": {
+          "enable": false,
+          "extraDrvAttrs": {},
+          "requirements": {
+            "build-system": [],
+            "dependencies": []
+          }
+        },
         "standardBuilder": {
           "enable": true,
           "extraDrvAttrs": {},
@@ -141,6 +186,14 @@
           "requirements": {
             "build": [],
             "native": []
+          }
+        },
+        "pythonAppBuilder": {
+          "enable": false,
+          "extraDrvAttrs": {},
+          "requirements": {
+            "build-system": [],
+            "dependencies": []
           }
         },
         "standardBuilder": {
@@ -186,6 +239,14 @@
             ]
           }
         },
+        "pythonAppBuilder": {
+          "enable": false,
+          "extraDrvAttrs": {},
+          "requirements": {
+            "build-system": [],
+            "dependencies": []
+          }
+        },
         "standardBuilder": {
           "enable": false,
           "extraDrvAttrs": {},
@@ -223,6 +284,14 @@
             "native": []
           }
         },
+        "pythonAppBuilder": {
+          "enable": false,
+          "extraDrvAttrs": {},
+          "requirements": {
+            "build-system": [],
+            "dependencies": []
+          }
+        },
         "standardBuilder": {
           "enable": true,
           "extraDrvAttrs": {},
@@ -246,6 +315,56 @@
         "script": "hello | grep \"Hello, world\"\n"
       },
       "version": "2.12.1"
+    },
+    {
+      "build": {
+        "plainBuilder": {
+          "build": "echo 'Build phase'",
+          "check": "echo 'Check phase'",
+          "configure": "echo 'Configure phase'",
+          "enable": false,
+          "install": "echo 'Install phase'",
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        },
+        "pythonAppBuilder": {
+          "enable": true,
+          "extraDrvAttrs": {},
+          "requirements": {
+            "build-system": [
+              "/nix/store/ybb7fxf4gx0y3yqynh39sr6qhkzp832i-python3.13-setuptools-80.9.0"
+            ],
+            "dependencies": [
+              "/nix/store/jsmqjsbglcp4gzl4aqi085a2x8ljb5r6-python3.13-flask-3.1.2",
+              "/nix/store/d7hfqw6w4zk7ga6swc4f07gd2i5lj1fx-python3.13-psycopg2-2.9.10"
+            ]
+          }
+        },
+        "standardBuilder": {
+          "enable": false,
+          "extraDrvAttrs": {},
+          "requirements": {
+            "build": [],
+            "native": []
+          }
+        }
+      },
+      "description": "Python web application example built using pythonAppBuilder.",
+      "homePage": "https://github.com/imincik/python-web-example",
+      "mainProgram": "python-web",
+      "name": "python-web",
+      "source": {
+        "github": "imincik/python-web-example/bd57b302e930f3b8b80448d2c08a3aac7d48e4ec",
+        "hash": "sha256-nSW5746+criXHPrxmJ+0zhJCMwl78eer03qQAvDIo5U=",
+        "url": null
+      },
+      "test": {
+        "requirements": [],
+        "script": "echo \"Test script\"\n"
+      },
+      "version": "0.0.1"
     }
   ]
 }
