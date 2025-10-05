@@ -18,7 +18,7 @@
           version = "1.0.0";
           description = "Say hello in multiple languages.";
 
-          shell = {
+          programs = {
             requirements = [
               config.packages.hello
             ];
@@ -59,18 +59,18 @@
               hello-english:
                 image: localhost/hello-english:latest
                 profiles:
-                  - app
+                  - services
 
               hello-italian:
                 image: localhost/hello-italian:latest
                 profiles:
-                  - app
+                  - services
 
               hello-spanish:
                 image: localhost/hello-spanish:latest
                 profiles:
-                  - app
-                  - shell
+                  - programs
+                  - services
           '';
         }
       ];

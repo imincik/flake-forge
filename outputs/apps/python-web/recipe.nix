@@ -18,15 +18,15 @@
           version = "1.0.0";
           description = "Simple web application with database backend.";
 
-          shell = {
+          programs = {
             requirements = [
-              config.packages.python-web
+              pkgs.curl
             ];
           };
 
           containers = [
             {
-              name = "frontend";
+              name = "api";
               requirements = [ config.packages.python-web ];
               config.CMD = [
                 "python-web"
@@ -36,17 +36,16 @@
 
           composeFile = ''
             services:
-              frontend:
-                image: localhost/frontend:latest
+              api:
+                image: localhost/api:latest
                 environment:
                   - DB_HOST=database
                   - DB_NAME=postgres
                   - DB_USER=postgres
                 ports:
                   - 5000:5000
-
                 profiles:
-                  - app
+                  - services
 
               database:
                 image: postgres:latest
@@ -54,10 +53,8 @@
                   - POSTGRES_HOST_AUTH_METHOD=trust
                 ports:
                   - 5432:5432
-
                 profiles:
-                  - app
-                  - shell
+                  - services
           '';
         }
       ];
