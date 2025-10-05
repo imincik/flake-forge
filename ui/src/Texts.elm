@@ -164,7 +164,7 @@ appInstructionsHtml app =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "A. Run programs (CLI, GUI) in a shell environment" ]
+            [ text "A. Run application programs (CLI, GUI) in a shell environment" ]
         , pre [ class "text-warning" ] [ text (runAppShellCmd app) ]
         , p
             [ style "margin-bottom" "0em"
