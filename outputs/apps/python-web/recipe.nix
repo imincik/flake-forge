@@ -1,8 +1,6 @@
 { inputs, ... }:
 
 {
-  # debug = true;
-
   perSystem =
     {
       config,
