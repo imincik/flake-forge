@@ -28,8 +28,8 @@
                   default = "1.0.0";
                 };
 
-                # Shell configuration
-                shell = {
+                # Programs shell configuration
+                programs = {
                   requirements = lib.mkOption {
                     type = lib.types.listOf lib.types.package;
                     default = [ ];
@@ -92,7 +92,7 @@
             app:
             pkgs.symlinkJoin {
               name = "${app.name}-${app.version}";
-              paths = app.shell.requirements;
+              paths = app.programs.requirements;
             };
 
           containerBundle =

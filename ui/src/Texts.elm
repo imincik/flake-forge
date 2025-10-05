@@ -116,7 +116,7 @@ packageInstructionsHtml pkg =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "A. Run package in a temporary shell environment" ]
+            [ text "A. Run package in a shell environment" ]
         , pre [ class "text-warning" ] [ text (runPackageShellCmd pkg) ]
         , p
             [ style "margin-bottom" "0em"
@@ -137,22 +137,9 @@ packageInstructionsHtml pkg =
         ]
 
 
-runAppBuildCmd : App -> String
-runAppBuildCmd app =
-    format """
-  nix build github:imincik/flake-forge#{0}-app
-
-  for image in ./result/*.tar.gz; do
-    podman load < $image
-  done
-""" [ app.name ]
-
-
 runAppShellCmd : App -> String
 runAppShellCmd app =
     format """
-  podman-compose --profile shell -f $(pwd)/result/compose.yaml up -d
-
   nix shell github:imincik/flake-forge#{0}-shell
 """ [ app.name ]
 
@@ -160,7 +147,13 @@ runAppShellCmd app =
 runAppContainerCmd : App -> String
 runAppContainerCmd app =
     format """
-  podman-compose --profile app -f $(pwd)/result/compose.yaml up
+  nix build github:imincik/flake-forge#{0}-app
+
+  for image in ./result/*.tar.gz; do
+    podman load < $image
+  done
+
+  podman-compose --profile services --file $(pwd)/result/compose.yaml up
 """ [ app.name ]
 
 
@@ -171,17 +164,12 @@ appInstructionsHtml app =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "First, build and load the application" ]
-        , pre [ class "text-warning" ] [ text (runAppBuildCmd app) ]
-        , p
-            [ style "margin-bottom" "0em"
-            ]
-            [ text "A. Run application in a mixed container/shell environment" ]
+            [ text "A. Run programs (CLI, GUI) in a shell environment" ]
         , pre [ class "text-warning" ] [ text (runAppShellCmd app) ]
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "B. Run application only in containers" ]
+            [ text "B. Run application services in containers" ]
         , pre [ class "text-warning" ] [ text (runAppContainerCmd app) ]
         , hr [] []
         , text "Recipe: "

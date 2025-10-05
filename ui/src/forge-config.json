@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "composeFile": "services:\n  hello-english:\n    image: localhost/hello-english:latest\n    profiles:\n      - app\n\n  hello-italian:\n    image: localhost/hello-italian:latest\n    profiles:\n      - app\n\n  hello-spanish:\n    image: localhost/hello-spanish:latest\n    profiles:\n      - app\n      - shell\n",
+      "composeFile": "services:\n  hello-english:\n    image: localhost/hello-english:latest\n    profiles:\n      - services\n\n  hello-italian:\n    image: localhost/hello-italian:latest\n    profiles:\n      - services\n\n  hello-spanish:\n    image: localhost/hello-spanish:latest\n    profiles:\n      - programs\n      - services\n",
       "containers": [
         {
           "config": {
@@ -45,7 +45,7 @@
       ],
       "description": "Say hello in multiple languages.",
       "name": "hello",
-      "shell": {
+      "programs": {
         "requirements": [
           "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
         ]
@@ -53,7 +53,7 @@
       "version": "1.0.0"
     },
     {
-      "composeFile": "services:\n  frontend:\n    image: localhost/frontend:latest\n    environment:\n      - DB_HOST=database\n      - DB_NAME=postgres\n      - DB_USER=postgres\n    ports:\n      - 5000:5000\n\n    profiles:\n      - app\n\n  database:\n    image: postgres:latest\n    environment:\n      - POSTGRES_HOST_AUTH_METHOD=trust\n    ports:\n      - 5432:5432\n\n    profiles:\n      - app\n      - shell\n",
+      "composeFile": "services:\n  api:\n    image: localhost/api:latest\n    environment:\n      - DB_HOST=database\n      - DB_NAME=postgres\n      - DB_USER=postgres\n    ports:\n      - 5000:5000\n    profiles:\n      - services\n\n  database:\n    image: postgres:latest\n    environment:\n      - POSTGRES_HOST_AUTH_METHOD=trust\n    ports:\n      - 5432:5432\n    profiles:\n      - services\n",
       "containers": [
         {
           "config": {
@@ -61,7 +61,7 @@
               "python-web"
             ]
           },
-          "name": "frontend",
+          "name": "api",
           "requirements": [
             "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1"
           ]
@@ -69,9 +69,9 @@
       ],
       "description": "Simple web application with database backend.",
       "name": "python-web",
-      "shell": {
+      "programs": {
         "requirements": [
-          "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1"
+          "/nix/store/8ggin0y50drxqzlkci4p71v2nan6gc7s-curl-8.14.1-bin"
         ]
       },
       "version": "1.0.0"
@@ -84,6 +84,7 @@
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
+          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -92,6 +93,7 @@
           }
         },
         "pythonAppBuilder": {
+          "debug": false,
           "enable": false,
           "extraDrvAttrs": {},
           "requirements": {
@@ -100,6 +102,7 @@
           }
         },
         "standardBuilder": {
+          "debug": false,
           "enable": true,
           "extraDrvAttrs": {},
           "requirements": {
@@ -133,6 +136,7 @@
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
+          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -141,6 +145,7 @@
           }
         },
         "pythonAppBuilder": {
+          "debug": false,
           "enable": false,
           "extraDrvAttrs": {},
           "requirements": {
@@ -149,6 +154,7 @@
           }
         },
         "standardBuilder": {
+          "debug": false,
           "enable": true,
           "extraDrvAttrs": {},
           "requirements": {
@@ -181,6 +187,7 @@
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
+          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -189,6 +196,7 @@
           }
         },
         "pythonAppBuilder": {
+          "debug": false,
           "enable": false,
           "extraDrvAttrs": {},
           "requirements": {
@@ -197,6 +205,7 @@
           }
         },
         "standardBuilder": {
+          "debug": false,
           "enable": true,
           "extraDrvAttrs": {},
           "requirements": {
@@ -229,6 +238,7 @@
           "build": "make -j $NIX_BUILD_CORES\n",
           "check": "ctest --output-on-failure\n",
           "configure": "mkdir build && cd build\n\ncmake ${CMAKE_ARGS} \\\n  -D CMAKE_BUILD_TYPE=Release \\\n  -D CMAKE_INSTALL_PREFIX=$out \\\n  ..\n",
+          "debug": false,
           "enable": true,
           "install": "make install -j $NIX_BUILD_CORES\n",
           "requirements": {
@@ -240,6 +250,7 @@
           }
         },
         "pythonAppBuilder": {
+          "debug": false,
           "enable": false,
           "extraDrvAttrs": {},
           "requirements": {
@@ -248,6 +259,7 @@
           }
         },
         "standardBuilder": {
+          "debug": false,
           "enable": false,
           "extraDrvAttrs": {},
           "requirements": {
@@ -277,6 +289,7 @@
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
+          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -285,6 +298,7 @@
           }
         },
         "pythonAppBuilder": {
+          "debug": false,
           "enable": false,
           "extraDrvAttrs": {},
           "requirements": {
@@ -293,6 +307,7 @@
           }
         },
         "standardBuilder": {
+          "debug": false,
           "enable": true,
           "extraDrvAttrs": {},
           "requirements": {
@@ -322,6 +337,7 @@
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
+          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -330,6 +346,7 @@
           }
         },
         "pythonAppBuilder": {
+          "debug": false,
           "enable": true,
           "extraDrvAttrs": {},
           "requirements": {
@@ -343,6 +360,7 @@
           }
         },
         "standardBuilder": {
+          "debug": false,
           "enable": false,
           "extraDrvAttrs": {},
           "requirements": {
