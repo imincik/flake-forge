@@ -7,11 +7,11 @@ The friendly software distribution system with Nix super powers.
 
 ## Features
 
-* Build process configuration using simple
-  ([conda-forge](https://conda-forge.org/) style) language
+* Build process configuration using human readable language
+  (inspired by [conda-forge](https://conda-forge.org/))
 
 * Outputs:
-  * Nix packages
+  * Nix packages for Linux (and Mac in a future)
   * Package container images
   * Multi-container application images
 
