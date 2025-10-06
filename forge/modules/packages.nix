@@ -78,9 +78,10 @@
                       type = lib.types.bool;
                       default = false;
                       description = ''
-                        Enable interactive package build process for debugging.
+                        Enable interactive package build environment for
+                        debugging.
 
-                        Launch debug build:
+                        Launch environment:
 
                         ```
                         mkdir dev && cd dev

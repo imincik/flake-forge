@@ -43,6 +43,18 @@ nix build .#my-package
 
 * [Application recipe examples](outputs/apps)
 
+### Debugging
+
+Set `build.<builder>.debug = true` and launch interactive package build
+environment by running
+
+```
+mkdir dev && cd dev
+nix develop .#<package>
+```
+
+and follow instructions.
+
 
 ## TODOs
 
