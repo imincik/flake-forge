@@ -17,7 +17,7 @@ The friendly software distribution system with Nix super powers.
 
 * [Web UI](https://imincik.github.io/flake-forge)
 
-* Simple for self hosting
+* Great for self hosting
 
 
 ## Packaging workflow
@@ -60,5 +60,5 @@ and follow instructions.
 
 * CI checks and workflows (dependencies updates, ...)
 
-* Many more builder configuration options
+* Many more language speciffic builders and configuration options
 
