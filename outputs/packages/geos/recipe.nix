@@ -13,17 +13,17 @@
       forge.packages = [
         {
           name = "geos";
-          version = "3.9.6";
-          description = "GEOS package built from tarball using standardBuilder.";
+          version = "2025-10-03";
+          description = "GEOS package built from GitHub using plainBuilder.";
           homePage = "https://libgeos.org";
-          mainProgram = "geos-config";
+          mainProgram = "geosop";
 
           source = {
-            url = "https://download.osgeo.org/geos/geos-3.9.6.tar.bz2";
-            hash = "sha256-jChKNBWS+WDYSBPrujwv1PyesLZlggon9vi+shGrawA=";
+            github = "libgeos/geos/883f237d1ecbf49f8efd09905df05814783c5b50";
+            hash = "sha256-enHSmHW8bgRIv33cQrlllF6rbrCkXfqQilcu53LQiRE=";
           };
 
-          build.standardBuilder = {
+          build.plainBuilder = {
             enable = true;
             requirements = {
               native = [
@@ -31,7 +31,28 @@
                 pkgs.ninja
               ];
             };
+            configure = ''
+              mkdir build && cd build
+
+              cmake ''${CMAKE_ARGS} \
+                -D CMAKE_BUILD_TYPE=Release \
+                -D CMAKE_INSTALL_PREFIX=$out \
+                ..
+            '';
+            build = ''
+              make -j ''$NIX_BUILD_CORES
+            '';
+            check = ''
+              ctest --output-on-failure
+            '';
+            install = ''
+              make install -j ''$NIX_BUILD_CORES
+            '';
           };
+
+          test.script = ''
+            geosop | grep -E "GEOS.[0-9]*\.[0-9]*\.[0-9]*"
+          '';
         }
       ];
     };
