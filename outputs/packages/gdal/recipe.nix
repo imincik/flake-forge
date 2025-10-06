@@ -13,14 +13,14 @@
       forge.packages = [
         {
           name = "gdal";
-          version = "3.9.3";
-          description = "GDAL package built from tarball using standardBuilder.";
+          version = "2025-10-05";
+          description = "GDAL package built from GitHub using standardBuilder.";
           homePage = "https://gdal.org";
           mainProgram = "gdalinfo";
 
           source = {
-            url = "https://download.osgeo.org/gdal/3.9.3/gdal-3.9.3.tar.gz";
-            hash = "sha256-8pPYzMa5j2F9uI+Fk+rjf35LMtSaYVssulztEse+va4=";
+            github = "OSGeo/gdal/3679e5e4511ae8b4a956ded7ef7be23fdb86b7db";
+            hash = "sha256-0cHD1+vEAahllGNOe6Y4uec44HmCvlJphRj8JPJzOXc=";
           };
 
           build.standardBuilder = {
@@ -36,7 +36,7 @@
           };
 
           test.script = ''
-            gdalinfo --version | grep "GDAL"
+            gdalinfo --version | grep -E "GDAL.[0-9]*\.[0-9]*\.[0-9]*"
           '';
         }
       ];
