@@ -102,7 +102,7 @@ runPackageShellCmd pkg =
 runPackageContainerCmd : Package -> String
 runPackageContainerCmd pkg =
     format """
-  nix build github:imincik/flake-forge#{0}.passthru.image
+  nix build github:imincik/flake-forge#{0}.image
 
   podman load < ./result
   podman run -it --rm localhost/{0}:{1}
