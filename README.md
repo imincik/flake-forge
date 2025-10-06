@@ -37,24 +37,31 @@ nix build .#<package> -L
 
 1. Publish package by merging the PR
 
-### Examples
+### Recipe examples
 
 * [Package recipe examples](outputs/packages)
 
 * [Application recipe examples](outputs/apps)
 
-### Debugging
+### Package build debugging
 
 Set `build.<builder>.debug = true` and launch interactive package build
 environment by running
 
-```
+```bash
 mkdir dev && cd dev
 nix develop .#<package>
 ```
 
 and follow instructions.
 
+### Tests
+
+* Run package test
+
+```bash
+nix build .#<package>.test -L
+```
 
 ## TODOs
 
