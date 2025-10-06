@@ -62,8 +62,9 @@
 
                 # Compose configuration
                 composeFile = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
+                  type = lib.types.path;
+                  description = "Relative path to a container compose file.";
+                  example = "./compose.yaml";
                 };
               };
             }
@@ -108,7 +109,7 @@
                   name = "compose.yaml";
                   path = pkgs.writeTextFile {
                     name = "compose.yaml";
-                    text = app.composeFile;
+                    text = builtins.readFile app.composeFile;
                   };
                 }
               ]
