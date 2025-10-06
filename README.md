@@ -23,12 +23,12 @@ The friendly software distribution system with Nix super powers.
 ## Packaging workflow
 
 1. Create a new package recipe file in
-   `outputs/packages/<my-package>/recipe.nix` and add it to git.
+   `outputs/packages/<package>/recipe.nix` and add it to git.
 
 1. Test build
 
 ```bash
-nix build .#my-package
+nix build .#<package> -L
 ```
 
 1. Inspect and test build output in `./result` directory
