@@ -95,14 +95,14 @@ installInstructionsHtml =
 runPackageShellCmd : Package -> String
 runPackageShellCmd pkg =
     format """
-  nix shell github:imincik/flake-forge#{0}
+  nix shell --accept-flake-config github:imincik/flake-forge#{0}
 """ [ pkg.name ]
 
 
 runPackageContainerCmd : Package -> String
 runPackageContainerCmd pkg =
     format """
-  nix build github:imincik/flake-forge#{0}.image
+  nix build --accept-flake-config github:imincik/flake-forge#{0}.image
 
   podman load < ./result
   podman run -it --rm localhost/{0}:{1}
@@ -140,14 +140,14 @@ packageInstructionsHtml pkg =
 runAppShellCmd : App -> String
 runAppShellCmd app =
     format """
-  nix shell github:imincik/flake-forge#{0}-shell
+  nix shell --accept-flake-config github:imincik/flake-forge#{0}-shell
 """ [ app.name ]
 
 
 runAppContainerCmd : App -> String
 runAppContainerCmd app =
     format """
-  nix build github:imincik/flake-forge#{0}-app
+  nix build --accept-flake-config github:imincik/flake-forge#{0}-app
 
   for image in ./result/*.tar.gz; do
     podman load < $image
