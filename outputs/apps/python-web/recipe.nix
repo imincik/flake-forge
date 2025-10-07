@@ -1,39 +1,34 @@
-{ inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  perSystem =
+  forge.apps = [
     {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+      name = "python-web";
+      version = "1.0.0";
+      description = "Simple web application with database backend.";
 
-    {
-      forge.apps = [
+      programs = {
+        requirements = [
+          pkgs.curl
+        ];
+      };
+
+      containers = [
         {
-          name = "python-web";
-          version = "1.0.0";
-          description = "Simple web application with database backend.";
-
-          programs = {
-            requirements = [
-              pkgs.curl
-            ];
-          };
-
-          containers = [
-            {
-              name = "api";
-              requirements = [ config.packages.python-web ];
-              config.CMD = [
-                "python-web"
-              ];
-            }
+          name = "api";
+          requirements = [ config.packages.python-web ];
+          config.CMD = [
+            "python-web"
           ];
-
-          composeFile = ./compose.yaml;
         }
       ];
-    };
+
+      composeFile = ./compose.yaml;
+    }
+  ];
 }

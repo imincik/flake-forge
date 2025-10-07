@@ -1,59 +1,54 @@
-{ inputs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  perSystem =
+  forge.packages = [
     {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+      name = "geos";
+      version = "2025-10-03";
+      description = "GEOS package built from GitHub using plainBuilder.";
+      homePage = "https://libgeos.org";
+      mainProgram = "geosop";
 
-    {
-      forge.packages = [
-        {
-          name = "geos";
-          version = "2025-10-03";
-          description = "GEOS package built from GitHub using plainBuilder.";
-          homePage = "https://libgeos.org";
-          mainProgram = "geosop";
+      source = {
+        github = "libgeos/geos/883f237d1ecbf49f8efd09905df05814783c5b50";
+        hash = "sha256-enHSmHW8bgRIv33cQrlllF6rbrCkXfqQilcu53LQiRE=";
+      };
 
-          source = {
-            github = "libgeos/geos/883f237d1ecbf49f8efd09905df05814783c5b50";
-            hash = "sha256-enHSmHW8bgRIv33cQrlllF6rbrCkXfqQilcu53LQiRE=";
-          };
+      build.plainBuilder = {
+        enable = true;
+        requirements = {
+          native = [
+            pkgs.cmake
+            pkgs.ninja
+          ];
+        };
+        configure = ''
+          mkdir build && cd build
 
-          build.plainBuilder = {
-            enable = true;
-            requirements = {
-              native = [
-                pkgs.cmake
-                pkgs.ninja
-              ];
-            };
-            configure = ''
-              mkdir build && cd build
+          cmake ''${CMAKE_ARGS} \
+            -D CMAKE_BUILD_TYPE=Release \
+            -D CMAKE_INSTALL_PREFIX=$out \
+            ..
+        '';
+        build = ''
+          make -j ''$NIX_BUILD_CORES
+        '';
+        check = ''
+          ctest --output-on-failure
+        '';
+        install = ''
+          make install -j ''$NIX_BUILD_CORES
+        '';
+      };
 
-              cmake ''${CMAKE_ARGS} \
-                -D CMAKE_BUILD_TYPE=Release \
-                -D CMAKE_INSTALL_PREFIX=$out \
-                ..
-            '';
-            build = ''
-              make -j ''$NIX_BUILD_CORES
-            '';
-            check = ''
-              ctest --output-on-failure
-            '';
-            install = ''
-              make install -j ''$NIX_BUILD_CORES
-            '';
-          };
-
-          test.script = ''
-            geosop | grep -E "GEOS.[0-9]*\.[0-9]*\.[0-9]*"
-          '';
-        }
-      ];
-    };
+      test.script = ''
+        geosop | grep -E "GEOS.[0-9]*\.[0-9]*\.[0-9]*"
+      '';
+    }
+  ];
 }
