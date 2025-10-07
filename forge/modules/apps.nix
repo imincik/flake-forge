@@ -96,24 +96,70 @@
               paths = app.programs.requirements;
             };
 
+          appPassthru = app: finalApp: {
+            test =
+              pkgs.testers.runNixOSTest {
+                name = "${app.name}-test";
+                nodes.machine =
+                  { config, pkgs, ... }:
+                  {
+                    users.users.test = {
+                      isNormalUser = true;
+                      extraGroups = [ "wheel" ];
+                    };
+                    virtualisation.podman.enable = true;
+                    environment.systemPackages = [
+                      finalApp
+                      pkgs.podman-compose
+                    ];
+                    system.stateVersion = "25.11";
+                  };
+                testScript = ''
+                  machine.wait_for_unit("default.target")
+                  machine.succeed("ping -c 4 8.8.8.8")
+                  machine.succeed("""
+                    # Load images
+                    for image in ${finalApp}/*.tar.gz; do
+                      podman load < $image
+                    done
+                    # Launch services
+                    podman-compose --profile services --file ${finalApp}/compose.yaml up --detach
+                  """)
+                  machine.succeed("curl localhost:5000/init")
+                '';
+              }
+              // {
+                __noChroot = true;
+              };
+          };
+
           containerBundle =
             app:
-            pkgs.linkFarm "${app.name}-${app.version}" (
-              (map (image: {
-                name = "${image.name}.tar.gz";
-                path = buildImage image;
-              }) app.containers)
-              # Compose file
-              ++ [
-                {
-                  name = "compose.yaml";
-                  path = pkgs.writeTextFile {
-                    name = "compose.yaml";
-                    text = builtins.readFile app.composeFile;
-                  };
-                }
-              ]
-            );
+            let
+              appDrv = (
+                pkgs.linkFarm "${app.name}-${app.version}" (
+                  # Container images
+                  (map (image: {
+                    name = "${image.name}.tar.gz";
+                    path = buildImage image;
+                  }) app.containers)
+                  # Compose file
+                  ++ [
+                    {
+                      name = "compose.yaml";
+                      path = pkgs.writeTextFile {
+                        name = "compose.yaml";
+                        text = builtins.readFile app.composeFile;
+                      };
+                    }
+                  ]
+                )
+              );
+            in
+            # Test
+            appDrv.overrideAttrs (old: {
+              passthru = appPassthru app appDrv;
+            });
 
           shellPackages = lib.listToAttrs (
             map (app: {
