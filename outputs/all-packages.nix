@@ -16,7 +16,10 @@ in
     }@args:
 
     let
-      recipes = callRecipes args;
+      recipes = callRecipes (args // {
+        # Add mypkgs as extra recipe argument
+        mypkgs = config.packages;
+      });
       allOutputs = lib.flatten (map (r: r.forge.packages or [ ]) recipes);
     in
     {

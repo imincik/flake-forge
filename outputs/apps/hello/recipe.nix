@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  mypkgs,
   ...
 }:
 
@@ -14,14 +15,14 @@
 
       programs = {
         requirements = [
-          config.packages.hello
+          mypkgs.hello
         ];
       };
 
       containers = [
         {
           name = "hello-english";
-          requirements = [ config.packages.hello ];
+          requirements = [ mypkgs.hello ];
           config.CMD = [
             "hello"
             "--greeting"
@@ -30,7 +31,7 @@
         }
         {
           name = "hello-italian";
-          requirements = [ config.packages.hello ];
+          requirements = [ mypkgs.hello ];
           config.CMD = [
             "hello"
             "--greeting"
@@ -39,7 +40,7 @@
         }
         {
           name = "hello-spanish";
-          requirements = [ config.packages.hello ];
+          requirements = [ mypkgs.hello ];
           config.CMD = [
             "hello"
             "--greeting"

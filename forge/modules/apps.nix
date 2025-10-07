@@ -99,6 +99,7 @@
           containerBundle =
             app:
             pkgs.linkFarm "${app.name}-${app.version}" (
+              # Container images
               (map (image: {
                 name = "${image.name}.tar.gz";
                 path = buildImage image;
