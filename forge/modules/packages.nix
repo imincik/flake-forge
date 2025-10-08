@@ -306,18 +306,20 @@
                   # buildPythonPackage doesn't support finalAttrs function.
                   # Passing thePackage to derivation is used as workaround.
                   { stdenv, thePackage }:
-                  pkgs.python3Packages.buildPythonApplication {
-                    pname = pkg.name;
-                    version = pkg.version;
-                    format = "pyproject";
-                    src = pkgSource pkg;
-                    build-system = pkg.build.pythonAppBuilder.requirements.build-system;
-                    dependencies = pkg.build.pythonAppBuilder.requirements.dependencies;
-                    passthru = pkgPassthru pkg thePackage;
-                    meta = pkgMeta pkg;
-                  }
-                  // pkg.build.pythonAppBuilder.extraDrvAttrs
-                  // lib.optionalAttrs pkg.build.pythonAppBuilder.debug debugShellHookAttr
+                  pkgs.python3Packages.buildPythonApplication (
+                    {
+                      pname = pkg.name;
+                      version = pkg.version;
+                      format = "pyproject";
+                      src = pkgSource pkg;
+                      build-system = pkg.build.pythonAppBuilder.requirements.build-system;
+                      dependencies = pkg.build.pythonAppBuilder.requirements.dependencies;
+                      passthru = pkgPassthru pkg thePackage;
+                      meta = pkgMeta pkg;
+                    }
+                    // pkg.build.pythonAppBuilder.extraDrvAttrs
+                    // lib.optionalAttrs pkg.build.pythonAppBuilder.debug debugShellHookAttr
+                  )
                   # Derivation end
                 ) { thePackage = value; };
               }) (lib.filter (p: p.build.pythonAppBuilder.enable == true) cfg.packages)
