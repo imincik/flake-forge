@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  mypkgs,
   ...
 }:
 
@@ -21,7 +22,7 @@
       containers = [
         {
           name = "api";
-          requirements = [ config.packages.python-web ];
+          requirements = [ mypkgs.python-web ];
           config.CMD = [
             "python-web"
           ];
