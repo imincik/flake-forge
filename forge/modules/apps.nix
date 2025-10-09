@@ -9,9 +9,8 @@
     in
     {
       options.forge = {
-
         apps = lib.mkOption {
-          type = lib.types.listOf (
+          type = lib.types.attrsOf (
             lib.types.submodule {
               options = {
                 # General configuration
@@ -129,12 +128,7 @@
               passthru = appPassthru app appDrv;
             });
 
-          containerPackages = lib.listToAttrs (
-            map (app: {
-              name = "${app.name}";
-              value = containerBundle app;
-            }) cfg
-          );
+          containerPackages = lib.mapAttrs (name: app: containerBundle ({ inherit name; } // app)) cfg;
         in
         {
           packages = containerPackages;

@@ -1,6 +1,6 @@
 {
-  "apps": [
-    {
+  "apps": {
+    "hello-app": {
       "composeFile": "/nix/store/nw6szwqhv08zh1891y1a6pc0gbk6mwvc-compose.yaml",
       "containers": [
         {
@@ -52,7 +52,7 @@
       },
       "version": "1.0.0"
     },
-    {
+    "python-web-app": {
       "composeFile": "/nix/store/m3h5izj1pcdz6s2pmmz6yw6gh2g7rvq3-compose.yaml",
       "containers": [
         {
@@ -76,7 +76,7 @@
       },
       "version": "1.0.0"
     }
-  ],
+  },
   "packages": [
     {
       "build": {

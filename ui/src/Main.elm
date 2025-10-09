@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Dict exposing (Dict)
 import Browser
 import ConfigDecoder exposing (App, Config, Package, configDecoder)
 import Html exposing (Html, a, button, div, h5, hr, input, p, small, text)
@@ -14,7 +15,7 @@ import Texts exposing (appInstructionsHtml, footerHtml, headerHtml, installInstr
 
 
 type alias Model =
-    { apps : List App
+    { apps : Dict String App
     , packages : List Package
     , selectedOutput : String
     , selectedApp : App
@@ -26,7 +27,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { apps = []
+    ( { apps = Dict.empty
       , packages = []
       , selectedOutput = "packages"
       , selectedApp =
@@ -124,7 +125,7 @@ view model =
                 , optionalDivHtml (model.selectedOutput == "applications")
                     (div [ class "list-group" ]
                         -- applications
-                        (appsHtml model.apps model.selectedApp model.searchString)
+                        (appsHtml (Dict.values model.apps) model.selectedApp model.searchString)
                     )
 
                 -- error message

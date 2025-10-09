@@ -7,7 +7,7 @@
 }:
 
 {
-  forge.apps = [
+  forge.apps.hello-app =
     {
       name = "hello-app";
       version = "1.0.0";
@@ -50,6 +50,5 @@
       ];
 
       composeFile = ./compose.yaml;
-    }
-  ];
+    };
 }
