@@ -44,7 +44,7 @@
         }
       ],
       "description": "Say hello in multiple languages.",
-      "name": "hello",
+      "name": "hello-app",
       "programs": {
         "requirements": [
           "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
@@ -68,7 +68,7 @@
         }
       ],
       "description": "Simple web application with database backend.",
-      "name": "python-web",
+      "name": "python-web-app",
       "programs": {
         "requirements": [
           "/nix/store/8ggin0y50drxqzlkci4p71v2nan6gc7s-curl-8.14.1-bin"
