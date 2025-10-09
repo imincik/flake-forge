@@ -96,42 +96,48 @@
               paths = app.programs.requirements;
             };
 
+          appPassthru = app: finalApp: {
+            # finalApp parameter is currently not used in this function
+            programs = shellBundle app;
+          };
+
           containerBundle =
             app:
-            pkgs.linkFarm "${app.name}-${app.version}" (
-              # Container images
-              (map (image: {
-                name = "${image.name}.tar.gz";
-                path = buildImage image;
-              }) app.containers)
-              # Compose file
-              ++ [
-                {
-                  name = "compose.yaml";
-                  path = pkgs.writeTextFile {
-                    name = "compose.yaml";
-                    text = builtins.readFile app.composeFile;
-                  };
-                }
-              ]
-            );
-
-          shellPackages = lib.listToAttrs (
-            map (app: {
-              name = "${app.name}-shell";
-              value = shellBundle app;
-            }) cfg
-          );
+            let
+              appDrv = (
+                pkgs.linkFarm "${app.name}-${app.version}" (
+                  # Container images
+                  (map (image: {
+                    name = "${image.name}.tar.gz";
+                    path = buildImage image;
+                  }) app.containers)
+                  # Compose file
+                  ++ [
+                    {
+                      name = "compose.yaml";
+                      path = pkgs.writeTextFile {
+                        name = "compose.yaml";
+                        text = builtins.readFile app.composeFile;
+                      };
+                    }
+                  ]
+                )
+              );
+            in
+            # Passthru
+            appDrv.overrideAttrs (_: {
+              passthru = appPassthru app appDrv;
+            });
 
           containerPackages = lib.listToAttrs (
             map (app: {
-              name = "${app.name}-app";
+              name = "${app.name}";
               value = containerBundle app;
             }) cfg
           );
         in
         {
-          packages = shellPackages // containerPackages;
+          packages = containerPackages;
         };
     };
 }

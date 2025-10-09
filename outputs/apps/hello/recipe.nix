@@ -9,7 +9,7 @@
 {
   forge.apps = [
     {
-      name = "hello";
+      name = "hello-app";
       version = "1.0.0";
       description = "Say hello in multiple languages.";
 
