@@ -9,7 +9,6 @@
 {
   forge.apps.hello-app =
     {
-      name = "hello-app";
       version = "1.0.0";
       description = "Say hello in multiple languages.";
 

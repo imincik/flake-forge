@@ -11,61 +11,69 @@
       options.forge = {
         apps = lib.mkOption {
           type = lib.types.attrsOf (
-            lib.types.submodule {
-              options = {
-                # General configuration
-                name = lib.mkOption {
-                  type = lib.types.str;
-                  default = "my-package";
-                };
-                description = lib.mkOption {
-                  type = lib.types.str;
-                  default = "";
-                };
-                version = lib.mkOption {
-                  type = lib.types.str;
-                  default = "1.0.0";
-                };
+            lib.types.submoduleWith {
+              modules = [
+                (
+                  { name, ... }:
+                  {
+                    config.name = name; # set internal option
+                    options = {
+                      # General configuration
+                      name = lib.mkOption {
+                        type = lib.types.str;
+                        internal = true;
+                      };
+                      description = lib.mkOption {
+                        type = lib.types.str;
+                        default = "";
+                      };
+                      version = lib.mkOption {
+                        type = lib.types.str;
+                        default = "1.0.0";
+                      };
 
-                # Programs shell configuration
-                programs = {
-                  requirements = lib.mkOption {
-                    type = lib.types.listOf lib.types.package;
-                    default = [ ];
-                  };
-                };
-
-                # Container configuration
-                containers = lib.mkOption {
-                  type = lib.types.listOf (
-                    lib.types.submodule {
-                      options = {
-                        name = lib.mkOption {
-                          type = lib.types.str;
-                          default = "app-container";
-                        };
+                      # Programs shell configuration
+                      programs = {
                         requirements = lib.mkOption {
                           type = lib.types.listOf lib.types.package;
                           default = [ ];
                         };
-                        config = {
-                          CMD = lib.mkOption {
-                            type = lib.types.listOf lib.types.str;
-                            default = [ ];
-                          };
-                        };
                       };
-                    }
-                  );
-                };
 
-                # Compose configuration
-                composeFile = lib.mkOption {
-                  type = lib.types.path;
-                  description = "Relative path to a container compose file.";
-                  example = "./compose.yaml";
-                };
-              };
+                      # Container configuration
+                      containers = lib.mkOption {
+                        type = lib.types.listOf (
+                          lib.types.submodule {
+                            options = {
+                              name = lib.mkOption {
+                                type = lib.types.str;
+                                default = "app-container";
+                              };
+                              requirements = lib.mkOption {
+                                type = lib.types.listOf lib.types.package;
+                                default = [ ];
+                              };
+                              config = {
+                                CMD = lib.mkOption {
+                                  type = lib.types.listOf lib.types.str;
+                                  default = [ ];
+                                };
+                              };
+                            };
+                          }
+                        );
+                      };
+
+                      # Compose configuration
+                      composeFile = lib.mkOption {
+                        type = lib.types.path;
+                        description = "Relative path to a container compose file.";
+                        example = "./compose.yaml";
+                      };
+                    };
+                  }
+                )
+              ];
             }
           );
         };

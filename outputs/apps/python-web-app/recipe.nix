@@ -9,7 +9,6 @@
 {
   forge.apps.python-web-app =
     {
-      name = "python-web-app";
       version = "1.0.0";
       description = "Simple web application with database backend.";
 
