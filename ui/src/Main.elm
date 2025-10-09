@@ -15,7 +15,7 @@ import Texts exposing (appInstructionsHtml, footerHtml, headerHtml, installInstr
 
 
 type alias Model =
-    { apps : Dict String App
+    { apps : List App
     , packages : List Package
     , selectedOutput : String
     , selectedApp : App
@@ -27,7 +27,7 @@ type alias Model =
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { apps = Dict.empty
+    ( { apps = []
       , packages = []
       , selectedOutput = "packages"
       , selectedApp =
@@ -125,7 +125,7 @@ view model =
                 , optionalDivHtml (model.selectedOutput == "applications")
                     (div [ class "list-group" ]
                         -- applications
-                        (appsHtml (Dict.values model.apps) model.selectedApp model.searchString)
+                        (appsHtml model.apps model.selectedApp model.searchString)
                     )
 
                 -- error message
