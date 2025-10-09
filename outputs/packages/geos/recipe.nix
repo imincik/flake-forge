@@ -14,7 +14,7 @@
   mainProgram = "geosop";
 
   source = {
-    github = "libgeos/geos/883f237d1ecbf49f8efd09905df05814783c5b50";
+    git = "github:libgeos/geos/883f237d1ecbf49f8efd09905df05814783c5b50";
     hash = "sha256-enHSmHW8bgRIv33cQrlllF6rbrCkXfqQilcu53LQiRE=";
   };
 
