@@ -128,7 +128,7 @@
               passthru = appPassthru app appDrv;
             });
 
-          containerPackages = lib.mapAttrs (name: app: containerBundle ({ inherit name; } // app)) cfg;
+          containerPackages = lib.mapAttrs (name: app: containerBundle app) cfg;
         in
         {
           packages = containerPackages;
