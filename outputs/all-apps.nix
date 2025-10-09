@@ -20,9 +20,8 @@ in
         # Add mypkgs as extra recipe argument
         mypkgs = config.packages;
       });
-      allOutputs = lib.flatten (map (r: r.forge.apps or [ ]) recipes);
     in
     {
-      forge.apps = allOutputs;
+      forge.apps = recipes;
     };
 }
