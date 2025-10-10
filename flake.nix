@@ -44,7 +44,8 @@
         ./ui/develop.nix
         ./checks.nix
 
-        (inputs.import-tree ./outputs)
+        ./outputs/all-apps.nix
+        ./outputs/all-packages.nix
       ];
 
       _module.args.rootPath = ./.;
