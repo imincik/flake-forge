@@ -9,7 +9,6 @@
     in
     {
       options.forge = {
-
         packages = lib.mkOption {
           type = lib.types.listOf (
             lib.types.submodule {

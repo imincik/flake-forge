@@ -50,7 +50,16 @@
           "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
         ]
       },
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "vm": {
+        "config": {},
+        "enable": true,
+        "name": "hello",
+        "ports": [],
+        "requirements": [
+          "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
+        ]
+      }
     },
     {
       "composeFile": "/nix/store/m3h5izj1pcdz6s2pmmz6yw6gh2g7rvq3-compose.yaml",
@@ -71,10 +80,28 @@
       "name": "python-web-app",
       "programs": {
         "requirements": [
-          "/nix/store/8ggin0y50drxqzlkci4p71v2nan6gc7s-curl-8.14.1-bin"
+          "/nix/store/8ggin0y50drxqzlkci4p71v2nan6gc7s-curl-8.14.1-bin",
+          "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1"
         ]
       },
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "vm": {
+        "config": {
+          "services": {
+            "postgresql": {
+              "authentication": "local all all trust\nhost all all 0.0.0.0/0 trust\n",
+              "enable": true,
+              "enableTCPIP": true
+            }
+          }
+        },
+        "enable": true,
+        "name": "database",
+        "ports": [
+          "5432:5432"
+        ],
+        "requirements": []
+      }
     }
   ],
   "packages": [

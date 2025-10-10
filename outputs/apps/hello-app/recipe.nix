@@ -46,6 +46,13 @@
       ];
     }
   ];
-
   composeFile = ./compose.yaml;
+
+  vm = {
+    enable = true;
+    name = "hello";
+    requirements = [
+      mypkgs.hello
+    ];
+  };
 }
