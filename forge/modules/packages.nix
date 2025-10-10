@@ -39,8 +39,8 @@
 
                 # Source configuration
                 source = {
-                  github = lib.mkOption {
-                    type = lib.types.nullOr (lib.types.strMatching "^.*/.*/.*$");
+                  git = lib.mkOption {
+                    type = lib.types.nullOr (lib.types.strMatching "^.*:.*/.*/.*$");
                     default = null;
                     example = "my-user/my-repo/v1.0.0";
                   };
@@ -186,19 +186,27 @@
         packages =
           let
             pkgSource =
+              let
+                gitForges = {
+                  # forge = fetchFunction
+                  github = pkgs.fetchFromGitHub;
+                  gitlab = pkgs.fetchFromGitLab;
+                };
+              in
               pkg:
               assert
-                (pkg.source.github == null && pkg.source.url == null)
-                -> throw "'source.github' or 'source.url' must be defined for ${pkg.name}";
-              # By default, try to use github
-              if pkg.source.github != null then
+                (pkg.source.git == null && pkg.source.url == null)
+                -> throw "'source.git' or 'source.url' must be defined for ${pkg.name}";
+              # By default, try to use git
+              if pkg.source.git != null then
                 let
-                  ghParams = lib.splitString "/" pkg.source.github;
+                  gitForge = lib.elemAt (lib.splitString ":" pkg.source.git) 0;
+                  gitParams = lib.splitString "/" pkg.source.git;
                 in
-                pkgs.fetchFromGitHub {
-                  owner = lib.lists.elemAt ghParams 0;
-                  repo = lib.lists.elemAt ghParams 1;
-                  rev = lib.lists.elemAt ghParams 2;
+                gitForges.${gitForge} {
+                  owner = lib.lists.elemAt gitParams 0;
+                  repo = lib.lists.elemAt gitParams 1;
+                  rev = lib.lists.elemAt gitParams 2;
                   hash = pkg.source.hash;
                 }
               # Fallback to tarball dowload

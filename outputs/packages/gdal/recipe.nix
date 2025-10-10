@@ -14,7 +14,7 @@
   mainProgram = "gdalinfo";
 
   source = {
-    github = "OSGeo/gdal/3679e5e4511ae8b4a956ded7ef7be23fdb86b7db";
+    git = "github:OSGeo/gdal/3679e5e4511ae8b4a956ded7ef7be23fdb86b7db";
     hash = "sha256-0cHD1+vEAahllGNOe6Y4uec44HmCvlJphRj8JPJzOXc=";
   };
 
