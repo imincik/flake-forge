@@ -204,7 +204,7 @@
                   gitParams = lib.splitString "/" pkg.source.git;
                 in
                 gitForges.${gitForge} {
-                  owner = lib.lists.elemAt gitParams 0;
+                  owner = lib.removePrefix "${gitForge}:" (lib.lists.elemAt gitParams 0);
                   repo = lib.lists.elemAt gitParams 1;
                   rev = lib.lists.elemAt gitParams 2;
                   hash = pkg.source.hash;
