@@ -17,16 +17,18 @@
     ];
   };
 
-  containers = [
-    {
-      name = "api";
-      requirements = [ mypkgs.python-web ];
-      config.CMD = [
-        "python-web"
-      ];
-    }
-  ];
-  composeFile = ./compose.yaml;
+  containers = {
+    images = [
+      {
+        name = "api";
+        requirements = [ mypkgs.python-web ];
+        config.CMD = [
+          "python-web"
+        ];
+      }
+    ];
+    composeFile = ./compose.yaml;
+  };
 
   vm = {
     enable = true;

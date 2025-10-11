@@ -17,36 +17,38 @@
     ];
   };
 
-  containers = [
-    {
-      name = "hello-english";
-      requirements = [ mypkgs.hello ];
-      config.CMD = [
-        "hello"
-        "--greeting"
-        "Hello"
-      ];
-    }
-    {
-      name = "hello-italian";
-      requirements = [ mypkgs.hello ];
-      config.CMD = [
-        "hello"
-        "--greeting"
-        "Ciao"
-      ];
-    }
-    {
-      name = "hello-spanish";
-      requirements = [ mypkgs.hello ];
-      config.CMD = [
-        "hello"
-        "--greeting"
-        "Hola"
-      ];
-    }
-  ];
-  composeFile = ./compose.yaml;
+  containers = {
+    images = [
+      {
+        name = "hello-english";
+        requirements = [ mypkgs.hello ];
+        config.CMD = [
+          "hello"
+          "--greeting"
+          "Hello"
+        ];
+      }
+      {
+        name = "hello-italian";
+        requirements = [ mypkgs.hello ];
+        config.CMD = [
+          "hello"
+          "--greeting"
+          "Ciao"
+        ];
+      }
+      {
+        name = "hello-spanish";
+        requirements = [ mypkgs.hello ];
+        config.CMD = [
+          "hello"
+          "--greeting"
+          "Hola"
+        ];
+      }
+    ];
+    composeFile = ./compose.yaml;
+  };
 
   vm = {
     enable = true;

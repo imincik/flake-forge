@@ -29,7 +29,6 @@
 
                 # Programs shell configuration
                 programs = {
-                  # TODO: add enable option
                   requirements = lib.mkOption {
                     type = lib.types.listOf lib.types.package;
                     default = [ ];
@@ -37,36 +36,34 @@
                 };
 
                 # Container configuration
-                containers = lib.mkOption {
-                  # TODO: add enable option
-                  type = lib.types.listOf (
-                    lib.types.submodule {
-                      options = {
-                        name = lib.mkOption {
-                          type = lib.types.str;
-                          default = "app-container";
-                        };
-                        requirements = lib.mkOption {
-                          type = lib.types.listOf lib.types.package;
-                          default = [ ];
-                        };
-                        config = {
-                          CMD = lib.mkOption {
-                            type = lib.types.listOf lib.types.str;
+                containers = {
+                  images = lib.mkOption {
+                    type = lib.types.listOf (
+                      lib.types.submodule {
+                        options = {
+                          name = lib.mkOption {
+                            type = lib.types.str;
+                            default = "app-container";
+                          };
+                          requirements = lib.mkOption {
+                            type = lib.types.listOf lib.types.package;
                             default = [ ];
                           };
+                          config = {
+                            CMD = lib.mkOption {
+                              type = lib.types.listOf lib.types.str;
+                              default = [ ];
+                            };
+                          };
                         };
-                      };
-                    }
-                  );
-                };
-
-                # TODO: move under containers
-                # Compose configuration
-                composeFile = lib.mkOption {
-                  type = lib.types.path;
-                  description = "Relative path to a container compose file.";
-                  example = "./compose.yaml";
+                      }
+                    );
+                  };
+                  composeFile = lib.mkOption {
+                    type = lib.types.path;
+                    description = "Relative path to a container compose file.";
+                    example = "./compose.yaml";
+                  };
                 };
 
                 # Virtual machine
@@ -202,14 +199,14 @@
                   (map (image: {
                     name = "${image.name}.tar.gz";
                     path = buildImage image;
-                  }) app.containers)
+                  }) app.containers.images)
                   # Compose file
                   ++ [
                     {
                       name = "compose.yaml";
                       path = pkgs.writeTextFile {
                         name = "compose.yaml";
-                        text = builtins.readFile app.composeFile;
+                        text = builtins.readFile app.containers.composeFile;
                       };
                     }
                   ]
