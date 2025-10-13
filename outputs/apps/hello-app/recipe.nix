@@ -51,7 +51,6 @@
   };
 
   vm = {
-    enable = true;
     name = "hello";
     requirements = [
       mypkgs.hello

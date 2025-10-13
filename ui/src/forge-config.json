@@ -58,7 +58,7 @@
           "ports": [],
           "system": {}
         },
-        "enable": true,
+        "enable": false,
         "name": "hello",
         "requirements": [
           "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"

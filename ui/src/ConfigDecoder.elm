@@ -13,6 +13,12 @@ type alias App =
     { name : String
     , description : String
     , version : String
+    , vm : AppVm
+    }
+
+
+type alias AppVm =
+    { enable : Bool
     }
 
 
@@ -34,10 +40,17 @@ configDecoder =
 
 appDecoder : Decode.Decoder App
 appDecoder =
-    Decode.map3 App
+    Decode.map4 App
         (Decode.field "name" Decode.string)
         (Decode.field "description" Decode.string)
         (Decode.field "version" Decode.string)
+        (Decode.field "vm" appVmDecoder)
+
+
+appVmDecoder : Decode.Decoder AppVm
+appVmDecoder =
+    Decode.map AppVm
+        (Decode.field "enable" Decode.bool)
 
 
 packageDecoder : Decode.Decoder Package

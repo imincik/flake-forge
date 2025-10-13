@@ -157,6 +157,13 @@ runAppContainerCmd app =
 """ [ app.name ]
 
 
+runAppVmCmd : App -> String
+runAppVmCmd app =
+    format """
+  nix build github:imincik/flake-forge#{0}.vm
+""" [ app.name ]
+
+
 appInstructionsHtml : App -> List (Html msg)
 appInstructionsHtml app =
     if not (String.isEmpty app.name) then
@@ -164,13 +171,18 @@ appInstructionsHtml app =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "A. Run application programs (CLI, GUI) in a shell environment" ]
-        , pre [ class "text-warning" ] [ text (runAppShellCmd app) ]
+            [ text "A. Run application programs (CLI, GUI) in a shell environment", pre [ class "text-warning" ] [ text (runAppShellCmd app) ] ]
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "B. Run application services in containers" ]
-        , pre [ class "text-warning" ] [ text (runAppContainerCmd app) ]
+            [ text "B. Run application services in containers", pre [ class "text-warning" ] [ text (runAppContainerCmd app) ] ]
+        , if app.vm.enable then
+            p
+                [ style "margin-bottom" "0em" ]
+                [ text "C. Run application services in VM", pre [ class "text-warning" ] [ text (runAppVmCmd app) ] ]
+
+          else
+            p [] []
         , hr [] []
         , text "Recipe: "
         , a

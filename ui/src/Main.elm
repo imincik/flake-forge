@@ -33,6 +33,7 @@ init _ =
             { name = ""
             , description = ""
             , version = ""
+            , vm = { enable = False }
             }
       , selectedPackage =
             { name = ""
