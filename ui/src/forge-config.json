@@ -160,6 +160,10 @@
         }
       },
       "description": "GDAL package built from GitHub using standardBuilder.",
+      "development": {
+        "requirements": [],
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+      },
       "homePage": "https://gdal.org",
       "mainProgram": "gdalinfo",
       "name": "gdal",
@@ -211,6 +215,10 @@
         }
       },
       "description": "GEOS package built from GitHub using plainBuilder.",
+      "development": {
+        "requirements": [],
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+      },
       "homePage": "https://libgeos.org",
       "mainProgram": "geosop",
       "name": "geos",
@@ -259,6 +267,10 @@
         }
       },
       "description": "Hello package built from tarball using standardBuilder.",
+      "development": {
+        "requirements": [],
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+      },
       "homePage": "https://www.gnu.org/software/hello",
       "mainProgram": "hello",
       "name": "hello",
@@ -312,6 +324,10 @@
         }
       },
       "description": "Python web application example built using pythonAppBuilder.",
+      "development": {
+        "requirements": [],
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+      },
       "homePage": "https://github.com/imincik/python-web-example",
       "mainProgram": "python-web",
       "name": "python-web",
