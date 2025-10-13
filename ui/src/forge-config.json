@@ -1,48 +1,50 @@
 {
   "apps": [
     {
-      "composeFile": "/nix/store/nw6szwqhv08zh1891y1a6pc0gbk6mwvc-compose.yaml",
-      "containers": [
-        {
-          "config": {
-            "CMD": [
-              "hello",
-              "--greeting",
-              "Hello"
+      "containers": {
+        "composeFile": "/nix/store/nw6szwqhv08zh1891y1a6pc0gbk6mwvc-compose.yaml",
+        "images": [
+          {
+            "config": {
+              "CMD": [
+                "hello",
+                "--greeting",
+                "Hello"
+              ]
+            },
+            "name": "hello-english",
+            "requirements": [
+              "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
             ]
           },
-          "name": "hello-english",
-          "requirements": [
-            "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
-          ]
-        },
-        {
-          "config": {
-            "CMD": [
-              "hello",
-              "--greeting",
-              "Ciao"
+          {
+            "config": {
+              "CMD": [
+                "hello",
+                "--greeting",
+                "Ciao"
+              ]
+            },
+            "name": "hello-italian",
+            "requirements": [
+              "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
             ]
           },
-          "name": "hello-italian",
-          "requirements": [
-            "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
-          ]
-        },
-        {
-          "config": {
-            "CMD": [
-              "hello",
-              "--greeting",
-              "Hola"
+          {
+            "config": {
+              "CMD": [
+                "hello",
+                "--greeting",
+                "Hola"
+              ]
+            },
+            "name": "hello-spanish",
+            "requirements": [
+              "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
             ]
-          },
-          "name": "hello-spanish",
-          "requirements": [
-            "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
-          ]
-        }
-      ],
+          }
+        ]
+      },
       "description": "Say hello in multiple languages.",
       "name": "hello-app",
       "programs": {
@@ -50,23 +52,36 @@
           "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
         ]
       },
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "vm": {
+        "config": {
+          "ports": [],
+          "system": {}
+        },
+        "enable": false,
+        "name": "hello",
+        "requirements": [
+          "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
+        ]
+      }
     },
     {
-      "composeFile": "/nix/store/m3h5izj1pcdz6s2pmmz6yw6gh2g7rvq3-compose.yaml",
-      "containers": [
-        {
-          "config": {
-            "CMD": [
-              "python-web"
+      "containers": {
+        "composeFile": "/nix/store/m3h5izj1pcdz6s2pmmz6yw6gh2g7rvq3-compose.yaml",
+        "images": [
+          {
+            "config": {
+              "CMD": [
+                "python-web"
+              ]
+            },
+            "name": "api",
+            "requirements": [
+              "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1"
             ]
-          },
-          "name": "api",
-          "requirements": [
-            "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1"
-          ]
-        }
-      ],
+          }
+        ]
+      },
       "description": "Simple web application with database backend.",
       "name": "python-web-app",
       "programs": {
@@ -74,7 +89,36 @@
           "/nix/store/8ggin0y50drxqzlkci4p71v2nan6gc7s-curl-8.14.1-bin"
         ]
       },
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "vm": {
+        "config": {
+          "ports": [
+            "5000:5000"
+          ],
+          "system": {
+            "services": {
+              "postgresql": {
+                "authentication": "local all all trust\nhost all all 0.0.0.0/0 trust\nhost all all ::0/0 trust\n",
+                "enable": true,
+                "enableTCPIP": true
+              }
+            },
+            "systemd": {
+              "services": {
+                "api": {
+                  "script": "/nix/store/nr7d9xysggiv6cj5f3jd22ka580i7ljg-python-web-0.0.1/bin/python-web",
+                  "wantedBy": [
+                    "multi-user.target"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "enable": true,
+        "name": "database",
+        "requirements": []
+      }
     }
   ],
   "packages": [
