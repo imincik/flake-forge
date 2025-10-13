@@ -10,7 +10,7 @@ module Texts exposing
     )
 
 import ConfigDecoder exposing (App, Package)
-import Html exposing (Html, a, h2, hr, p, pre, span, text)
+import Html exposing (Html, a, h2, h3, hr, p, pre, span, text)
 import Html.Attributes exposing (class, href, style, target)
 
 
@@ -109,6 +109,13 @@ runPackageContainerCmd pkg =
 """ [ pkg.name, pkg.version ]
 
 
+enterPackageDevenvCmd : Package -> String
+enterPackageDevenvCmd pkg =
+    format """
+  nix develop github:imincik/flake-forge#{0}.devenv
+""" [ pkg.name ]
+
+
 packageInstructionsHtml : Package -> List (Html msg)
 packageInstructionsHtml pkg =
     if not (String.isEmpty pkg.name) then
@@ -123,6 +130,13 @@ packageInstructionsHtml pkg =
             ]
             [ text "B. Run package in a container" ]
         , pre [ class "text-warning" ] [ text (runPackageContainerCmd pkg) ]
+        , hr [] []
+        , h3 [] [ text "DEVELOPMENT" ]
+        , p
+            [ style "margin-bottom" "0em"
+            ]
+            [ text "Enter package development environment" ]
+        , pre [ class "text-warning" ] [ text (enterPackageDevenvCmd pkg) ]
         , hr [] []
         , text "Recipe: "
         , a

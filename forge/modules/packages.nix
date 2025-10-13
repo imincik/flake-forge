@@ -175,6 +175,21 @@
                     '';
                   };
                 };
+
+                # Development configuration
+                development = {
+                  requirements = lib.mkOption {
+                    type = lib.types.listOf lib.types.package;
+                    default = [ ];
+                  };
+                  shellHook = lib.mkOption {
+                    type = lib.types.str;
+                    default = ''
+                      echo -e "\nWelcome. This environment contains all software required to"
+                      echo "build this package from source."
+                    '';
+                  };
+                };
               };
             }
           );
@@ -230,6 +245,13 @@
                 config = {
                   Entrypoint = [ "${pkgs.bashInteractive}/bin/bash" ];
                 };
+              };
+              devenv = pkgs.mkShell {
+                inputsFrom = [
+                  finalPkg
+                ];
+                packages = pkg.development.requirements;
+                shellHook = pkg.development.shellHook;
               };
             };
 
