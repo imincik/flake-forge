@@ -160,7 +160,7 @@ runAppContainerCmd app =
 runAppVmCmd : App -> String
 runAppVmCmd app =
     format """
-  nix build github:imincik/flake-forge#{0}.vm
+  nix run github:imincik/flake-forge#{0}.vm
 """ [ app.name ]
 
 
