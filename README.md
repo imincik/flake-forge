@@ -25,7 +25,7 @@ The friendly software distribution system with Nix super powers.
 1. Create a new package recipe file in
    `outputs/packages/<package>/recipe.nix` and add it to git.
 
-1. Test build
+1. Build package
 
 ```bash
 nix build .#<package> -L
@@ -43,7 +43,7 @@ nix build .#<package> -L
 
 * [Application recipe examples](outputs/apps)
 
-### Package build debugging
+### Package debugging
 
 Set `build.<builder>.debug = true` and launch interactive package build
 environment by running
@@ -55,7 +55,7 @@ nix develop .#<package>
 
 and follow instructions.
 
-### Tests
+### Package tests
 
 * Run package test
 
