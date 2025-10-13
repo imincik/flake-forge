@@ -154,14 +154,14 @@ packageInstructionsHtml pkg =
 runAppShellCmd : App -> String
 runAppShellCmd app =
     format """
-  nix shell github:imincik/flake-forge#{0}.programs
+  nix shell github:imincik/flake-forge#{0}
 """ [ app.name ]
 
 
 runAppContainerCmd : App -> String
 runAppContainerCmd app =
     format """
-  nix build github:imincik/flake-forge#{0}
+  nix build github:imincik/flake-forge#{0}.containers
 
   for image in ./result/*.tar.gz; do
     podman load < $image

@@ -116,6 +116,21 @@
 
       config =
         let
+          shellBundle =
+            app:
+            let
+              appDrv = (
+                pkgs.symlinkJoin {
+                  name = "${app.name}-${app.version}";
+                  paths = app.programs.requirements;
+                }
+              );
+            in
+            # Passthru
+            appDrv.overrideAttrs (_: {
+              passthru = appPassthru app appDrv;
+            });
+
           buildImage =
             image:
             pkgs.dockerTools.buildImage {
@@ -131,12 +146,25 @@
               };
             };
 
-          shellBundle =
+          containerBundle =
             app:
-            pkgs.symlinkJoin {
-              name = "${app.name}-${app.version}";
-              paths = app.programs.requirements;
-            };
+            pkgs.linkFarm "${app.name}-${app.version}" (
+              # Container images
+              (map (image: {
+                name = "${image.name}.tar.gz";
+                path = buildImage image;
+              }) app.containers.images)
+              # Compose file
+              ++ [
+                {
+                  name = "compose.yaml";
+                  path = pkgs.writeTextFile {
+                    name = "compose.yaml";
+                    text = builtins.readFile app.containers.composeFile;
+                  };
+                }
+              ]
+            );
 
           nixosVm =
             app:
@@ -186,47 +214,19 @@
             # finalApp parameter is currently not used in this function
             app: finalApp:
             {
-              programs = shellBundle app;
+              containers = containerBundle app;
             }
             // lib.optionalAttrs app.vm.enable { vm = nixosVm app; };
 
-          containerBundle =
-            app:
-            let
-              appDrv = (
-                pkgs.linkFarm "${app.name}-${app.version}" (
-                  # Container images
-                  (map (image: {
-                    name = "${image.name}.tar.gz";
-                    path = buildImage image;
-                  }) app.containers.images)
-                  # Compose file
-                  ++ [
-                    {
-                      name = "compose.yaml";
-                      path = pkgs.writeTextFile {
-                        name = "compose.yaml";
-                        text = builtins.readFile app.containers.composeFile;
-                      };
-                    }
-                  ]
-                )
-              );
-            in
-            # Passthru
-            appDrv.overrideAttrs (_: {
-              passthru = appPassthru app appDrv;
-            });
-
-          containerPackages = lib.listToAttrs (
+          allApps = lib.listToAttrs (
             map (app: {
               name = "${app.name}";
-              value = containerBundle app;
+              value = shellBundle app;
             }) cfg
           );
         in
         {
-          packages = containerPackages;
+          packages = allApps;
         };
     };
 }
