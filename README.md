@@ -1,4 +1,4 @@
-# Flake Forge
+# Nix Forge
 
 **WARNING: this sofware is currently in alpha state.**
 
@@ -16,7 +16,7 @@ The friendly software distribution system with Nix super powers.
   * Development environments for packages
   * NixOS virtual machines for apps
 
-* [Web UI](https://imincik.github.io/flake-forge)
+* [Web UI](https://imincik.github.io/nix-forge)
 
 * Great for self hosting
 
