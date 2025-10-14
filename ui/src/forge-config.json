@@ -162,7 +162,7 @@
       "description": "GDAL package built from GitHub using standardBuilder.",
       "development": {
         "requirements": [],
-        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"
       },
       "homePage": "https://gdal.org",
       "mainProgram": "gdalinfo",
@@ -217,7 +217,7 @@
       "description": "GEOS package built from GitHub using plainBuilder.",
       "development": {
         "requirements": [],
-        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"
       },
       "homePage": "https://libgeos.org",
       "mainProgram": "geosop",
@@ -269,7 +269,7 @@
       "description": "Hello package built from tarball using standardBuilder.",
       "development": {
         "requirements": [],
-        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"
       },
       "homePage": "https://www.gnu.org/software/hello",
       "mainProgram": "hello",
@@ -326,7 +326,7 @@
       "description": "Python web application example built using pythonAppBuilder.",
       "development": {
         "requirements": [],
-        "shellHook": "echo -e \"\\nWelcome. This environment contains all software required to\"\necho \"build this package from source.\"\n"
+        "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"
       },
       "homePage": "https://github.com/imincik/python-web-example",
       "mainProgram": "python-web",

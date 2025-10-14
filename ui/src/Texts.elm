@@ -135,7 +135,7 @@ packageInstructionsHtml pkg =
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "Enter package development environment" ]
+            [ text "Enter development environment (all dependencies included)" ]
         , pre [ class "text-warning" ] [ text (enterPackageDevenvCmd pkg) ]
         , hr [] []
         , text "Recipe: "
