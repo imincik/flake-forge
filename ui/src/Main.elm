@@ -271,7 +271,6 @@ packageHtml pkg selectedPkg =
             [ class "mb-1"
             ]
             [ text pkg.description ]
-        , small [] [ text pkg.homePage ]
         ]
 
 

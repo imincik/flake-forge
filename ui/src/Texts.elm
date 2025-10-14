@@ -10,7 +10,7 @@ module Texts exposing
     )
 
 import ConfigDecoder exposing (App, Package)
-import Html exposing (Html, a, h2, h3, hr, p, pre, span, text)
+import Html exposing (Html, a, br, h2, h3, hr, p, pre, span, text)
 import Html.Attributes exposing (class, href, style, target)
 
 
@@ -138,7 +138,14 @@ packageInstructionsHtml pkg =
             [ text "Enter development environment (all dependencies included)" ]
         , pre [ class "text-warning" ] [ text (enterPackageDevenvCmd pkg) ]
         , hr [] []
-        , text "Recipe: "
+        , text "Home page: "
+        , a
+            [ href pkg.homePage
+            , target "_blank"
+            ]
+            [ text pkg.homePage ]
+        , br [] []
+        , text "Recipe : "
         , a
             [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/packages/" ++ pkg.name ++ "/recipe.nix")
             , target "_blank"
