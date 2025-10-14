@@ -1,5 +1,6 @@
 module ConfigDecoder exposing (App, Config, Package, configDecoder, packageDecoder)
 
+import Dict
 import Json.Decode as Decode
 
 
@@ -28,6 +29,7 @@ type alias Package =
     , version : String
     , homePage : String
     , mainProgram : String
+    , builder : String
     }
 
 
@@ -53,11 +55,28 @@ appVmDecoder =
         (Decode.field "enable" Decode.bool)
 
 
+packageBuilder : Decode.Decoder String
+packageBuilder =
+    Decode.field "build" (Decode.dict (Decode.field "enable" Decode.bool))
+        |> Decode.map findEnabledBuilder
+
+
+findEnabledBuilder : Dict.Dict String Bool -> String
+findEnabledBuilder dict =
+    dict
+        |> Dict.toList
+        |> List.filter (\( _, enabled ) -> enabled)
+        |> List.head
+        |> Maybe.map Tuple.first
+        |> Maybe.withDefault "none"
+
+
 packageDecoder : Decode.Decoder Package
 packageDecoder =
-    Decode.map5 Package
+    Decode.map6 Package
         (Decode.field "name" Decode.string)
         (Decode.field "description" Decode.string)
         (Decode.field "version" Decode.string)
         (Decode.field "homePage" Decode.string)
         (Decode.field "mainProgram" Decode.string)
+        packageBuilder

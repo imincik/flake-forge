@@ -9,7 +9,7 @@
 {
   name = "geos";
   version = "2025-10-03";
-  description = "GEOS package built from GitHub using plainBuilder.";
+  description = "GEOS package built from GitHub source.";
   homePage = "https://libgeos.org";
   mainProgram = "geosop";
 

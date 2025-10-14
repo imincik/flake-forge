@@ -159,7 +159,7 @@
           }
         }
       },
-      "description": "GDAL package built from GitHub using standardBuilder.",
+      "description": "GDAL package built from GitHub source.",
       "development": {
         "requirements": [],
         "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"
@@ -214,7 +214,7 @@
           }
         }
       },
-      "description": "GEOS package built from GitHub using plainBuilder.",
+      "description": "GEOS package built from GitHub source.",
       "development": {
         "requirements": [],
         "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"
@@ -266,7 +266,7 @@
           }
         }
       },
-      "description": "Hello package built from tarball using standardBuilder.",
+      "description": "Hello package built from source code tarball.",
       "development": {
         "requirements": [],
         "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"
@@ -323,7 +323,7 @@
           }
         }
       },
-      "description": "Python web application example built using pythonAppBuilder.",
+      "description": "Python web application example built from GitHub source.",
       "development": {
         "requirements": [],
         "shellHook": "echo -e \"\\nWelcome. This environment contains all dependencies required\"\necho \"to build this software from source.\"\necho\necho \"Now, navigate to the source code directory and you are all set to\"\necho \"start hacking.\"\n"

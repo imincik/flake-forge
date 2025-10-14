@@ -41,6 +41,7 @@ init _ =
             , version = ""
             , homePage = ""
             , mainProgram = ""
+            , builder = ""
             }
       , searchString = ""
       , error = Nothing
@@ -271,6 +272,10 @@ packageHtml pkg selectedPkg =
             [ class "mb-1"
             ]
             [ text pkg.description ]
+        , p
+            [ class "mb-1 "
+            ]
+            [ small [] [ text ("[ " ++ pkg.builder ++ " ]") ] ]
         ]
 
 
@@ -313,6 +318,21 @@ appHtml app selectedApp =
             [ class "mb-1"
             ]
             [ text app.description ]
+        , p
+            [ class "mb-1 "
+            ]
+            [ small []
+                [ text
+                    ("[ shell containers"
+                        ++ (if app.vm.enable then
+                                " vm ]"
+
+                            else
+                                " ]"
+                           )
+                    )
+                ]
+            ]
         ]
 
 

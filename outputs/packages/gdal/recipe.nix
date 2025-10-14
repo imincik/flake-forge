@@ -9,7 +9,7 @@
 {
   name = "gdal";
   version = "2025-10-05";
-  description = "GDAL package built from GitHub using standardBuilder.";
+  description = "GDAL package built from GitHub source.";
   homePage = "https://gdal.org";
   mainProgram = "gdalinfo";
 
