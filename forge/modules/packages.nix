@@ -185,8 +185,11 @@
                   shellHook = lib.mkOption {
                     type = lib.types.str;
                     default = ''
-                      echo -e "\nWelcome. This environment contains all software required to"
-                      echo "build this package from source."
+                      echo -e "\nWelcome. This environment contains all dependencies required"
+                      echo "to build this software from source."
+                      echo
+                      echo "Now, navigate to the source code directory and you are all set to"
+                      echo "start hacking."
                     '';
                   };
                 };

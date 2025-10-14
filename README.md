@@ -12,8 +12,9 @@ The friendly software distribution system with Nix super powers.
 
 * Outputs:
   * Nix packages for Linux (and Mac in a future)
-  * Container images
-  * NixOS virtual machines
+  * Container images for packages and apps
+  * Development environments for packages
+  * NixOS virtual machines for apps
 
 * [Web UI](https://imincik.github.io/flake-forge)
 
