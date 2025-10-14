@@ -29,7 +29,7 @@ headerHtml =
     p []
         [ span
             [ style "margin-right" "10px" ]
-            [ text "[Flake Forge]" ]
+            [ text "[Nix Forge]" ]
         , span
             [ class "fs-2 text-secondary" ]
             [ text "the software distribution system" ]
@@ -95,14 +95,14 @@ installInstructionsHtml =
 runPackageShellCmd : Package -> String
 runPackageShellCmd pkg =
     format """
-  nix shell github:imincik/flake-forge#{0}
+  nix shell github:imincik/nix-forge#{0}
 """ [ pkg.name ]
 
 
 runPackageContainerCmd : Package -> String
 runPackageContainerCmd pkg =
     format """
-  nix build github:imincik/flake-forge#{0}.image
+  nix build github:imincik/nix-forge#{0}.image
 
   podman load < ./result
   podman run -it --rm localhost/{0}:{1}
@@ -112,7 +112,7 @@ runPackageContainerCmd pkg =
 enterPackageDevenvCmd : Package -> String
 enterPackageDevenvCmd pkg =
     format """
-  nix develop github:imincik/flake-forge#{0}.devenv
+  nix develop github:imincik/nix-forge#{0}.devenv
 """ [ pkg.name ]
 
 
@@ -147,7 +147,7 @@ packageInstructionsHtml pkg =
         , br [] []
         , text "Recipe : "
         , a
-            [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/packages/" ++ pkg.name ++ "/recipe.nix")
+            [ href ("https://github.com/imincik/nix-forge/blob/master/outputs/packages/" ++ pkg.name ++ "/recipe.nix")
             , target "_blank"
             ]
             [ text ("packages/" ++ pkg.name ++ "/recipe.nix") ]
@@ -161,14 +161,14 @@ packageInstructionsHtml pkg =
 runAppShellCmd : App -> String
 runAppShellCmd app =
     format """
-  nix shell github:imincik/flake-forge#{0}
+  nix shell github:imincik/nix-forge#{0}
 """ [ app.name ]
 
 
 runAppContainerCmd : App -> String
 runAppContainerCmd app =
     format """
-  nix build github:imincik/flake-forge#{0}.containers
+  nix build github:imincik/nix-forge#{0}.containers
 
   for image in ./result/*.tar.gz; do
     podman load < $image
@@ -181,7 +181,7 @@ runAppContainerCmd app =
 runAppVmCmd : App -> String
 runAppVmCmd app =
     format """
-  nix run github:imincik/flake-forge#{0}.vm
+  nix run github:imincik/nix-forge#{0}.vm
 """ [ app.name ]
 
 
@@ -207,7 +207,7 @@ appInstructionsHtml app =
         , hr [] []
         , text "Recipe: "
         , a
-            [ href ("https://github.com/imincik/flake-forge/blob/master/outputs/apps/" ++ app.name ++ "/recipe.nix")
+            [ href ("https://github.com/imincik/nix-forge/blob/master/outputs/apps/" ++ app.name ++ "/recipe.nix")
             , target "_blank"
             ]
             [ text ("apps/" ++ app.name ++ "/recipe.nix") ]

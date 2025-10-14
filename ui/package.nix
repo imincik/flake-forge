@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   # nix build .#forge-config --option sandbox relaxed --builders ""
   __noChroot = true;
 
-  pname = "flake-forge-ui";
+  pname = "forge-ui";
   version = "0.1.0";
 
   src = ./.;
