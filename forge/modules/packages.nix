@@ -1,15 +1,19 @@
-{ inputs, lib, ... }:
-
-{
-  perSystem =
-    { config, pkgs, ... }:
+{ inputs, config, lib, flake-parts-lib, ... }:
 
     let
       cfg = config.forge;
+      inherit (flake-parts-lib) mkPerSystemOption;
     in
     {
-      options.forge = {
+      options = {
+      perSystem = mkPerSystemOption (
+        { config, pkgs, ... }:
+        {
+      options = {
+        forge = {
         packages = lib.mkOption {
+          default = [ ];
+          description = "List of packages.";
           type = lib.types.listOf (
             lib.types.submodule {
               options = {
@@ -351,5 +355,8 @@
           in
           (plainBuilderPkgs // standardBuilderPkgs // pythonAppBuilderPkgs);
       };
+    };
+    }
+    );
     };
 }
