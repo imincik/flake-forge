@@ -1,15 +1,19 @@
-{ inputs, lib, ... }:
-
-{
-  perSystem =
-    { config, pkgs, ... }:
+{ inputs, config, lib, flake-parts-lib, ... }:
 
     let
       cfg = config.forge.apps;
+      inherit (flake-parts-lib) mkPerSystemOption;
     in
     {
-      options.forge = {
+      options = {
+        perSystem = mkPerSystemOption (
+          { config, pkgs, ... }:
+          {
+      options = {
+        forge = {
         apps = lib.mkOption {
+          default = [ ];
+          description = "List of apps.";
           type = lib.types.listOf (
             lib.types.submodule {
               options = {
@@ -111,7 +115,7 @@
               };
             }
           );
-        };
+      };
       };
 
       config =
@@ -229,4 +233,7 @@
           packages = allApps;
         };
     };
+}
+);
+};
 }
