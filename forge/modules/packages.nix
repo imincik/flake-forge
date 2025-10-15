@@ -1,13 +1,15 @@
 { inputs, config, lib, flake-parts-lib, ... }:
 
     let
-      cfg = config.forge;
       inherit (flake-parts-lib) mkPerSystemOption;
     in
     {
       options = {
       perSystem = mkPerSystemOption (
         { config, pkgs, ... }:
+        let
+          cfg = config.forge.packages;
+        in
         {
       options = {
         forge = {
@@ -201,6 +203,7 @@
             }
           );
         };
+    };
       };
 
       config = {
@@ -298,7 +301,7 @@
                   )
                   # Derivation end
                 ) { };
-              }) (lib.filter (p: p.build.plainBuilder.enable == true) cfg.packages)
+              }) (lib.filter (p: p.build.plainBuilder.enable == true) cfg)
             );
 
             standardBuilderPkgs = lib.listToAttrs (
@@ -323,7 +326,7 @@
                   )
                   # Derivation end
                 ) { };
-              }) (lib.filter (p: p.build.standardBuilder.enable == true) cfg.packages)
+              }) (lib.filter (p: p.build.standardBuilder.enable == true) cfg)
             );
 
             pythonAppBuilderPkgs = lib.listToAttrs (
@@ -350,12 +353,11 @@
                   )
                   # Derivation end
                 ) { thePackage = value; };
-              }) (lib.filter (p: p.build.pythonAppBuilder.enable == true) cfg.packages)
+              }) (lib.filter (p: p.build.pythonAppBuilder.enable == true) cfg)
             );
           in
           (plainBuilderPkgs // standardBuilderPkgs // pythonAppBuilderPkgs);
       };
-    };
     }
     );
     };
