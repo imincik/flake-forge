@@ -40,9 +40,9 @@ nix build .#<package> -L
 
 ### Configuration options
 
-* [Packages](ui/src/docs/options-packages.html)
+* [Packages](https://imincik.github.io/nix-forge/docs/options-packages.html)
 
-* [Apps](ui/src/docs/options-apps.html)
+* [Apps](https://imincik.github.io/nix-forge/docs/options-apps.html)
 
 ### Recipe examples
 
