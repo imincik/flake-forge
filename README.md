@@ -38,6 +38,12 @@ nix build .#<package> -L
 
 1. Publish package by merging the PR
 
+### Configuration options
+
+* [Packages](ui/src/docs/options-packages.html)
+
+* [Apps](ui/src/docs/options-apps.html)
+
 ### Recipe examples
 
 * [Package recipe examples](outputs/packages)

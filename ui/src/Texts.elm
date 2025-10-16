@@ -151,6 +151,11 @@ packageInstructionsHtml pkg =
             , target "_blank"
             ]
             [ text ("packages/" ++ pkg.name ++ "/recipe.nix") ]
+        , a
+            [ href "docs/options-packages.html"
+            , target "_blank"
+            ]
+            [ text " (configuration options)" ]
         ]
 
     else
@@ -211,6 +216,11 @@ appInstructionsHtml app =
             , target "_blank"
             ]
             [ text ("apps/" ++ app.name ++ "/recipe.nix") ]
+        , a
+            [ href "docs/options-apps.html"
+            , target "_blank"
+            ]
+            [ text " (configuration options)" ]
         ]
 
     else

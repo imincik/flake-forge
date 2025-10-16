@@ -3,6 +3,8 @@
 
   elmPackages,
   _forge-config,
+  _forge-options-apps,
+  _forge-options-packages,
 }:
 
 stdenv.mkDerivation {
@@ -28,11 +30,15 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir $out
+    mkdir $out/docs
+
     cp src/index.html $out
     cp build/main.js $out
 
     cp -a src/resources $out
 
     ln -s ${_forge-config} $out/forge-config.json 
+    ln -s ${_forge-options-apps} $out/docs/options-apps.html
+    ln -s ${_forge-options-packages} $out/docs/options-packages.html
   '';
 }

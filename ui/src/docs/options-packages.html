@@ -1,0 +1,190 @@
+<h2 id="persystem">perSystem</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> module</p>
+<h2 id="packages">packages</h2>
+<p>List of packages.</p>
+<p><em>Type:</em> list of (submodule)</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2
+id="packages..build.plainbuilder.enable">packages.*.build.plainBuilder.enable</h2>
+<p>Whether to enable Plain builder. .</p>
+<p><em>Type:</em> boolean</p>
+<p><em>Default:</em> <code>false</code></p>
+<p><em>Example:</em> <code>true</code></p>
+<h2
+id="packages..build.plainbuilder.build">packages.*.build.plainBuilder.build</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>"echo 'Build phase'"</code></p>
+<h2
+id="packages..build.plainbuilder.check">packages.*.build.plainBuilder.check</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>"echo 'Check phase'"</code></p>
+<h2
+id="packages..build.plainbuilder.configure">packages.*.build.plainBuilder.configure</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>"echo 'Configure phase'"</code></p>
+<h2
+id="packages..build.plainbuilder.debug">packages.*.build.plainBuilder.debug</h2>
+<p>Enable interactive package build environment for debugging.</p>
+<p>Launch environment:</p>
+<pre><code>mkdir dev &amp;&amp; cd dev
+nix develop .#&lt;package&gt;</code></pre>
+<p>and follow instructions.</p>
+<p><em>Type:</em> boolean</p>
+<p><em>Default:</em> <code>false</code></p>
+<h2
+id="packages..build.plainbuilder.install">packages.*.build.plainBuilder.install</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>"echo 'Install phase'"</code></p>
+<h2
+id="packages..build.plainbuilder.requirements.build">packages.*.build.plainBuilder.requirements.build</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2
+id="packages..build.plainbuilder.requirements.native">packages.*.build.plainBuilder.requirements.native</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2
+id="packages..build.pythonappbuilder.enable">packages.*.build.pythonAppBuilder.enable</h2>
+<p>Whether to enable Python application builder. .</p>
+<p><em>Type:</em> boolean</p>
+<p><em>Default:</em> <code>false</code></p>
+<p><em>Example:</em> <code>true</code></p>
+<h2
+id="packages..build.pythonappbuilder.debug">packages.*.build.pythonAppBuilder.debug</h2>
+<p>Enable interactive package build environment for debugging.</p>
+<p>Launch environment:</p>
+<pre><code>mkdir dev &amp;&amp; cd dev
+nix develop .#&lt;package&gt;</code></pre>
+<p>and follow instructions.</p>
+<p><em>Type:</em> boolean</p>
+<p><em>Default:</em> <code>false</code></p>
+<h2
+id="packages..build.pythonappbuilder.extradrvattrs">packages.*.build.pythonAppBuilder.extraDrvAttrs</h2>
+<p>Expert option.</p>
+<p>Set extra Nix derivation attributes.</p>
+<p><em>Type:</em> attribute set of anything</p>
+<p><em>Default:</em> <code>{ }</code></p>
+<p><em>Example:</em></p>
+<pre><code>{
+  preConfigure = &quot;export HOME=$(mktemp -d)&quot;
+  postInstall = &quot;rm $out/somefile.txt&quot;
+}
+</code></pre>
+<h2
+id="packages..build.pythonappbuilder.requirements.build-system">packages.*.build.pythonAppBuilder.requirements.build-system</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2
+id="packages..build.pythonappbuilder.requirements.dependencies">packages.*.build.pythonAppBuilder.requirements.dependencies</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2
+id="packages..build.standardbuilder.enable">packages.*.build.standardBuilder.enable</h2>
+<p>Whether to enable Standard builder. .</p>
+<p><em>Type:</em> boolean</p>
+<p><em>Default:</em> <code>false</code></p>
+<p><em>Example:</em> <code>true</code></p>
+<h2
+id="packages..build.standardbuilder.debug">packages.*.build.standardBuilder.debug</h2>
+<p>Enable interactive package build environment for debugging.</p>
+<p>Launch environment:</p>
+<pre><code>mkdir dev &amp;&amp; cd dev
+nix develop .#&lt;package&gt;</code></pre>
+<p>and follow instructions.</p>
+<p><em>Type:</em> boolean</p>
+<p><em>Default:</em> <code>false</code></p>
+<h2
+id="packages..build.standardbuilder.extradrvattrs">packages.*.build.standardBuilder.extraDrvAttrs</h2>
+<p>Expert option.</p>
+<p>Set extra Nix derivation attributes.</p>
+<p><em>Type:</em> attribute set of anything</p>
+<p><em>Default:</em> <code>{ }</code></p>
+<p><em>Example:</em></p>
+<pre><code>{
+  preConfigure = &quot;export HOME=$(mktemp -d)&quot;
+  postInstall = &quot;rm $out/somefile.txt&quot;
+}
+</code></pre>
+<h2
+id="packages..build.standardbuilder.requirements.build">packages.*.build.standardBuilder.requirements.build</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2
+id="packages..build.standardbuilder.requirements.native">packages.*.build.standardBuilder.requirements.native</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2 id="packages..description">packages.*.description</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>""</code></p>
+<h2
+id="packages..development.requirements">packages.*.development.requirements</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2
+id="packages..development.shellhook">packages.*.development.shellHook</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em></p>
+<pre><code>&#39;&#39;
+  echo -e &quot;\nWelcome. This environment contains all dependencies required&quot;
+  echo &quot;to build this software from source.&quot;
+  echo
+  echo &quot;Now, navigate to the source code directory and you are all set to&quot;
+  echo &quot;start hacking.&quot;
+&#39;&#39;</code></pre>
+<h2 id="packages..homepage">packages.*.homePage</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>""</code></p>
+<h2 id="packages..mainprogram">packages.*.mainProgram</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>"my-program"</code></p>
+<p><em>Example:</em> <code>"hello"</code></p>
+<h2 id="packages..name">packages.*.name</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>"my-package"</code></p>
+<h2 id="packages..source.git">packages.*.source.git</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> null or string matching the pattern ^.*:.*/.*/.*$</p>
+<p><em>Default:</em> <code>null</code></p>
+<p><em>Example:</em> <code>"my-user/my-repo/v1.0.0"</code></p>
+<h2 id="packages..source.hash">packages.*.source.hash</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>""</code></p>
+<h2 id="packages..source.url">packages.*.source.url</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> null or string matching the pattern ^.*://.*</p>
+<p><em>Default:</em> <code>null</code></p>
+<p><em>Example:</em>
+<code>"https://downloads.my-project/my-package-1.0.0.tar.gz"</code></p>
+<h2 id="packages..test.requirements">packages.*.test.requirements</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> list of package</p>
+<p><em>Default:</em> <code>[ ]</code></p>
+<h2 id="packages..test.script">packages.*.test.script</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em></p>
+<pre><code>&#39;&#39;
+  echo &quot;Test script&quot;
+&#39;&#39;</code></pre>
+<h2 id="packages..version">packages.*.version</h2>
+<p>This option has no description.</p>
+<p><em>Type:</em> string</p>
+<p><em>Default:</em> <code>"1.0.0"</code></p>
