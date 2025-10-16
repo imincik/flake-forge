@@ -29,6 +29,10 @@
               echo "Re-generate forge-config file:"
               echo "  cat \$(nix build .#_forge-config --print-out-paths) | jq > src/forge-config.json"
               echo
+              echo "Re-generate options documentation:"
+              echo "  cat \$(nix build .#_forge-options-apps --print-out-paths) > src/docs/options-apps.html"
+              echo "  cat \$(nix build .#_forge-options-packages --print-out-paths) > src/docs/options-packages.html"
+              echo
               echo "Launch Python web server:"
               echo "  python3 -m http.server & echo \$! > python-http.pid"
               echo
