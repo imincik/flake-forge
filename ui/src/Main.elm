@@ -6,7 +6,7 @@ import Html exposing (Html, a, button, div, h5, hr, input, p, small, text)
 import Html.Attributes exposing (class, href, name, placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Http
-import Texts exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
+import Instructions exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
 
 
 -- PORTS
