@@ -10,8 +10,9 @@ module Texts exposing
     )
 
 import ConfigDecoder exposing (App, Package)
-import Html exposing (Html, a, br, h2, h3, hr, p, pre, span, text)
-import Html.Attributes exposing (class, href, style, target)
+import Html exposing (Html, a, br, button, div, h2, h3, hr, p, pre, span, text)
+import Html.Attributes exposing (class, href, style, target, title)
+import Html.Events exposing (onClick)
 
 
 format : String -> List String -> String
@@ -22,6 +23,21 @@ format template replacements =
     in
     List.indexedMap Tuple.pair replacements
         |> List.foldl (\( i, r ) acc -> replace i r acc) template
+
+
+codeBlock : (String -> msg) -> String -> Html msg
+codeBlock onCopy code =
+    div [ class "position-relative" ]
+        [ pre [ class "text-warning", style "padding-right" "30px" ] [ text code ]
+        , button
+            [ class "btn btn-sm btn-outline-light position-absolute"
+            , style "top" "5px"
+            , style "right" "5px"
+            , title "Copy to clipboard"
+            , onClick (onCopy code)
+            ]
+            [ text "Copy" ]
+        ]
 
 
 headerHtml : Html msg
@@ -85,15 +101,15 @@ curl --proto '=https' --tlsv1.2 -sSf \\
 """
 
 
-installInstructionsHtml : List (Html msg)
-installInstructionsHtml =
+installInstructionsHtml : (String -> msg) -> List (Html msg)
+installInstructionsHtml onCopy =
     [ h2 [] [ text "QUICK START" ]
     , p [ style "margin-bottom" "0em" ]
         [ text "Install Nix "
         , a [ href "https://zero-to-nix.com/start/install", target "_blank" ]
             [ text "(learn more about this installer)" ]
         ]
-    , pre [ class "text-warning" ] [ text installNixCmd ]
+    , codeBlock onCopy installNixCmd
     , p [ style "margin-bottom" "0em" ] [ text "and select a package or application to see the usage instructions." ]
     ]
 
@@ -122,27 +138,27 @@ enterPackageDevenvCmd pkg =
 """ [ pkg.name ]
 
 
-packageInstructionsHtml : Package -> List (Html msg)
-packageInstructionsHtml pkg =
+packageInstructionsHtml : (String -> msg) -> Package -> List (Html msg)
+packageInstructionsHtml onCopy pkg =
     if not (String.isEmpty pkg.name) then
         [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
         , p
             [ style "margin-bottom" "0em"
             ]
             [ text "A. Run package in a shell environment" ]
-        , pre [ class "text-warning" ] [ text (runPackageShellCmd pkg) ]
+        , codeBlock onCopy (runPackageShellCmd pkg)
         , p
             [ style "margin-bottom" "0em"
             ]
             [ text "B. Run package in a container" ]
-        , pre [ class "text-warning" ] [ text (runPackageContainerCmd pkg) ]
+        , codeBlock onCopy (runPackageContainerCmd pkg)
         , hr [] []
         , h3 [] [ text "DEVELOPMENT" ]
         , p
             [ style "margin-bottom" "0em"
             ]
             [ text "Enter development environment (all dependencies included)" ]
-        , pre [ class "text-warning" ] [ text (enterPackageDevenvCmd pkg) ]
+        , codeBlock onCopy (enterPackageDevenvCmd pkg)
         , hr [] []
         , text "Home page: "
         , a
@@ -196,22 +212,25 @@ runAppVmCmd app =
 """ [ app.name ]
 
 
-appInstructionsHtml : App -> List (Html msg)
-appInstructionsHtml app =
+appInstructionsHtml : (String -> msg) -> App -> List (Html msg)
+appInstructionsHtml onCopy app =
     if not (String.isEmpty app.name) then
         [ h2 [] [ text ("APP: " ++ app.name) ]
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "A. Run application programs (CLI, GUI) in a shell environment", pre [ class "text-warning" ] [ text (runAppShellCmd app) ] ]
+            [ text "A. Run application programs (CLI, GUI) in a shell environment" ]
+        , codeBlock onCopy (runAppShellCmd app)
         , p
             [ style "margin-bottom" "0em"
             ]
-            [ text "B. Run application services in containers", pre [ class "text-warning" ] [ text (runAppContainerCmd app) ] ]
+            [ text "B. Run application services in containers" ]
+        , codeBlock onCopy (runAppContainerCmd app)
         , if app.vm.enable then
-            p
-                [ style "margin-bottom" "0em" ]
-                [ text "C. Run application services in VM", pre [ class "text-warning" ] [ text (runAppVmCmd app) ] ]
+            div []
+                [ p [ style "margin-bottom" "0em" ] [ text "C. Run application services in VM" ]
+                , codeBlock onCopy (runAppVmCmd app)
+                ]
 
           else
             p [] []

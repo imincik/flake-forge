@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import ConfigDecoder exposing (App, Config, Package, configDecoder)
@@ -7,6 +7,12 @@ import Html.Attributes exposing (class, href, name, placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Texts exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
+
+
+-- PORTS
+
+
+port copyToClipboard : String -> Cmd msg
 
 
 
@@ -60,6 +66,7 @@ type Msg
     | SelectApp App
     | SelectPackage Package
     | Search String
+    | CopyCode String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -82,6 +89,9 @@ update msg model =
 
         Search string ->
             ( { model | searchString = string }, Cmd.none )
+
+        CopyCode code ->
+            ( model, copyToClipboard code )
 
 
 
@@ -143,16 +153,16 @@ view model =
                 [ if String.isEmpty model.selectedPackage.name && String.isEmpty model.selectedApp.name then
                     -- install instructions
                     div []
-                        installInstructionsHtml
+                        (installInstructionsHtml CopyCode)
 
                   else if model.selectedOutput == "packages" then
                     -- usage instructions
                     div []
-                        (packageInstructionsHtml model.selectedPackage)
+                        (packageInstructionsHtml CopyCode model.selectedPackage)
 
                   else
                     div []
-                        (appInstructionsHtml model.selectedApp)
+                        (appInstructionsHtml CopyCode model.selectedApp)
                 ]
             ]
 

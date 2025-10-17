@@ -17,6 +17,15 @@
     var app = Elm.Main.init({
       node: document.getElementById('elm-main')
     });
+
+    // Handle copy to clipboard
+    app.ports.copyToClipboard.subscribe(function(text) {
+      navigator.clipboard.writeText(text).then(function() {
+        console.log('Copied to clipboard successfully!');
+      }).catch(function(err) {
+        console.error('Failed to copy to clipboard:', err);
+      });
+    });
   </script>
 </body>
 </html>
