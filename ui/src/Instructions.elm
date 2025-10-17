@@ -1,4 +1,4 @@
-module Texts exposing
+module Instructions exposing
     ( appInstructionsHtml
     , footerHtml
     , headerHtml
