@@ -33,7 +33,7 @@ codeBlock onCopy content =
             , onClick (onCopy content)
             ]
             [ text "Copy" ]
-        , pre [ class "bg-dark text-white p-3 rounded border" ]
+        , pre [ class "bg-dark text-warning p-3 rounded border" ]
             [ code [] [ text content ] ]
         ]
 
