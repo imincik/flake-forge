@@ -92,8 +92,7 @@ footerHtml =
 
 installNixCmd : String
 installNixCmd =
-    """
-curl --proto '=https' --tlsv1.2 -sSf \\
+    """curl --proto '=https' --tlsv1.2 -sSf \\
     -L https://install.determinate.systems/nix \\
     | sh -s -- install
 """
@@ -122,8 +121,8 @@ runPackageContainerCmd : Package -> String
 runPackageContainerCmd pkg =
     format """nix build github:imincik/nix-forge#{0}.image
 
-  podman load < ./result
-  podman run -it --rm localhost/{0}:{1}
+podman load < ./result
+podman run -it --rm localhost/{0}:{1}
 """ [ pkg.name, pkg.version ]
 
 
@@ -190,11 +189,11 @@ runAppContainerCmd : App -> String
 runAppContainerCmd app =
     format """nix build github:imincik/nix-forge#{0}.containers
 
-  for image in ./result/*.tar.gz; do
+for image in ./result/*.tar.gz; do
     podman load < $image
-  done
+done
 
-  podman-compose --profile services --file $(pwd)/result/compose.yaml up
+podman-compose --profile services --file $(pwd)/result/compose.yaml up
 """ [ app.name ]
 
 
