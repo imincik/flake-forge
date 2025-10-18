@@ -287,6 +287,8 @@ optionsHtml options selectedOption filter categoryFilter =
                             || String.contains (String.toLower filter) (String.toLower option.description)
                         )
                             && (getOptionCategory option == categoryFilter)
+                            && (option.name /= "packages")
+                            && (option.name /= "apps")
                     )
     in
     if List.isEmpty filteredOptions then
