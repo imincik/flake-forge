@@ -193,7 +193,7 @@ categoryTabsHtml activeCategory =
         buttonItem ( value, label ) =
             button
                 [ class
-                    ("btn btn-sm "
+                    ("btn btn-lg "
                         ++ (if value == activeCategory then
                                 "btn-dark"
 
