@@ -114,15 +114,13 @@ installInstructionsHtml onCopy =
 
 runPackageShellCmd : Package -> String
 runPackageShellCmd pkg =
-    format """
-  nix shell github:imincik/nix-forge#{0}
+    format """nix shell github:imincik/nix-forge#{0}
 """ [ pkg.name ]
 
 
 runPackageContainerCmd : Package -> String
 runPackageContainerCmd pkg =
-    format """
-  nix build github:imincik/nix-forge#{0}.image
+    format """nix build github:imincik/nix-forge#{0}.image
 
   podman load < ./result
   podman run -it --rm localhost/{0}:{1}
@@ -131,8 +129,7 @@ runPackageContainerCmd pkg =
 
 enterPackageDevenvCmd : Package -> String
 enterPackageDevenvCmd pkg =
-    format """
-  nix develop github:imincik/nix-forge#{0}.devenv
+    format """nix develop github:imincik/nix-forge#{0}.devenv
 """ [ pkg.name ]
 
 
@@ -185,15 +182,13 @@ packageInstructionsHtml onCopy pkg =
 
 runAppShellCmd : App -> String
 runAppShellCmd app =
-    format """
-  nix shell github:imincik/nix-forge#{0}
+    format """nix shell github:imincik/nix-forge#{0}
 """ [ app.name ]
 
 
 runAppContainerCmd : App -> String
 runAppContainerCmd app =
-    format """
-  nix build github:imincik/nix-forge#{0}.containers
+    format """nix build github:imincik/nix-forge#{0}.containers
 
   for image in ./result/*.tar.gz; do
     podman load < $image
@@ -205,8 +200,7 @@ runAppContainerCmd app =
 
 runAppVmCmd : App -> String
 runAppVmCmd app =
-    format """
-  nix run github:imincik/nix-forge#{0}.vm
+    format """nix run github:imincik/nix-forge#{0}.vm
 """ [ app.name ]
 
 
