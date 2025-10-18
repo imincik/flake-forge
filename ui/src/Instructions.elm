@@ -174,7 +174,7 @@ packageInstructionsHtml onCopy pkg =
             ]
             [ text ("packages/" ++ pkg.name ++ "/recipe.nix") ]
         , a
-            [ href "docs/options-packages.html"
+            [ href "options.html"
             , target "_blank"
             ]
             [ text " (configuration options)" ]
@@ -242,7 +242,7 @@ appInstructionsHtml onCopy app =
             ]
             [ text ("apps/" ++ app.name ++ "/recipe.nix") ]
         , a
-            [ href "docs/options-apps.html"
+            [ href "options.html"
             , target "_blank"
             ]
             [ text " (configuration options)" ]
