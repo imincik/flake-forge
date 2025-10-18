@@ -10,7 +10,7 @@ module Instructions exposing
     )
 
 import ConfigDecoder exposing (App, Package)
-import Html exposing (Html, a, br, button, div, h2, h3, hr, p, pre, span, text)
+import Html exposing (Html, a, br, button, code, div, h2, h3, hr, p, pre, span, text)
 import Html.Attributes exposing (class, href, style, target, title)
 import Html.Events exposing (onClick)
 
@@ -26,17 +26,15 @@ format template replacements =
 
 
 codeBlock : (String -> msg) -> String -> Html msg
-codeBlock onCopy code =
+codeBlock onCopy content =
     div [ class "position-relative" ]
-        [ pre [ class "text-warning", style "padding-right" "30px" ] [ text code ]
-        , button
-            [ class "btn btn-sm btn-outline-light position-absolute"
-            , style "top" "5px"
-            , style "right" "5px"
-            , title "Copy to clipboard"
-            , onClick (onCopy code)
+        [ button
+            [ class "btn btn-sm btn-outline-light position-absolute top-0 end-0 m-2"
+            , onClick (onCopy content)
             ]
             [ text "Copy" ]
+        , pre [ class "bg-dark text-white p-3 rounded border" ]
+            [ code [] [ text content ] ]
         ]
 
 

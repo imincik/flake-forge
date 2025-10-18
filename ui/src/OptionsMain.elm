@@ -383,7 +383,7 @@ codeBlock content =
             , onClick (CopyCode content)
             ]
             [ text "Copy" ]
-        , pre [ class "bg-secondary text-white p-3 rounded" ]
+        , pre [ class "bg-dark text-white p-3 rounded border" ]
             [ code [] [ text content ] ]
         ]
 
