@@ -2,11 +2,12 @@ port module Main exposing (main)
 
 import Browser
 import ConfigDecoder exposing (App, Config, Package, configDecoder)
-import Html exposing (Html, a, button, div, h5, hr, input, p, small, text)
+import Html exposing (Html, a, button, div, h5, hr, input, p, small, span, text)
 import Html.Attributes exposing (class, href, name, placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Instructions exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
+
 
 
 -- PORTS
@@ -285,7 +286,7 @@ packageHtml pkg selectedPkg =
         , p
             [ class "mb-1 "
             ]
-            [ small [] [ text ("[ " ++ pkg.builder ++ " ]") ] ]
+            [ small [] [ span [ class "badge bg-secondary" ] [ text pkg.builder ] ] ]
         ]
 
 
@@ -332,15 +333,13 @@ appHtml app selectedApp =
             [ class "mb-1 "
             ]
             [ small []
-                [ text
-                    ("[ shell containers"
-                        ++ (if app.vm.enable then
-                                " vm ]"
+                [ span [ class "badge bg-secondary me-1" ] [ text "shell" ]
+                , span [ class "badge bg-secondary me-1" ] [ text "containers" ]
+                , if app.vm.enable then
+                    span [ class "badge bg-secondary" ] [ text "vm" ]
 
-                            else
-                                " ]"
-                           )
-                    )
+                  else
+                    text ""
                 ]
             ]
         ]
