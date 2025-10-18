@@ -87,14 +87,8 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div [ class "container" ]
-        [ -- header
+        [ -- content
           div [ class "row" ]
-            [ div [ class "col-lg-12 border fw-bold fs-1 py-2 my-2" ]
-                [ text "Configuration Options Browser" ]
-            ]
-
-        -- content
-        , div [ class "row" ]
             [ -- options list panel
               div [ class "col-lg-6 border bg-light py-3 my-3" ]
                 [ div [ class "name d-flex justify-content-between align-items-center" ]
