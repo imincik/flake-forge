@@ -245,6 +245,22 @@ cleanOptionName name =
         |> String.replace "apps.*." ""
 
 
+getBadgeText : String -> String
+getBadgeText name =
+    let
+        cleanedName =
+            cleanOptionName name
+    in
+    if String.contains "." cleanedName then
+        cleanedName
+            |> String.split "."
+            |> List.head
+            |> Maybe.withDefault ""
+
+    else
+        "toplevel"
+
+
 optionHtml : Option -> Maybe Option -> Html Msg
 optionHtml option selectedOption =
     let
@@ -258,8 +274,8 @@ optionHtml option selectedOption =
             else
                 option.description
 
-        category =
-            getOptionCategory option
+        badgeText =
+            getBadgeText option.name
     in
     a
         [ href ("#option-" ++ option.name)
@@ -269,7 +285,7 @@ optionHtml option selectedOption =
         ]
         [ div [ class "d-flex w-100 justify-content-between" ]
             [ h5 [ class "mb-1" ] [ text (cleanOptionName option.name) ]
-            , small [] [ span [ class "badge bg-secondary" ] [ text category ] ]
+            , small [] [ span [ class "badge bg-secondary" ] [ text badgeText ] ]
             ]
         , p [ class "mb-1" ] [ text shortDesc ]
         , small [] [ text ("Type: " ++ option.optionType) ]
@@ -290,6 +306,14 @@ optionsHtml options selectedOption filter categoryFilter =
                             && (option.name /= "packages")
                             && (option.name /= "apps")
                     )
+
+        topLevelOptions =
+            filteredOptions
+                |> List.filter (\option -> not (String.contains "." (cleanOptionName option.name)))
+
+        specificOptions =
+            filteredOptions
+                |> List.filter (\option -> String.contains "." (cleanOptionName option.name))
     in
     if List.isEmpty filteredOptions then
         [ div [ class "p-3 text-center text-muted" ]
@@ -297,9 +321,20 @@ optionsHtml options selectedOption filter categoryFilter =
         ]
 
     else
-        List.map
-            (\option -> optionHtml option selectedOption)
-            filteredOptions
+        (if not (List.isEmpty topLevelOptions) then
+            [ div [ class "fw-bold text-muted small px-3 pt-3 pb-1" ] [ text "TOP LEVEL OPTIONS" ] ]
+                ++ List.map (\option -> optionHtml option selectedOption) topLevelOptions
+
+         else
+            []
+        )
+            ++ (if not (List.isEmpty specificOptions) then
+                    [ div [ class "fw-bold text-muted small px-3 pt-3 pb-1" ] [ text "SPECIFIC OPTIONS" ] ]
+                        ++ List.map (\option -> optionHtml option selectedOption) specificOptions
+
+                else
+                    []
+               )
 
 
 formatDescription : String -> List (Html Msg)
