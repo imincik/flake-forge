@@ -48,44 +48,13 @@ optionDecoder name =
 
 optionsDecoder : Decoder OptionsData
 optionsDecoder =
-    Decode.dict
-        (Decode.lazy
-            (\_ ->
-                Decode.andThen
-                    (\name ->
-                        optionDecoder name
-                    )
-                    (Decode.succeed "placeholder")
-            )
-        )
+    Decode.keyValuePairs Decode.value
         |> Decode.andThen
-            (\dict ->
-                Dict.toList dict
-                    |> List.map
-                        (\( key, _ ) ->
-                            Decode.map2 Tuple.pair
-                                (Decode.succeed key)
-                                (optionDecoder key)
-                        )
-                    |> (\decoders ->
-                            Decode.keyValuePairs (optionDecoder "temp")
-                                |> Decode.map
-                                    (\pairs ->
-                                        pairs
-                                            |> List.map (\( k, _ ) -> ( k, optionDecoder k ))
-                                            |> List.map (\( k, decoder ) -> Decode.field k decoder |> Decode.map (\opt -> ( k, opt )))
-                                            |> (\_ -> pairs |> List.map (\( k, v ) -> ( k, { v | name = k } )))
-                                            |> Dict.fromList
-                                    )
-                       )
-            )
-        |> Decode.andThen (\_ -> Decode.keyValuePairs (Decode.value) |> Decode.map (List.map (\( k, _ ) -> ( k, k ))) |> Decode.map Dict.fromList)
-        |> Decode.andThen
-            (\keys ->
-                keys
-                    |> Dict.keys
-                    |> List.map (\key -> Decode.field key (optionDecoder key) |> Decode.map (\opt -> ( key, opt )))
+            (\pairs ->
+                pairs
+                    |> List.map (\( key, _ ) -> Decode.field key (optionDecoder key))
                     |> combineDecoders
+                    |> Decode.map (List.map2 Tuple.pair (List.map Tuple.first pairs))
                     |> Decode.map Dict.fromList
             )
 
@@ -93,8 +62,6 @@ optionsDecoder =
 combineDecoders : List (Decoder a) -> Decoder (List a)
 combineDecoders decoders =
     List.foldr
-        (\decoder accDecoder ->
-            Decode.map2 (::) decoder accDecoder
-        )
+        (Decode.map2 (::))
         (Decode.succeed [])
         decoders
