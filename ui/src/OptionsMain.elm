@@ -238,6 +238,13 @@ getOptionCategory option =
         "other"
 
 
+cleanOptionName : String -> String
+cleanOptionName name =
+    name
+        |> String.replace "packages.*." ""
+        |> String.replace "apps.*." ""
+
+
 optionHtml : Option -> Maybe Option -> Html Msg
 optionHtml option selectedOption =
     let
@@ -261,7 +268,7 @@ optionHtml option selectedOption =
         , onClick (SelectOption option)
         ]
         [ div [ class "d-flex w-100 justify-content-between" ]
-            [ h5 [ class "mb-1" ] [ text option.name ]
+            [ h5 [ class "mb-1" ] [ text (cleanOptionName option.name) ]
             , small [] [ span [ class "badge bg-secondary" ] [ text category ] ]
             ]
         , p [ class "mb-1" ] [ text shortDesc ]
@@ -303,7 +310,7 @@ formatDescription description =
 optionDetailsHtml : Option -> Html Msg
 optionDetailsHtml option =
     div [ class "p-3" ]
-        [ h5 [ class "text-warning" ] [ text option.name ]
+        [ h5 [ class "text-warning" ] [ text (cleanOptionName option.name) ]
         , hr [] []
         , p [ class "mb-1 fw-bold" ] [ text "Description:" ]
         , div [] (formatDescription option.description)
