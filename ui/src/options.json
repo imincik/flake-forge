@@ -1,1 +1,898 @@
-{"apps": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "List of apps.", "loc": ["perSystem", "forge", "apps"], "readOnly": false, "type": "list of (submodule)"}, "apps.*.containers.composeFile": {"declarations": [], "description": "Relative path to a container compose file.", "example": {"_type": "literalExpression", "text": "\"./compose.yaml\""}, "loc": ["perSystem", "forge", "apps", "*", "containers", "composeFile"], "readOnly": false, "type": "absolute path"}, "apps.*.containers.images": {"declarations": [], "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "containers", "images"], "readOnly": false, "type": "list of (submodule)"}, "apps.*.containers.images.*.config.CMD": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "containers", "images", "*", "config", "CMD"], "readOnly": false, "type": "list of string"}, "apps.*.containers.images.*.name": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"app-container\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "containers", "images", "*", "name"], "readOnly": false, "type": "string"}, "apps.*.containers.images.*.requirements": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "containers", "images", "*", "requirements"], "readOnly": false, "type": "list of package"}, "apps.*.description": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "description"], "readOnly": false, "type": "string"}, "apps.*.name": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"my-package\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "name"], "readOnly": false, "type": "string"}, "apps.*.programs.requirements": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "programs", "requirements"], "readOnly": false, "type": "list of package"}, "apps.*.version": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"1.0.0\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "version"], "readOnly": false, "type": "string"}, "apps.*.vm.config.ports": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "List of ports to forward from host system to VM.\n\nFormat: HOST_PORT:VM_PORT\n", "example": {"_type": "literalExpression", "text": "[ \"10022:22\" \"5432:5432\" \"8000:90\" ]\n"}, "loc": ["perSystem", "forge", "apps", "*", "vm", "config", "ports"], "readOnly": false, "type": "list of string matching the pattern ^[0-9]*:[0-9]*$"}, "apps.*.vm.config.system": {"declarations": [], "default": {"_type": "literalExpression", "text": "{ }"}, "description": "NixOS system configuration.\n\nSee: https://search.nixos.org/options\n", "example": {"_type": "literalExpression", "text": "{\n  services.postgresql.enabled = true;\n}\n"}, "loc": ["perSystem", "forge", "apps", "*", "vm", "config", "system"], "readOnly": false, "type": "attribute set of anything"}, "apps.*.vm.enable": {"declarations": [], "default": {"_type": "literalExpression", "text": "false"}, "description": "Whether to enable Virtual machine.\n.", "example": {"_type": "literalExpression", "text": "true"}, "loc": ["perSystem", "forge", "apps", "*", "vm", "enable"], "readOnly": false, "type": "boolean"}, "apps.*.vm.name": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"nixos-vm\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "vm", "name"], "readOnly": false, "type": "string"}, "apps.*.vm.requirements": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "apps", "*", "vm", "requirements"], "readOnly": false, "type": "list of package"}, "packages": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "List of packages.", "loc": ["perSystem", "forge", "packages"], "readOnly": false, "type": "list of (submodule)"}, "packages.*.build.plainBuilder.build": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"echo 'Build phase'\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "build"], "readOnly": false, "type": "string"}, "packages.*.build.plainBuilder.check": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"echo 'Check phase'\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "check"], "readOnly": false, "type": "string"}, "packages.*.build.plainBuilder.configure": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"echo 'Configure phase'\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "configure"], "readOnly": false, "type": "string"}, "packages.*.build.plainBuilder.debug": {"declarations": [], "default": {"_type": "literalExpression", "text": "false"}, "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n", "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "debug"], "readOnly": false, "type": "boolean"}, "packages.*.build.plainBuilder.enable": {"declarations": [], "default": {"_type": "literalExpression", "text": "false"}, "description": "Whether to enable Plain builder.\n.", "example": {"_type": "literalExpression", "text": "true"}, "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "enable"], "readOnly": false, "type": "boolean"}, "packages.*.build.plainBuilder.install": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"echo 'Install phase'\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "install"], "readOnly": false, "type": "string"}, "packages.*.build.plainBuilder.requirements.build": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "requirements", "build"], "readOnly": false, "type": "list of package"}, "packages.*.build.plainBuilder.requirements.native": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "plainBuilder", "requirements", "native"], "readOnly": false, "type": "list of package"}, "packages.*.build.pythonAppBuilder.debug": {"declarations": [], "default": {"_type": "literalExpression", "text": "false"}, "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n", "loc": ["perSystem", "forge", "packages", "*", "build", "pythonAppBuilder", "debug"], "readOnly": false, "type": "boolean"}, "packages.*.build.pythonAppBuilder.enable": {"declarations": [], "default": {"_type": "literalExpression", "text": "false"}, "description": "Whether to enable Python application builder.\n.", "example": {"_type": "literalExpression", "text": "true"}, "loc": ["perSystem", "forge", "packages", "*", "build", "pythonAppBuilder", "enable"], "readOnly": false, "type": "boolean"}, "packages.*.build.pythonAppBuilder.extraDrvAttrs": {"declarations": [], "default": {"_type": "literalExpression", "text": "{ }"}, "description": "Expert option.\n\nSet extra Nix derivation attributes.\n", "example": {"_type": "literalExpression", "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"}, "loc": ["perSystem", "forge", "packages", "*", "build", "pythonAppBuilder", "extraDrvAttrs"], "readOnly": false, "type": "attribute set of anything"}, "packages.*.build.pythonAppBuilder.requirements.build-system": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "pythonAppBuilder", "requirements", "build-system"], "readOnly": false, "type": "list of package"}, "packages.*.build.pythonAppBuilder.requirements.dependencies": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "pythonAppBuilder", "requirements", "dependencies"], "readOnly": false, "type": "list of package"}, "packages.*.build.standardBuilder.debug": {"declarations": [], "default": {"_type": "literalExpression", "text": "false"}, "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n", "loc": ["perSystem", "forge", "packages", "*", "build", "standardBuilder", "debug"], "readOnly": false, "type": "boolean"}, "packages.*.build.standardBuilder.enable": {"declarations": [], "default": {"_type": "literalExpression", "text": "false"}, "description": "Whether to enable Standard builder.\n.", "example": {"_type": "literalExpression", "text": "true"}, "loc": ["perSystem", "forge", "packages", "*", "build", "standardBuilder", "enable"], "readOnly": false, "type": "boolean"}, "packages.*.build.standardBuilder.extraDrvAttrs": {"declarations": [], "default": {"_type": "literalExpression", "text": "{ }"}, "description": "Expert option.\n\nSet extra Nix derivation attributes.\n", "example": {"_type": "literalExpression", "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"}, "loc": ["perSystem", "forge", "packages", "*", "build", "standardBuilder", "extraDrvAttrs"], "readOnly": false, "type": "attribute set of anything"}, "packages.*.build.standardBuilder.requirements.build": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "standardBuilder", "requirements", "build"], "readOnly": false, "type": "list of package"}, "packages.*.build.standardBuilder.requirements.native": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "build", "standardBuilder", "requirements", "native"], "readOnly": false, "type": "list of package"}, "packages.*.description": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "description"], "readOnly": false, "type": "string"}, "packages.*.development.requirements": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "development", "requirements"], "readOnly": false, "type": "list of package"}, "packages.*.development.shellHook": {"declarations": [], "default": {"_type": "literalExpression", "text": "''\n  echo -e \"\\nWelcome. This environment contains all dependencies required\"\n  echo \"to build this software from source.\"\n  echo\n  echo \"Now, navigate to the source code directory and you are all set to\"\n  echo \"start hacking.\"\n''"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "development", "shellHook"], "readOnly": false, "type": "string"}, "packages.*.homePage": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "homePage"], "readOnly": false, "type": "string"}, "packages.*.mainProgram": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"my-program\""}, "description": "This option has no description.", "example": {"_type": "literalExpression", "text": "\"hello\""}, "loc": ["perSystem", "forge", "packages", "*", "mainProgram"], "readOnly": false, "type": "string"}, "packages.*.name": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"my-package\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "name"], "readOnly": false, "type": "string"}, "packages.*.source.git": {"declarations": [], "default": {"_type": "literalExpression", "text": "null"}, "description": "This option has no description.", "example": {"_type": "literalExpression", "text": "\"my-user/my-repo/v1.0.0\""}, "loc": ["perSystem", "forge", "packages", "*", "source", "git"], "readOnly": false, "type": "null or string matching the pattern ^.*:.*/.*/.*$"}, "packages.*.source.hash": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "source", "hash"], "readOnly": false, "type": "string"}, "packages.*.source.url": {"declarations": [], "default": {"_type": "literalExpression", "text": "null"}, "description": "This option has no description.", "example": {"_type": "literalExpression", "text": "\"https://downloads.my-project/my-package-1.0.0.tar.gz\""}, "loc": ["perSystem", "forge", "packages", "*", "source", "url"], "readOnly": false, "type": "null or string matching the pattern ^.*://.*"}, "packages.*.test.requirements": {"declarations": [], "default": {"_type": "literalExpression", "text": "[ ]"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "test", "requirements"], "readOnly": false, "type": "list of package"}, "packages.*.test.script": {"declarations": [], "default": {"_type": "literalExpression", "text": "''\n  echo \"Test script\"\n''"}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "test", "script"], "readOnly": false, "type": "string"}, "packages.*.version": {"declarations": [], "default": {"_type": "literalExpression", "text": "\"1.0.0\""}, "description": "This option has no description.", "loc": ["perSystem", "forge", "packages", "*", "version"], "readOnly": false, "type": "string"}, "perSystem": {"declarations": [], "description": "This option has no description.", "loc": ["perSystem"], "readOnly": false, "type": "module"}}
+{
+  "apps": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "List of apps.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps"
+    ],
+    "readOnly": false,
+    "type": "list of (submodule)"
+  },
+  "apps.*.containers.composeFile": {
+    "declarations": [],
+    "description": "Relative path to a container compose file.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "\"./compose.yaml\""
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "containers",
+      "composeFile"
+    ],
+    "readOnly": false,
+    "type": "absolute path"
+  },
+  "apps.*.containers.images": {
+    "declarations": [],
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "containers",
+      "images"
+    ],
+    "readOnly": false,
+    "type": "list of (submodule)"
+  },
+  "apps.*.containers.images.*.config.CMD": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "containers",
+      "images",
+      "*",
+      "config",
+      "CMD"
+    ],
+    "readOnly": false,
+    "type": "list of string"
+  },
+  "apps.*.containers.images.*.name": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"app-container\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "containers",
+      "images",
+      "*",
+      "name"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "apps.*.containers.images.*.requirements": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "containers",
+      "images",
+      "*",
+      "requirements"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "apps.*.description": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "description"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "apps.*.name": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"my-package\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "name"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "apps.*.programs.requirements": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "programs",
+      "requirements"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "apps.*.version": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"1.0.0\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "version"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "apps.*.vm.config.ports": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "List of ports to forward from host system to VM.\n\nFormat: HOST_PORT:VM_PORT\n",
+    "example": {
+      "_type": "literalExpression",
+      "text": "[ \"10022:22\" \"5432:5432\" \"8000:90\" ]\n"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "vm",
+      "config",
+      "ports"
+    ],
+    "readOnly": false,
+    "type": "list of string matching the pattern ^[0-9]*:[0-9]*$"
+  },
+  "apps.*.vm.config.system": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "{ }"
+    },
+    "description": "NixOS system configuration.\n\nSee: https://search.nixos.org/options\n",
+    "example": {
+      "_type": "literalExpression",
+      "text": "{\n  services.postgresql.enabled = true;\n}\n"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "vm",
+      "config",
+      "system"
+    ],
+    "readOnly": false,
+    "type": "attribute set of anything"
+  },
+  "apps.*.vm.enable": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Whether to enable Virtual machine.\n.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "true"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "vm",
+      "enable"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "apps.*.vm.name": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"nixos-vm\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "vm",
+      "name"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "apps.*.vm.requirements": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "vm",
+      "requirements"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "List of packages.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages"
+    ],
+    "readOnly": false,
+    "type": "list of (submodule)"
+  },
+  "packages.*.build.plainBuilder.build": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"echo 'Build phase'\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "build"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.build.plainBuilder.check": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"echo 'Check phase'\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "check"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.build.plainBuilder.configure": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"echo 'Configure phase'\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "configure"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.build.plainBuilder.debug": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "debug"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "packages.*.build.plainBuilder.enable": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Whether to enable Plain builder.\n.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "true"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "enable"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "packages.*.build.plainBuilder.install": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"echo 'Install phase'\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "install"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.build.plainBuilder.requirements.build": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "requirements",
+      "build"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.build.plainBuilder.requirements.native": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "plainBuilder",
+      "requirements",
+      "native"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.build.pythonAppBuilder.debug": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "pythonAppBuilder",
+      "debug"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "packages.*.build.pythonAppBuilder.enable": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Whether to enable Python application builder.\n.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "true"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "pythonAppBuilder",
+      "enable"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "packages.*.build.pythonAppBuilder.extraDrvAttrs": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "{ }"
+    },
+    "description": "Expert option.\n\nSet extra Nix derivation attributes.\n",
+    "example": {
+      "_type": "literalExpression",
+      "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "pythonAppBuilder",
+      "extraDrvAttrs"
+    ],
+    "readOnly": false,
+    "type": "attribute set of anything"
+  },
+  "packages.*.build.pythonAppBuilder.requirements.build-system": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "pythonAppBuilder",
+      "requirements",
+      "build-system"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.build.pythonAppBuilder.requirements.dependencies": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "pythonAppBuilder",
+      "requirements",
+      "dependencies"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.build.standardBuilder.debug": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "standardBuilder",
+      "debug"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "packages.*.build.standardBuilder.enable": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Whether to enable Standard builder.\n.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "true"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "standardBuilder",
+      "enable"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "packages.*.build.standardBuilder.extraDrvAttrs": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "{ }"
+    },
+    "description": "Expert option.\n\nSet extra Nix derivation attributes.\n",
+    "example": {
+      "_type": "literalExpression",
+      "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "standardBuilder",
+      "extraDrvAttrs"
+    ],
+    "readOnly": false,
+    "type": "attribute set of anything"
+  },
+  "packages.*.build.standardBuilder.requirements.build": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "standardBuilder",
+      "requirements",
+      "build"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.build.standardBuilder.requirements.native": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "standardBuilder",
+      "requirements",
+      "native"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.description": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "description"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.development.requirements": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "development",
+      "requirements"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.development.shellHook": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "''\n  echo -e \"\\nWelcome. This environment contains all dependencies required\"\n  echo \"to build this software from source.\"\n  echo\n  echo \"Now, navigate to the source code directory and you are all set to\"\n  echo \"start hacking.\"\n''"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "development",
+      "shellHook"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.homePage": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "homePage"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.mainProgram": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"my-program\""
+    },
+    "description": "This option has no description.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "\"hello\""
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "mainProgram"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.name": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"my-package\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "name"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.source.git": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "null"
+    },
+    "description": "This option has no description.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "\"my-user/my-repo/v1.0.0\""
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "source",
+      "git"
+    ],
+    "readOnly": false,
+    "type": "null or string matching the pattern ^.*:.*/.*/.*$"
+  },
+  "packages.*.source.hash": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "source",
+      "hash"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.source.url": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "null"
+    },
+    "description": "This option has no description.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "\"https://downloads.my-project/my-package-1.0.0.tar.gz\""
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "source",
+      "url"
+    ],
+    "readOnly": false,
+    "type": "null or string matching the pattern ^.*://.*"
+  },
+  "packages.*.test.requirements": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "[ ]"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "test",
+      "requirements"
+    ],
+    "readOnly": false,
+    "type": "list of package"
+  },
+  "packages.*.test.script": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "''\n  echo \"Test script\"\n''"
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "test",
+      "script"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "packages.*.version": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"1.0.0\""
+    },
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "version"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
+  "perSystem": {
+    "declarations": [],
+    "description": "This option has no description.",
+    "loc": [
+      "perSystem"
+    ],
+    "readOnly": false,
+    "type": "module"
+  }
+}
