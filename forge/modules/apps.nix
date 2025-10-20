@@ -21,7 +21,7 @@ in
           forge = {
             apps = lib.mkOption {
               default = [ ];
-              description = "List of apps.";
+              description = "List of applications.";
               type = lib.types.listOf (
                 lib.types.submodule {
                   options = {
@@ -37,6 +37,11 @@ in
                     version = lib.mkOption {
                       type = lib.types.str;
                       default = "1.0.0";
+                    };
+                    usage = lib.mkOption {
+                      type = lib.types.str;
+                      default = "";
+                      description = "Application usage description in markdown format.";
                     };
 
                     # Programs shell configuration
