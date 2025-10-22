@@ -10,6 +10,28 @@
   name = "python-web-app";
   version = "1.0.0";
   description = "Simple web application with database backend.";
+  usage = ''
+    This is a simple example app which provides a web API to manage a list of
+    users.
+
+    * Initialize database
+    ```
+      curl -X POST localhost:5000/init
+    ```
+
+    * Add a new user
+    ```
+      curl -X POST \
+        --header "Content-Type: application/json" \
+        --data '{"name":"username"}' \
+      localhost:5000/users
+    ```
+
+    * Get list of all users
+    ```
+      curl localhost:5000/users
+    ```
+  '';
 
   programs = {
     requirements = [

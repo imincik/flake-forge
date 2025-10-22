@@ -14,6 +14,7 @@ type alias App =
     { name : String
     , description : String
     , version : String
+    , usage: String
     , vm : AppVm
     }
 
@@ -42,10 +43,11 @@ configDecoder =
 
 appDecoder : Decode.Decoder App
 appDecoder =
-    Decode.map4 App
+    Decode.map5 App
         (Decode.field "name" Decode.string)
         (Decode.field "description" Decode.string)
         (Decode.field "version" Decode.string)
+        (Decode.field "usage" Decode.string)
         (Decode.field "vm" appVmDecoder)
 
 

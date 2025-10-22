@@ -52,6 +52,7 @@
           "/nix/store/idim9ry5wzadd80j92741rlfapcnll6y-hello-2.12.1"
         ]
       },
+      "usage": "",
       "version": "1.0.0",
       "vm": {
         "config": {
@@ -89,6 +90,7 @@
           "/nix/store/8ggin0y50drxqzlkci4p71v2nan6gc7s-curl-8.14.1-bin"
         ]
       },
+      "usage": "This is a simple example app which provides a web API to manage a list of\nusers.\n\n* Initialize database\n```\n  curl -X POST localhost:5000/init\n```\n\n* Add a new user\n```\n  curl -X POST \\\n    --header \"Content-Type: application/json\" \\\n    --data '{\"name\":\"username\"}' \\\n  localhost:5000/users\n```\n\n* Get list of all users\n```\n  curl localhost:5000/users\n```\n",
       "version": "1.0.0",
       "vm": {
         "config": {

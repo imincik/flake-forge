@@ -13,6 +13,7 @@ import ConfigDecoder exposing (App, Package)
 import Html exposing (Html, a, br, button, code, div, h2, h3, hr, p, pre, span, text)
 import Html.Attributes exposing (class, href, style, target, title)
 import Html.Events exposing (onClick)
+import Markdown
 
 
 format : String -> List String -> String
@@ -135,7 +136,9 @@ enterPackageDevenvCmd pkg =
 packageInstructionsHtml : (String -> msg) -> Package -> List (Html msg)
 packageInstructionsHtml onCopy pkg =
     if not (String.isEmpty pkg.name) then
-        [ h2 [] [ text ("PACKAGE: " ++ pkg.name) ]
+        [ h2 [] [ text pkg.name ]
+        , hr [] []
+        , h3 [] [ text "USAGE" ]
         , p
             [ style "margin-bottom" "0em"
             ]
@@ -206,7 +209,17 @@ runAppVmCmd app =
 appInstructionsHtml : (String -> msg) -> App -> List (Html msg)
 appInstructionsHtml onCopy app =
     if not (String.isEmpty app.name) then
-        [ h2 [] [ text ("APP: " ++ app.name) ]
+        [ h2 [] [ text app.name ]
+        , hr [] []
+        , h3 [] [ text "USAGE" ]
+        , if not (String.isEmpty app.usage) then
+            div []
+                [ Markdown.toHtml [ class "markdown-content" ] (String.trim app.usage)
+                , hr [] []
+                ]
+
+          else
+            text ""
         , p
             [ style "margin-bottom" "0em"
             ]

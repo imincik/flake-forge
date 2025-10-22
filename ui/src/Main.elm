@@ -40,6 +40,7 @@ init _ =
             { name = ""
             , description = ""
             , version = ""
+            , usage = ""
             , vm = { enable = False }
             }
       , selectedPackage =
