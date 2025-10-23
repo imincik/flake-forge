@@ -1,12 +1,14 @@
 port module Main exposing (main)
 
 import Browser
+import Browser.Navigation as Nav
 import ConfigDecoder exposing (App, Config, Package, configDecoder)
 import Html exposing (Html, a, button, div, h5, hr, input, p, small, span, text)
 import Html.Attributes exposing (class, href, name, placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Instructions exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
+import Url
 
 
 
@@ -28,31 +30,43 @@ type alias Model =
     , selectedPackage : Package
     , searchString : String
     , error : Maybe String
+    , navKey : Nav.Key
+    , url : Url.Url
     }
 
 
-init : () -> ( Model, Cmd Msg )
-init _ =
+emptyApp : App
+emptyApp =
+    { name = ""
+    , description = ""
+    , version = ""
+    , usage = ""
+    , vm = { enable = False }
+    }
+
+
+emptyPackage : Package
+emptyPackage =
+    { name = ""
+    , description = ""
+    , version = ""
+    , homePage = ""
+    , mainProgram = ""
+    , builder = ""
+    }
+
+
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url key =
     ( { apps = []
       , packages = []
       , selectedOutput = "packages"
-      , selectedApp =
-            { name = ""
-            , description = ""
-            , version = ""
-            , usage = ""
-            , vm = { enable = False }
-            }
-      , selectedPackage =
-            { name = ""
-            , description = ""
-            , version = ""
-            , homePage = ""
-            , mainProgram = ""
-            , builder = ""
-            }
+      , selectedApp = emptyApp
+      , selectedPackage = emptyPackage
       , searchString = ""
       , error = Nothing
+      , navKey = key
+      , url = url
       }
     , getConfig
     )
@@ -69,13 +83,19 @@ type Msg
     | SelectPackage Package
     | Search String
     | CopyCode String
+    | LinkClicked Browser.UrlRequest
+    | UrlChanged Url.Url
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GetConfig (Ok config) ->
-            ( { model | apps = config.apps, packages = config.packages, error = Nothing }, Cmd.none )
+            let
+                updatedModel =
+                    { model | apps = config.apps, packages = config.packages, error = Nothing }
+            in
+            ( selectFromUrl updatedModel, Cmd.none )
 
         GetConfig (Err err) ->
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )
@@ -84,16 +104,58 @@ update msg model =
             ( { model | selectedOutput = output }, Cmd.none )
 
         SelectApp app ->
-            ( { model | selectedApp = app }, Cmd.none )
+            ( { model | selectedApp = app, selectedOutput = "applications" }
+            , Nav.pushUrl model.navKey ("#app-" ++ app.name)
+            )
 
         SelectPackage pkg ->
-            ( { model | selectedPackage = pkg }, Cmd.none )
+            ( { model | selectedPackage = pkg, selectedOutput = "packages" }
+            , Nav.pushUrl model.navKey ("#package-" ++ pkg.name)
+            )
 
         Search string ->
             ( { model | searchString = string }, Cmd.none )
 
         CopyCode code ->
             ( model, copyToClipboard code )
+
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model, Nav.pushUrl model.navKey (Url.toString url) )
+
+                Browser.External href ->
+                    ( model, Nav.load href )
+
+        UrlChanged url ->
+            ( selectFromUrl { model | url = url }, Cmd.none )
+
+
+selectFromUrl : Model -> Model
+selectFromUrl model =
+    case model.url.fragment of
+        Just fragment ->
+            if String.startsWith "package-" fragment then
+                case List.filter (\pkg -> pkg.name == String.dropLeft 8 fragment) model.packages |> List.head of
+                    Just pkg ->
+                        { model | selectedPackage = pkg, selectedApp = emptyApp, selectedOutput = "packages" }
+
+                    Nothing ->
+                        model
+
+            else if String.startsWith "app-" fragment then
+                case List.filter (\app -> app.name == String.dropLeft 4 fragment) model.apps |> List.head of
+                    Just app ->
+                        { model | selectedApp = app, selectedPackage = emptyPackage, selectedOutput = "applications" }
+
+                    Nothing ->
+                        model
+
+            else
+                model
+
+        Nothing ->
+            model
 
 
 
@@ -363,9 +425,11 @@ appsHtml apps selectedApp filter =
 
 main : Program () Model Msg
 main =
-    Browser.element
+    Browser.application
         { init = init
-        , view = view
+        , view = \model -> { title = "Nix Forge", body = [ view model ] }
         , update = update
         , subscriptions = \_ -> Sub.none
+        , onUrlRequest = LinkClicked
+        , onUrlChange = UrlChanged
         }
