@@ -59,17 +59,16 @@ appVmDecoder =
 
 packageBuilder : Decode.Decoder String
 packageBuilder =
-    Decode.field "build" (Decode.dict (Decode.field "enable" Decode.bool))
+    Decode.field "build" (Decode.dict (Decode.maybe (Decode.oneOf [ Decode.field "enable" Decode.bool, Decode.bool ])))
         |> Decode.map findEnabledBuilder
 
 
-findEnabledBuilder : Dict.Dict String Bool -> String
+findEnabledBuilder : Dict.Dict String (Maybe Bool) -> String
 findEnabledBuilder dict =
     dict
-        |> Dict.toList
-        |> List.filter (\( _, enabled ) -> enabled)
+        |> Dict.filter (\_ value -> value == Just True)
+        |> Dict.keys
         |> List.head
-        |> Maybe.map Tuple.first
         |> Maybe.withDefault "none"
 
 
