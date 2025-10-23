@@ -30,11 +30,11 @@ codeBlock : (String -> msg) -> String -> Html msg
 codeBlock onCopy content =
     div [ class "position-relative" ]
         [ button
-            [ class "btn btn-sm btn-outline-light position-absolute top-0 end-0 m-2"
+            [ class "btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2"
             , onClick (onCopy content)
             ]
             [ text "Copy" ]
-        , pre [ class "bg-dark text-warning p-3 rounded border" ]
+        , pre [ class "bg-dark text-warning p-3 rounded border border-secondary" ]
             [ code [] [ text content ] ]
         ]
 
