@@ -289,14 +289,14 @@ optionHtml : Option -> Maybe Option -> Html Msg
 optionHtml option selectedOption =
     let
         shortDesc =
-            if String.length option.description > 100 then
-                String.left 100 option.description ++ "..."
-
-            else if String.isEmpty option.description then
+            if String.isEmpty option.description then
                 "This option has no description."
 
             else
                 option.description
+                    |> String.lines
+                    |> List.head
+                    |> Maybe.withDefault ""
     in
     a
         [ href ("#option-" ++ option.name)
