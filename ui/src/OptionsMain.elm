@@ -285,22 +285,6 @@ cleanOptionName name =
         |> String.replace "apps.*." ""
 
 
-getBadgeText : String -> String
-getBadgeText name =
-    let
-        cleanedName =
-            cleanOptionName name
-    in
-    if String.contains "." cleanedName then
-        cleanedName
-            |> String.split "."
-            |> List.head
-            |> Maybe.withDefault ""
-
-    else
-        "toplevel"
-
-
 optionHtml : Option -> Maybe Option -> Html Msg
 optionHtml option selectedOption =
     let
@@ -313,9 +297,6 @@ optionHtml option selectedOption =
 
             else
                 option.description
-
-        badgeText =
-            getBadgeText option.name
     in
     a
         [ href ("#option-" ++ option.name)
@@ -325,7 +306,6 @@ optionHtml option selectedOption =
         ]
         [ div [ class "d-flex w-100 justify-content-between" ]
             [ h5 [ class "mb-1" ] [ text (cleanOptionName option.name) ]
-            , small [] [ span [ class "badge bg-secondary" ] [ text badgeText ] ]
             ]
         , p [ class "mb-1" ] [ text shortDesc ]
         , small [] [ text ("Type: " ++ option.optionType) ]
@@ -354,6 +334,76 @@ optionsHtml options selectedOption filter categoryFilter =
         specificOptions =
             filteredOptions
                 |> List.filter (\option -> String.contains "." (cleanOptionName option.name))
+
+        -- Define sort order for option groups based on category filter
+        getGroupSortOrder prefix =
+            case categoryFilter of
+                "packages" ->
+                    case String.toLower prefix of
+                        "source" ->
+                            1
+
+                        "build" ->
+                            2
+
+                        "test" ->
+                            3
+
+                        "development" ->
+                            4
+
+                        _ ->
+                            99
+
+                "apps" ->
+                    case String.toLower prefix of
+                        "programs" ->
+                            1
+
+                        "containers" ->
+                            2
+
+                        "vm" ->
+                            3
+
+                        _ ->
+                            99
+
+                _ ->
+                    99
+
+        -- Group specific options by their prefix (before first dot)
+        groupedOptions =
+            specificOptions
+                |> List.foldl
+                    (\option acc ->
+                        let
+                            prefix =
+                                cleanOptionName option.name
+                                    |> String.split "."
+                                    |> List.head
+                                    |> Maybe.withDefault ""
+                        in
+                        Dict.update prefix
+                            (\maybeList ->
+                                case maybeList of
+                                    Just list ->
+                                        Just (option :: list)
+
+                                    Nothing ->
+                                        Just [ option ]
+                            )
+                            acc
+                    )
+                    Dict.empty
+                |> Dict.toList
+                |> List.sortBy (\( prefix, _ ) -> getGroupSortOrder prefix)
+
+        renderGroup ( prefix, groupOptions ) =
+            [ div [ class "fw-bold text-muted small px-3 pt-3 pb-1" ]
+                [ text (String.toUpper prefix) ]
+            ]
+                ++ List.map (\option -> optionHtml option selectedOption) (List.reverse groupOptions)
     in
     if List.isEmpty filteredOptions then
         [ div [ class "p-3 text-center text-muted" ]
@@ -361,20 +411,8 @@ optionsHtml options selectedOption filter categoryFilter =
         ]
 
     else
-        (if not (List.isEmpty topLevelOptions) then
-            [ div [ class "fw-bold text-muted small px-3 pt-3 pb-1" ] [ text "TOP LEVEL OPTIONS" ] ]
-                ++ List.map (\option -> optionHtml option selectedOption) topLevelOptions
-
-         else
-            []
-        )
-            ++ (if not (List.isEmpty specificOptions) then
-                    [ div [ class "fw-bold text-muted small px-3 pt-3 pb-1" ] [ text "SPECIFIC OPTIONS" ] ]
-                        ++ List.map (\option -> optionHtml option selectedOption) specificOptions
-
-                else
-                    []
-               )
+        List.map (\option -> optionHtml option selectedOption) topLevelOptions
+            ++ List.concatMap renderGroup groupedOptions
 
 
 formatDescription : String -> List (Html Msg)
