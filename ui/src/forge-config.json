@@ -126,11 +126,12 @@
   "packages": [
     {
       "build": {
+        "debug": false,
+        "extraDrvAttrs": {},
         "plainBuilder": {
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
-          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -139,18 +140,14 @@
           }
         },
         "pythonAppBuilder": {
-          "debug": false,
           "enable": false,
-          "extraDrvAttrs": {},
           "requirements": {
             "build-system": [],
             "dependencies": []
           }
         },
         "standardBuilder": {
-          "debug": false,
           "enable": true,
-          "extraDrvAttrs": {},
           "requirements": {
             "build": [
               "/nix/store/njhrpc02gq7501vi1kr2jl1ml603hid0-proj-9.6.1"
@@ -182,11 +179,12 @@
     },
     {
       "build": {
+        "debug": false,
+        "extraDrvAttrs": {},
         "plainBuilder": {
           "build": "make -j $NIX_BUILD_CORES\n",
           "check": "ctest --output-on-failure\n",
           "configure": "mkdir build && cd build\n\ncmake ${CMAKE_ARGS} \\\n  -D CMAKE_BUILD_TYPE=Release \\\n  -D CMAKE_INSTALL_PREFIX=$out \\\n  ..\n",
-          "debug": false,
           "enable": true,
           "install": "make install -j $NIX_BUILD_CORES\n",
           "requirements": {
@@ -198,18 +196,14 @@
           }
         },
         "pythonAppBuilder": {
-          "debug": false,
           "enable": false,
-          "extraDrvAttrs": {},
           "requirements": {
             "build-system": [],
             "dependencies": []
           }
         },
         "standardBuilder": {
-          "debug": false,
           "enable": false,
-          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": []
@@ -237,11 +231,12 @@
     },
     {
       "build": {
+        "debug": false,
+        "extraDrvAttrs": {},
         "plainBuilder": {
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
-          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -250,18 +245,14 @@
           }
         },
         "pythonAppBuilder": {
-          "debug": false,
           "enable": false,
-          "extraDrvAttrs": {},
           "requirements": {
             "build-system": [],
             "dependencies": []
           }
         },
         "standardBuilder": {
-          "debug": false,
           "enable": true,
-          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": []
@@ -289,11 +280,12 @@
     },
     {
       "build": {
+        "debug": false,
+        "extraDrvAttrs": {},
         "plainBuilder": {
           "build": "echo 'Build phase'",
           "check": "echo 'Check phase'",
           "configure": "echo 'Configure phase'",
-          "debug": false,
           "enable": false,
           "install": "echo 'Install phase'",
           "requirements": {
@@ -302,9 +294,7 @@
           }
         },
         "pythonAppBuilder": {
-          "debug": false,
           "enable": true,
-          "extraDrvAttrs": {},
           "requirements": {
             "build-system": [
               "/nix/store/ybb7fxf4gx0y3yqynh39sr6qhkzp832i-python3.13-setuptools-80.9.0"
@@ -316,9 +306,7 @@
           }
         },
         "standardBuilder": {
-          "debug": false,
           "enable": false,
-          "extraDrvAttrs": {},
           "requirements": {
             "build": [],
             "native": []

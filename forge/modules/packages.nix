@@ -67,112 +67,103 @@ in
                     };
 
                     # Build configuration
-                    build =
-                      let
-                        extraDrvAttrsOption = lib.mkOption {
-                          type = lib.types.attrsOf lib.types.anything;
-                          default = { };
-                          description = ''
-                            Expert option.
-
-                            Set extra Nix derivation attributes.
-                          '';
-                          example = lib.literalExpression ''
-                            {
-                              preConfigure = "export HOME=$(mktemp -d)"
-                              postInstall = "rm $out/somefile.txt"
-                            }
-                          '';
-                        };
-
-                        buildDebugOption = lib.mkOption {
-                          type = lib.types.bool;
-                          default = false;
-                          description = ''
-                            Enable interactive package build environment for
-                            debugging.
-
-                            Launch environment:
-
-                            ```
-                            mkdir dev && cd dev
-                            nix develop .#<package>
-                            ```
-
-                            and follow instructions.
-                          '';
-                        };
-                      in
-                      {
-                        plainBuilder = {
-                          enable = lib.mkEnableOption ''
-                            Plain builder.
-                          '';
-                          debug = buildDebugOption;
-                          requirements = {
-                            native = lib.mkOption {
-                              type = lib.types.listOf lib.types.package;
-                              default = [ ];
-                            };
-                            build = lib.mkOption {
-                              type = lib.types.listOf lib.types.package;
-                              default = [ ];
-                            };
-                          };
-                          configure = lib.mkOption {
-                            type = lib.types.str;
-                            default = "echo 'Configure phase'";
+                    build = {
+                      plainBuilder = {
+                        enable = lib.mkEnableOption ''
+                          Plain builder.
+                        '';
+                        requirements = {
+                          native = lib.mkOption {
+                            type = lib.types.listOf lib.types.package;
+                            default = [ ];
                           };
                           build = lib.mkOption {
-                            type = lib.types.str;
-                            default = "echo 'Build phase'";
-                          };
-                          check = lib.mkOption {
-                            type = lib.types.str;
-                            default = "echo 'Check phase'";
-                          };
-                          install = lib.mkOption {
-                            type = lib.types.str;
-                            default = "echo 'Install phase'";
+                            type = lib.types.listOf lib.types.package;
+                            default = [ ];
                           };
                         };
-
-                        standardBuilder = {
-                          enable = lib.mkEnableOption ''
-                            Standard builder.
-                          '';
-                          debug = buildDebugOption;
-                          requirements = {
-                            native = lib.mkOption {
-                              type = lib.types.listOf lib.types.package;
-                              default = [ ];
-                            };
-                            build = lib.mkOption {
-                              type = lib.types.listOf lib.types.package;
-                              default = [ ];
-                            };
-                          };
-                          extraDrvAttrs = extraDrvAttrsOption;
+                        configure = lib.mkOption {
+                          type = lib.types.str;
+                          default = "echo 'Configure phase'";
                         };
-
-                        pythonAppBuilder = {
-                          enable = lib.mkEnableOption ''
-                            Python application builder.
-                          '';
-                          debug = buildDebugOption;
-                          requirements = {
-                            build-system = lib.mkOption {
-                              type = lib.types.listOf lib.types.package;
-                              default = [ ];
-                            };
-                            dependencies = lib.mkOption {
-                              type = lib.types.listOf lib.types.package;
-                              default = [ ];
-                            };
-                          };
-                          extraDrvAttrs = extraDrvAttrsOption;
+                        build = lib.mkOption {
+                          type = lib.types.str;
+                          default = "echo 'Build phase'";
+                        };
+                        check = lib.mkOption {
+                          type = lib.types.str;
+                          default = "echo 'Check phase'";
+                        };
+                        install = lib.mkOption {
+                          type = lib.types.str;
+                          default = "echo 'Install phase'";
                         };
                       };
+
+                      standardBuilder = {
+                        enable = lib.mkEnableOption ''
+                          Standard builder.
+                        '';
+                        requirements = {
+                          native = lib.mkOption {
+                            type = lib.types.listOf lib.types.package;
+                            default = [ ];
+                          };
+                          build = lib.mkOption {
+                            type = lib.types.listOf lib.types.package;
+                            default = [ ];
+                          };
+                        };
+                      };
+
+                      pythonAppBuilder = {
+                        enable = lib.mkEnableOption ''
+                          Python application builder.
+                        '';
+                        requirements = {
+                          build-system = lib.mkOption {
+                            type = lib.types.listOf lib.types.package;
+                            default = [ ];
+                          };
+                          dependencies = lib.mkOption {
+                            type = lib.types.listOf lib.types.package;
+                            default = [ ];
+                          };
+                        };
+                      };
+
+                      # Other common builder options
+                      extraDrvAttrs = lib.mkOption {
+                        type = lib.types.attrsOf lib.types.anything;
+                        default = { };
+                        description = ''
+                          Expert option.
+
+                          Set extra Nix derivation attributes.
+                        '';
+                        example = lib.literalExpression ''
+                          {
+                            preConfigure = "export HOME=$(mktemp -d)"
+                            postInstall = "rm $out/somefile.txt"
+                          }
+                        '';
+                      };
+                      debug = lib.mkOption {
+                        type = lib.types.bool;
+                        default = false;
+                        description = ''
+                          Enable interactive package build environment for debugging.
+
+                          Launch environment:
+                          ```
+                          mkdir dev && cd dev
+                          nix develop .#<package>
+                          ```
+
+                          and follow instructions.
+                        '';
+                      };
+                    };
 
                     # Test configuration
                     test = {
@@ -303,7 +294,7 @@ in
                         passthru = pkgPassthru pkg finalAttrs.finalPackage;
                         meta = pkgMeta pkg;
                       }
-                      // lib.optionalAttrs pkg.build.plainBuilder.debug debugShellHookAttr
+                      // lib.optionalAttrs pkg.build.debug debugShellHookAttr
                     )
                     # Derivation end
                   ) { };
@@ -327,8 +318,8 @@ in
                         passthru = pkgPassthru pkg finalAttrs.finalPackage;
                         meta = pkgMeta pkg;
                       }
-                      // pkg.build.standardBuilder.extraDrvAttrs
-                      // lib.optionalAttrs pkg.build.standardBuilder.debug debugShellHookAttr
+                      // pkg.build.extraDrvAttrs
+                      // lib.optionalAttrs pkg.build.debug debugShellHookAttr
                     )
                     # Derivation end
                   ) { };
@@ -354,8 +345,8 @@ in
                         passthru = pkgPassthru pkg thePackage;
                         meta = pkgMeta pkg;
                       }
-                      // pkg.build.pythonAppBuilder.extraDrvAttrs
-                      // lib.optionalAttrs pkg.build.pythonAppBuilder.debug debugShellHookAttr
+                      // pkg.build.extraDrvAttrs
+                      // lib.optionalAttrs pkg.build.debug debugShellHookAttr
                     )
                     # Derivation end
                   ) { thePackage = value; };
