@@ -1,12 +1,14 @@
 port module OptionsMain exposing (main)
 
 import Browser
+import Browser.Navigation as Nav
 import Dict
 import Html exposing (Html, a, button, code, div, h5, hr, input, p, pre, small, span, text)
 import Html.Attributes exposing (class, href, placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import OptionsDecoder exposing (Option, OptionsData, optionsDecoder)
+import Url
 
 
 
@@ -26,16 +28,20 @@ type alias Model =
     , searchString : String
     , categoryFilter : String
     , error : Maybe String
+    , navKey : Nav.Key
+    , url : Url.Url
     }
 
 
-init : () -> ( Model, Cmd Msg )
-init _ =
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url key =
     ( { options = []
       , selectedOption = Nothing
       , searchString = ""
       , categoryFilter = "packages"
       , error = Nothing
+      , navKey = key
+      , url = url
       }
     , getOptions
     )
@@ -51,6 +57,8 @@ type Msg
     | Search String
     | FilterCategory String
     | CopyCode String
+    | LinkClicked Browser.UrlRequest
+    | UrlChanged Url.Url
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -61,14 +69,19 @@ update msg model =
                 optionsList =
                     Dict.values optionsData
                         |> List.sortBy .name
+
+                updatedModel =
+                    { model | options = optionsList, error = Nothing }
             in
-            ( { model | options = optionsList, error = Nothing }, Cmd.none )
+            ( selectFromUrl updatedModel, Cmd.none )
 
         GetOptions (Err err) ->
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )
 
         SelectOption option ->
-            ( { model | selectedOption = Just option }, Cmd.none )
+            ( { model | selectedOption = Just option }
+            , Nav.pushUrl model.navKey ("#option-" ++ option.name)
+            )
 
         Search string ->
             ( { model | searchString = string }, Cmd.none )
@@ -78,6 +91,39 @@ update msg model =
 
         CopyCode code ->
             ( model, copyToClipboard code )
+
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model, Nav.pushUrl model.navKey (Url.toString url) )
+
+                Browser.External href ->
+                    ( model, Nav.load href )
+
+        UrlChanged url ->
+            ( selectFromUrl { model | url = url }, Cmd.none )
+
+
+selectFromUrl : Model -> Model
+selectFromUrl model =
+    case model.url.fragment of
+        Just fragment ->
+            if String.startsWith "option-" fragment then
+                case List.filter (\opt -> opt.name == String.dropLeft 7 fragment) model.options |> List.head of
+                    Just option ->
+                        { model
+                            | selectedOption = Just option
+                            , categoryFilter = getOptionCategory option
+                        }
+
+                    Nothing ->
+                        model
+
+            else
+                model
+
+        Nothing ->
+            model
 
 
 
@@ -388,9 +434,11 @@ codeBlock content =
 
 main : Program () Model Msg
 main =
-    Browser.element
+    Browser.application
         { init = init
-        , view = view
+        , view = \model -> { title = "Nix Forge - Options", body = [ view model ] }
         , update = update
         , subscriptions = \_ -> Sub.none
+        , onUrlRequest = LinkClicked
+        , onUrlChange = UrlChanged
         }
