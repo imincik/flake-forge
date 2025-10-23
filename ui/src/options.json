@@ -5,7 +5,7 @@
       "_type": "literalExpression",
       "text": "[ ]"
     },
-    "description": "List of apps.",
+    "description": "List of applications.",
     "loc": [
       "perSystem",
       "forge",
@@ -159,6 +159,23 @@
     "readOnly": false,
     "type": "list of package"
   },
+  "apps.*.usage": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "\"\""
+    },
+    "description": "Application usage description in markdown format.",
+    "loc": [
+      "perSystem",
+      "forge",
+      "apps",
+      "*",
+      "usage"
+    ],
+    "readOnly": false,
+    "type": "string"
+  },
   "apps.*.version": {
     "declarations": [],
     "default": {
@@ -295,6 +312,46 @@
     "readOnly": false,
     "type": "list of (submodule)"
   },
+  "packages.*.build.debug": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "false"
+    },
+    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "debug"
+    ],
+    "readOnly": false,
+    "type": "boolean"
+  },
+  "packages.*.build.extraDrvAttrs": {
+    "declarations": [],
+    "default": {
+      "_type": "literalExpression",
+      "text": "{ }"
+    },
+    "description": "Expert option.\n\nSet extra Nix derivation attributes.\n",
+    "example": {
+      "_type": "literalExpression",
+      "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"
+    },
+    "loc": [
+      "perSystem",
+      "forge",
+      "packages",
+      "*",
+      "build",
+      "extraDrvAttrs"
+    ],
+    "readOnly": false,
+    "type": "attribute set of anything"
+  },
   "packages.*.build.plainBuilder.build": {
     "declarations": [],
     "default": {
@@ -351,25 +408,6 @@
     ],
     "readOnly": false,
     "type": "string"
-  },
-  "packages.*.build.plainBuilder.debug": {
-    "declarations": [],
-    "default": {
-      "_type": "literalExpression",
-      "text": "false"
-    },
-    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
-    "loc": [
-      "perSystem",
-      "forge",
-      "packages",
-      "*",
-      "build",
-      "plainBuilder",
-      "debug"
-    ],
-    "readOnly": false,
-    "type": "boolean"
   },
   "packages.*.build.plainBuilder.enable": {
     "declarations": [],
@@ -453,25 +491,6 @@
     "readOnly": false,
     "type": "list of package"
   },
-  "packages.*.build.pythonAppBuilder.debug": {
-    "declarations": [],
-    "default": {
-      "_type": "literalExpression",
-      "text": "false"
-    },
-    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
-    "loc": [
-      "perSystem",
-      "forge",
-      "packages",
-      "*",
-      "build",
-      "pythonAppBuilder",
-      "debug"
-    ],
-    "readOnly": false,
-    "type": "boolean"
-  },
   "packages.*.build.pythonAppBuilder.enable": {
     "declarations": [],
     "default": {
@@ -494,29 +513,6 @@
     ],
     "readOnly": false,
     "type": "boolean"
-  },
-  "packages.*.build.pythonAppBuilder.extraDrvAttrs": {
-    "declarations": [],
-    "default": {
-      "_type": "literalExpression",
-      "text": "{ }"
-    },
-    "description": "Expert option.\n\nSet extra Nix derivation attributes.\n",
-    "example": {
-      "_type": "literalExpression",
-      "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"
-    },
-    "loc": [
-      "perSystem",
-      "forge",
-      "packages",
-      "*",
-      "build",
-      "pythonAppBuilder",
-      "extraDrvAttrs"
-    ],
-    "readOnly": false,
-    "type": "attribute set of anything"
   },
   "packages.*.build.pythonAppBuilder.requirements.build-system": {
     "declarations": [],
@@ -558,25 +554,6 @@
     "readOnly": false,
     "type": "list of package"
   },
-  "packages.*.build.standardBuilder.debug": {
-    "declarations": [],
-    "default": {
-      "_type": "literalExpression",
-      "text": "false"
-    },
-    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
-    "loc": [
-      "perSystem",
-      "forge",
-      "packages",
-      "*",
-      "build",
-      "standardBuilder",
-      "debug"
-    ],
-    "readOnly": false,
-    "type": "boolean"
-  },
   "packages.*.build.standardBuilder.enable": {
     "declarations": [],
     "default": {
@@ -599,29 +576,6 @@
     ],
     "readOnly": false,
     "type": "boolean"
-  },
-  "packages.*.build.standardBuilder.extraDrvAttrs": {
-    "declarations": [],
-    "default": {
-      "_type": "literalExpression",
-      "text": "{ }"
-    },
-    "description": "Expert option.\n\nSet extra Nix derivation attributes.\n",
-    "example": {
-      "_type": "literalExpression",
-      "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"
-    },
-    "loc": [
-      "perSystem",
-      "forge",
-      "packages",
-      "*",
-      "build",
-      "standardBuilder",
-      "extraDrvAttrs"
-    ],
-    "readOnly": false,
-    "type": "attribute set of anything"
   },
   "packages.*.build.standardBuilder.requirements.build": {
     "declarations": [],
