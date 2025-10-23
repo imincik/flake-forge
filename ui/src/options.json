@@ -318,7 +318,7 @@
       "_type": "literalExpression",
       "text": "false"
     },
-    "description": "Enable interactive package build environment for\ndebugging.\n\nLaunch environment:\n\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
+    "description": "Enable interactive package build environment for debugging.\n\nLaunch environment:\n```\nmkdir dev && cd dev\nnix develop .#<package>\n```\n\nand follow instructions.\n",
     "loc": [
       "perSystem",
       "forge",
