@@ -336,7 +336,7 @@
       "_type": "literalExpression",
       "text": "{ }"
     },
-    "description": "Expert option.\n\nSet extra Nix derivation attributes.\n",
+    "description": "Set extra Nix derivation attributes.\nExpert option.\n",
     "example": {
       "_type": "literalExpression",
       "text": "{\n  preConfigure = \"export HOME=$(mktemp -d)\"\n  postInstall = \"rm $out/somefile.txt\"\n}\n"
@@ -415,7 +415,7 @@
       "_type": "literalExpression",
       "text": "false"
     },
-    "description": "Whether to enable Plain builder.\n.",
+    "description": "Whether to enable support for building packages using plain shell commands.",
     "example": {
       "_type": "literalExpression",
       "text": "true"
@@ -478,6 +478,10 @@
       "text": "[ ]"
     },
     "description": "This option has no description.",
+    "example": {
+      "_type": "literalExpression",
+      "text": "[\n  pkgs.cmake\n  pkgs.ninja\n];\n"
+    },
     "loc": [
       "perSystem",
       "forge",
@@ -497,7 +501,7 @@
       "_type": "literalExpression",
       "text": "false"
     },
-    "description": "Whether to enable Python application builder.\n.",
+    "description": "Whether to enable support for build Python applications.",
     "example": {
       "_type": "literalExpression",
       "text": "true"
@@ -560,7 +564,7 @@
       "_type": "literalExpression",
       "text": "false"
     },
-    "description": "Whether to enable Standard builder.\n.",
+    "description": "Whether to enable support for building Makefile, Autotools and CMake (Meson, Ninja) based packages.",
     "example": {
       "_type": "literalExpression",
       "text": "true"
@@ -623,7 +627,7 @@
       "_type": "literalExpression",
       "text": "\"\""
     },
-    "description": "This option has no description.",
+    "description": "Short package description.",
     "loc": [
       "perSystem",
       "forge",
@@ -676,7 +680,7 @@
       "_type": "literalExpression",
       "text": "\"\""
     },
-    "description": "This option has no description.",
+    "description": "Home page URL.",
     "loc": [
       "perSystem",
       "forge",
@@ -685,7 +689,7 @@
       "homePage"
     ],
     "readOnly": false,
-    "type": "string"
+    "type": "string matching the pattern ^https?://.+$"
   },
   "packages.*.mainProgram": {
     "declarations": [],
@@ -693,7 +697,7 @@
       "_type": "literalExpression",
       "text": "\"my-program\""
     },
-    "description": "This option has no description.",
+    "description": "Main executable name.",
     "example": {
       "_type": "literalExpression",
       "text": "\"hello\""
@@ -714,7 +718,7 @@
       "_type": "literalExpression",
       "text": "\"my-package\""
     },
-    "description": "This option has no description.",
+    "description": "Package name.\nOnly lowercase letters and hyphens are allowed. Package name must start with letter.\n",
     "loc": [
       "perSystem",
       "forge",
@@ -723,7 +727,7 @@
       "name"
     ],
     "readOnly": false,
-    "type": "string"
+    "type": "string matching the pattern ^[a-z][a-z0-9-]*$"
   },
   "packages.*.source.git": {
     "declarations": [],
@@ -731,10 +735,10 @@
       "_type": "literalExpression",
       "text": "null"
     },
-    "description": "This option has no description.",
+    "description": "Git repository and version path.",
     "example": {
       "_type": "literalExpression",
-      "text": "\"my-user/my-repo/v1.0.0\""
+      "text": "\"github:my-user/my-repo/v1.0.0\""
     },
     "loc": [
       "perSystem",
@@ -753,7 +757,11 @@
       "_type": "literalExpression",
       "text": "\"\""
     },
-    "description": "This option has no description.",
+    "description": "Source code hash.\n\nLeave hash value empty during first package build and replace it with suggested value.\n",
+    "example": {
+      "_type": "literalExpression",
+      "text": "\"sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\""
+    },
     "loc": [
       "perSystem",
       "forge",
@@ -771,7 +779,7 @@
       "_type": "literalExpression",
       "text": "null"
     },
-    "description": "This option has no description.",
+    "description": "Source code tarball URL.",
     "example": {
       "_type": "literalExpression",
       "text": "\"https://downloads.my-project/my-package-1.0.0.tar.gz\""
@@ -785,7 +793,7 @@
       "url"
     ],
     "readOnly": false,
-    "type": "null or string matching the pattern ^.*://.*"
+    "type": "null or string matching the pattern ^https?://.+$"
   },
   "packages.*.test.requirements": {
     "declarations": [],
@@ -829,7 +837,7 @@
       "_type": "literalExpression",
       "text": "\"1.0.0\""
     },
-    "description": "This option has no description.",
+    "description": "Package version.",
     "loc": [
       "perSystem",
       "forge",

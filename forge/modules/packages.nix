@@ -27,25 +27,33 @@ in
                   options = {
                     # General configuration
                     name = lib.mkOption {
-                      type = lib.types.str;
+                      type = lib.types.strMatching "^[a-z][a-z0-9-]*$";
                       default = "my-package";
+                      description = ''
+                        Package name.
+                        Only lowercase letters and hyphens are allowed. Package name must start with letter.
+                      '';
                     };
                     description = lib.mkOption {
                       type = lib.types.str;
                       default = "";
+                      description = "Short package description.";
                     };
                     version = lib.mkOption {
                       type = lib.types.str;
                       default = "1.0.0";
+                      description = "Package version.";
                     };
                     homePage = lib.mkOption {
-                      type = lib.types.str;
+                      type = lib.types.strMatching "^https?:\/\/.+$";
                       default = "";
+                      description = "Home page URL.";
                     };
                     mainProgram = lib.mkOption {
                       type = lib.types.str;
                       default = "my-program";
                       example = "hello";
+                      description = "Main executable name.";
                     };
 
                     # Source configuration
@@ -53,29 +61,41 @@ in
                       git = lib.mkOption {
                         type = lib.types.nullOr (lib.types.strMatching "^.*:.*/.*/.*$");
                         default = null;
-                        example = "my-user/my-repo/v1.0.0";
+                        example = "github:my-user/my-repo/v1.0.0";
+                        description = "Git repository and version path.";
                       };
                       url = lib.mkOption {
-                        type = lib.types.nullOr (lib.types.strMatching "^.*://.*");
+                        type = lib.types.nullOr (lib.types.strMatching "^https?:\/\/.+$");
                         default = null;
                         example = "https://downloads.my-project/my-package-1.0.0.tar.gz";
+                        description = "Source code tarball URL.";
                       };
                       hash = lib.mkOption {
                         type = lib.types.str;
                         default = "";
+                        example = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+                        description = ''
+                          Source code hash.
+
+                          Leave hash value empty during first package build and replace it with suggested value.
+                        '';
                       };
                     };
 
                     # Build configuration
                     build = {
                       plainBuilder = {
-                        enable = lib.mkEnableOption ''
-                          Plain builder.
-                        '';
+                        enable = lib.mkEnableOption "support for building packages using plain shell commands";
                         requirements = {
                           native = lib.mkOption {
                             type = lib.types.listOf lib.types.package;
                             default = [ ];
+                            example = lib.literalExpression ''
+                              [
+                                pkgs.cmake
+                                pkgs.ninja
+                              ];
+                            '';
                           };
                           build = lib.mkOption {
                             type = lib.types.listOf lib.types.package;
@@ -101,9 +121,7 @@ in
                       };
 
                       standardBuilder = {
-                        enable = lib.mkEnableOption ''
-                          Standard builder.
-                        '';
+                        enable = lib.mkEnableOption "support for building Makefile, Autotools and CMake (Meson, Ninja) based packages";
                         requirements = {
                           native = lib.mkOption {
                             type = lib.types.listOf lib.types.package;
@@ -117,9 +135,7 @@ in
                       };
 
                       pythonAppBuilder = {
-                        enable = lib.mkEnableOption ''
-                          Python application builder.
-                        '';
+                        enable = lib.mkEnableOption "support for build Python applications";
                         requirements = {
                           build-system = lib.mkOption {
                             type = lib.types.listOf lib.types.package;
@@ -137,9 +153,8 @@ in
                         type = lib.types.attrsOf lib.types.anything;
                         default = { };
                         description = ''
-                          Expert option.
-
                           Set extra Nix derivation attributes.
+                          Expert option.
                         '';
                         example = lib.literalExpression ''
                           {
