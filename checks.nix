@@ -15,7 +15,7 @@
 
     let
       # Helper function to extract all packages with given passthru attribute
-      passthruAttr =
+      packagesWithAttr =
         attr:
         lib.filterAttrs (_: v: v != null) (
           lib.mapAttrs' (
@@ -39,13 +39,13 @@
       // allPackages
 
       # All packages containing passthru attributes
-      // (passthruAttr "image")
-      // (passthruAttr "devenv")
-      // (passthruAttr "test")
+      // (packagesWithAttr "image")
+      // (packagesWithAttr "devenv")
+      // (packagesWithAttr "test")
 
       # All apps containing passthru attributes
-      // (passthruAttr "programs")
-      // (passthruAttr "containers")
-      // (passthruAttr "vm");
+      // (packagesWithAttr "programs")
+      // (packagesWithAttr "containers")
+      // (packagesWithAttr "vm");
     };
 }
