@@ -99,15 +99,22 @@ installNixCmd =
 """
 
 
+acceptFlakeConfigCmd : String
+acceptFlakeConfigCmd =
+    """export NIX_CONFIG="accept-flake-config = true\""""
+
+
 installInstructionsHtml : (String -> msg) -> List (Html msg)
 installInstructionsHtml onCopy =
     [ h2 [] [ text "QUICK START" ]
     , p [ style "margin-bottom" "0em" ]
-        [ text "Install Nix "
+        [ text "1. Install Nix "
         , a [ href "https://zero-to-nix.com/start/install", target "_blank" ]
-            [ text "(learn more about this installer)" ]
+            [ text "(learn more about this installer)." ]
         ]
     , codeBlock onCopy installNixCmd
+    , text "2. Accept binaries pre-built by Nix Forge (optional, highly recommended) "
+    , codeBlock onCopy acceptFlakeConfigCmd
     , p [ style "margin-bottom" "0em" ] [ text "and select a package or application to see the usage instructions." ]
     ]
 

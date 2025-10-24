@@ -1,6 +1,13 @@
 {
   description = "Nix Forge";
 
+  nixConfig = {
+    extra-substituters = [ "https://flake-forge.cachix.org" ];
+    extra-trusted-public-keys = [
+      "flake-forge.cachix.org-1:cu8to1JK8J70jntSwC0Z2Uzu6DpwgcWTS3xiiye3Lyw="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
