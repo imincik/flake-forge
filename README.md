@@ -2,23 +2,23 @@
 
 **WARNING: this sofware is currently in alpha state.**
 
-The friendly software distribution system with Nix super powers.
-
+Simplified Nix packaging with maximum added value.
 
 ## Features
 
-* Build process configuration using human readable language
-  (inspired by [conda-forge](https://conda-forge.org/))
+* Simple configuration (inspired by [conda-forge](https://conda-forge.org/))
 
 * Outputs:
-  * Nix packages for Linux (and Mac in a future)
-  * Container images for packages and apps
-  * Development environments for packages
-  * NixOS virtual machines for apps
+  * Simple packages
+    * Nix packages
+    * Container images
+    * Development environments
+
+  * Multi-component applications
+    * Container images
+    * NixOS systems
 
 * [Web UI](https://imincik.github.io/nix-forge)
-
-* Great for self hosting
 
 
 ## Packaging workflow
