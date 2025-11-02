@@ -6,19 +6,28 @@ Simplified Nix packaging with maximum added value.
 
 ## Features
 
-* Simple configuration (inspired by [conda-forge](https://conda-forge.org/))
-
-* Outputs:
-  * Simple packages
-    * Nix packages
-    * Container images
-    * Development environments
-
-  * Multi-component applications
-    * Container images
-    * NixOS systems
+* Simple, type checked configuration recipes for **simple packages** and
+  **mutli-component applications**
 
 * [Web UI](https://imincik.github.io/nix-forge)
+
+* [Configuration browser](https://imincik.github.io/nix-forge/options.html)
+
+### Packages
+
+Environments:
+
+* Shell environments
+* Container images
+* Development environments
+
+### Multi-component applications
+
+Environments:
+
+* Shell environments
+* Container images
+* NixOS systems (VMs)
 
 
 ## Packaging workflow
