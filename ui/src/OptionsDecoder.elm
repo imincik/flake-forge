@@ -14,11 +14,11 @@ type alias Option =
     { name : String
     , declarations : List String
     , description : String
-    , loc : List String
     , readOnly : Bool
     , optionType : String
     , default : Maybe LiteralExpression
     , example : Maybe LiteralExpression
+    , value : String
     }
 
 
@@ -39,11 +39,11 @@ optionDecoder name =
         (Decode.succeed name)
         (field "declarations" (Decode.list string))
         (field "description" string)
-        (field "loc" (Decode.list string))
         (field "readOnly" Decode.bool)
         (field "type" string)
         (Decode.maybe (field "default" literalExpressionDecoder))
         (Decode.maybe (field "example" literalExpressionDecoder))
+        (Decode.succeed "")
 
 
 optionsDecoder : Decoder OptionsData
