@@ -14,9 +14,9 @@
         packages = with pkgs; [
           entr
           jq
+          live-server
 
           elmPackages.elm
-          python3Packages.python
         ];
 
         shellHook =
@@ -32,8 +32,8 @@
               echo "Re-generate options documentation:"
               echo "  cat \$(nix build .#_forge-options --print-out-paths) | jq > src/options.json"
               echo
-              echo "Launch Python web server:"
-              echo "  python3 -m http.server & echo \$! > python-http.pid"
+              echo "Launch live server:"
+              echo "  live-server --host=127.0.0.1 --open=/index.html src/ & echo \$! > live-server.pid"
               echo
               echo "Re-build main app on change:"
               echo "  find src/ -name "*.elm" | entr -rn elm make src/Main.elm --output=src/main.js"
@@ -45,9 +45,9 @@
             }
 
             function cleanup {
-              echo "Stopping python server ..."
-              kill -9 $(cat python-http.pid) || echo ".. failed to stop python server"
-              rm -f python-http.pid
+              echo "Stopping live-server ..."
+              kill -9 $(cat live-server.pid) || echo ".. failed to stop live-server"
+              rm -f live-server.pid
             }
 
             trap cleanup EXIT
