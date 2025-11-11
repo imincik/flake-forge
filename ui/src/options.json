@@ -128,7 +128,7 @@
     "declarations": [],
     "default": {
       "_type": "literalExpression",
-      "text": "\"my-package\""
+      "text": "\"my-application\""
     },
     "description": "This option has no description.",
     "loc": [
