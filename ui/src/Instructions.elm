@@ -177,11 +177,6 @@ packageInstructionsHtml onCopy pkg =
             , target "_blank"
             ]
             [ text ("packages/" ++ pkg.name ++ "/recipe.nix") ]
-        , a
-            [ href "options.html"
-            , target "_blank"
-            ]
-            [ text " (configuration options)" ]
         ]
 
     else

@@ -4,7 +4,7 @@ import Browser
 import Browser.Navigation as Nav
 import ConfigDecoder exposing (App, Config, Package, configDecoder)
 import Html exposing (Html, a, button, div, h5, hr, input, p, small, span, text)
-import Html.Attributes exposing (class, href, name, placeholder, value)
+import Html.Attributes exposing (class, href, name, placeholder, target, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import Instructions exposing (appInstructionsHtml, footerHtml, headerHtml, installInstructionsHtml, packageInstructionsHtml)
@@ -179,10 +179,13 @@ view model =
             -- packages panel
             [ div [ class "col-lg-6 border bg-light py-3 my-3" ]
                 [ div
-                    [ class "name d-flex justify-content-between align-items-center"
+                    [ class "name d-flex gap-2 justify-content-between align-items-center"
                     ]
-                    --search
-                    (searchHtml model.searchString)
+                    [ div [ class "flex-grow-1" ]
+                        --search
+                        (searchHtml model.searchString)
+                    , a [ class "btn btn-primary", href "options.html", target "_blank" ] [ text "New recipe" ]
+                    ]
                 , div [ class "d-flex btn-group align-items-center" ]
                     (outputsTabHtml [ "PACKAGES", "APPLICATIONS" ] model.selectedOutput)
 
