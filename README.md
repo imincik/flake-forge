@@ -2,32 +2,31 @@
 
 **WARNING: this sofware is currently in alpha state.**
 
-Simplified Nix packaging with maximum added value.
+Nix Forge is an attempt to lower the barrier and learning curve required for
+packaging and deploying software with Nix to a level acceptable for newcomers
+who expect to adopt a new technology over the weekend while preserving all the
+superpowers of Nix.
 
 ## Features
 
-* Simple, type checked configuration recipes for **simple packages** and
+* Simple, type checked configuration recipes for **packages** and
   **mutli-component applications**
 
 * [Web UI](https://imincik.github.io/nix-forge)
 
 * [Configuration browser](https://imincik.github.io/nix-forge/options.html)
 
-### Packages
-
-Environments:
+### Packages outputs
 
 * Shell environments
 * Container images
 * Development environments
 
-### Multi-component applications
+### Multi-component applications outputs
 
-Environments:
-
-* Shell environments
-* Container images
-* NixOS systems (VMs)
+* Shell environments (for CLI and GUI components)
+* Container images (for services)
+* NixOS systems (for services)
 
 
 ## Packaging workflow
