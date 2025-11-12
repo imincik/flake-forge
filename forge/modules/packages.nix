@@ -53,7 +53,7 @@ in
                       git = lib.mkOption {
                         type = lib.types.nullOr (lib.types.strMatching "^.*:.*/.*/.*$");
                         default = null;
-                        example = "my-user/my-repo/v1.0.0";
+                        example = "github:my-user/my-repo/v1.0.0";
                       };
                       url = lib.mkOption {
                         type = lib.types.nullOr (lib.types.strMatching "^.*://.*");

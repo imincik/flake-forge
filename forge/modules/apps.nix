@@ -28,7 +28,7 @@ in
                     # General configuration
                     name = lib.mkOption {
                       type = lib.types.str;
-                      default = "my-package";
+                      default = "my-application";
                     };
                     description = lib.mkOption {
                       type = lib.types.str;

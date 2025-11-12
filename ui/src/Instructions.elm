@@ -14,16 +14,7 @@ import Html exposing (Html, a, br, button, code, div, h2, h3, hr, p, pre, span, 
 import Html.Attributes exposing (class, href, style, target, title)
 import Html.Events exposing (onClick)
 import Markdown
-
-
-format : String -> List String -> String
-format template replacements =
-    let
-        replace index replacement result =
-            String.replace ("{" ++ String.fromInt index ++ "}") replacement result
-    in
-    List.indexedMap Tuple.pair replacements
-        |> List.foldl (\( i, r ) acc -> replace i r acc) template
+import Utils exposing (format)
 
 
 codeBlock : (String -> msg) -> String -> Html msg
@@ -177,11 +168,6 @@ packageInstructionsHtml onCopy pkg =
             , target "_blank"
             ]
             [ text ("packages/" ++ pkg.name ++ "/recipe.nix") ]
-        , a
-            [ href "options.html"
-            , target "_blank"
-            ]
-            [ text " (configuration options)" ]
         ]
 
     else

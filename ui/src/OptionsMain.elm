@@ -3,12 +3,13 @@ port module OptionsMain exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Dict
-import Html exposing (Html, a, button, code, div, h5, hr, input, p, pre, small, span, text)
-import Html.Attributes exposing (class, href, placeholder, value)
+import Html exposing (Html, a, button, code, div, h5, hr, input, p, pre, small, span, text, textarea)
+import Html.Attributes exposing (class, href, placeholder, rows, style, value)
 import Html.Events exposing (onClick, onInput)
 import Http
 import OptionsDecoder exposing (Option, OptionsData, optionsDecoder)
 import Url
+import Utils exposing (format)
 
 
 
@@ -27,6 +28,7 @@ type alias Model =
     , selectedOption : Maybe Option
     , searchString : String
     , categoryFilter : String
+    , showInstructions : Bool
     , error : Maybe String
     , navKey : Nav.Key
     , url : Url.Url
@@ -39,6 +41,7 @@ init _ url key =
       , selectedOption = Nothing
       , searchString = ""
       , categoryFilter = "packages"
+      , showInstructions = False
       , error = Nothing
       , navKey = key
       , url = url
@@ -57,6 +60,8 @@ type Msg
     | Search String
     | FilterCategory String
     | CopyCode String
+    | UpdateRecipeValue String
+    | CreateRecipe
     | LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
 
@@ -79,7 +84,7 @@ update msg model =
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )
 
         SelectOption option ->
-            ( { model | selectedOption = Just option }
+            ( { model | selectedOption = Just option, showInstructions = False }
             , Nav.pushUrl model.navKey ("#option-" ++ option.name)
             )
 
@@ -87,10 +92,36 @@ update msg model =
             ( { model | searchString = string }, Cmd.none )
 
         FilterCategory category ->
-            ( { model | categoryFilter = category }, Cmd.none )
+            ( { model | categoryFilter = category, selectedOption = Nothing, showInstructions = False }, Cmd.none )
 
         CopyCode code ->
             ( model, copyToClipboard code )
+
+        UpdateRecipeValue value ->
+            case model.selectedOption of
+                Just option ->
+                    let
+                        updatedOption =
+                            { option | value = value }
+
+                        updatedOptions =
+                            List.map
+                                (\opt ->
+                                    if opt.name == option.name then
+                                        updatedOption
+
+                                    else
+                                        opt
+                                )
+                                model.options
+                    in
+                    ( { model | selectedOption = Just updatedOption, options = updatedOptions }, Cmd.none )
+
+                Nothing ->
+                    ( model, Cmd.none )
+
+        CreateRecipe ->
+            ( { model | showInstructions = True, selectedOption = Nothing }, Cmd.none )
 
         LinkClicked urlRequest ->
             case urlRequest of
@@ -114,6 +145,7 @@ selectFromUrl model =
                         { model
                             | selectedOption = Just option
                             , categoryFilter = getOptionCategory option
+                            , showInstructions = False
                         }
 
                     Nothing ->
@@ -137,8 +169,10 @@ view model =
           div [ class "row" ]
             [ -- options list panel
               div [ class "col-lg-6 border bg-light py-3 my-3" ]
-                [ div [ class "name d-flex justify-content-between align-items-center" ]
-                    (searchHtml model.searchString)
+                [ div [ class "d-flex gap-2 align-items-center" ]
+                    [ div [ class "flex-grow-1" ] (searchHtml model.searchString)
+                    , button [ class "btn btn-primary", onClick CreateRecipe ] [ text "Create recipe" ]
+                    ]
                 , div [ class "d-flex btn-group align-items-center my-2" ]
                     (categoryTabsHtml model.categoryFilter)
 
@@ -158,18 +192,18 @@ view model =
                         text ""
                 ]
 
-            -- option details panel
+            -- option details or instructions panel
             , div [ class "col-lg-6 bg-dark text-white py-3 my-3" ]
-                [ case model.selectedOption of
-                    Just option ->
-                        optionDetailsHtml option
+                [ if model.showInstructions then
+                    instructionsHtml model.categoryFilter model.options
 
-                    Nothing ->
-                        div [ class "p-3" ]
-                            [ p [] [ text "Select a configuration option to view its details." ]
-                            , hr [] []
-                            , p [] [ text "You can search and filter options using the controls on the left." ]
-                            ]
+                  else
+                    case model.selectedOption of
+                        Just option ->
+                            optionDetailsHtml option
+
+                        Nothing ->
+                            text "Select an option to set its value. Click 'Create recipe' when done."
                 ]
             ]
         ]
@@ -208,6 +242,57 @@ httpErrorToString err =
 
 
 -- HTML FUNCTIONS
+
+
+instructionsHtml : String -> List Option -> Html Msg
+instructionsHtml category options =
+    case category of
+        "packages" ->
+            let
+                recipeContent =
+                    generateRecipeContent category options
+            in
+            div [ class "p-3" ]
+                [ h5 [] [ text "NEW PACKAGE" ]
+                , hr [] []
+                , p [] [ text "1. Create a new package directory" ]
+                , codeBlock (newDirectoryCmd ("outputs/packages/" ++ newPackageName options))
+                , p [] [ text "2. Create a recipe file and add it to git" ]
+                , codeBlock (newRecipeFile ("outputs/packages/" ++ newPackageName options ++ "/recipe.nix") recipeContent)
+                , codeBlock (addFileToGitCmd ("outputs/packages/" ++ newPackageName options ++ "/recipe.nix"))
+                , p [] [ text "3. Test build" ]
+                , codeBlock (buildPackageCmd (newPackageName options))
+                , p [] [ text "4. Run test" ]
+                , codeBlock (runPackageTestCmd (newPackageName options))
+                , p [] [ text "5. Submit PR" ]
+                , codeBlock (addFileToGitCmd ("outputs/packages/" ++ newPackageName options ++ "/recipe.nix"))
+                , codeBlock (submitPRCmd (newPackageName options))
+                ]
+
+        "apps" ->
+            let
+                recipeContent =
+                    generateRecipeContent category options
+            in
+            div [ class "p-3" ]
+                [ h5 [] [ text "NEW APPLICATION" ]
+                , hr [] []
+                , p [] [ text "1. Create a new application directory" ]
+                , codeBlock (newDirectoryCmd ("outputs/apps/" ++ newAppName options))
+                , p [] [ text "2. Create a recipe file and add it to git" ]
+                , codeBlock (newRecipeFile ("outputs/apps/" ++ newAppName options ++ "/recipe.nix") recipeContent)
+                , codeBlock (addFileToGitCmd ("outputs/apps/" ++ newAppName options ++ "/recipe.nix"))
+                , p [] [ text "3. Test build" ]
+                , codeBlock (buildPackageCmd (newAppName options))
+                , p [] [ text "4. Submit PR" ]
+                , codeBlock (addFileToGitCmd ("outputs/apps/" ++ newAppName options ++ "/recipe.nix"))
+                , codeBlock (submitPRCmd (newAppName options))
+                ]
+
+        _ ->
+            div [ class "p-3" ]
+                [ p [] [ text "Select a configuration option to view its details." ]
+                ]
 
 
 searchHtml : String -> List (Html Msg)
@@ -262,6 +347,13 @@ optionActiveState option selectedOption =
             " inactive"
 
 
+cleanOptionName : String -> String
+cleanOptionName name =
+    name
+        |> String.replace "packages.*." ""
+        |> String.replace "apps.*." ""
+
+
 getOptionCategory : Option -> String
 getOptionCategory option =
     let
@@ -278,11 +370,62 @@ getOptionCategory option =
         "other"
 
 
-cleanOptionName : String -> String
-cleanOptionName name =
-    name
-        |> String.replace "packages.*." ""
-        |> String.replace "apps.*." ""
+optionValue : Option -> String
+optionValue option =
+    if String.isEmpty option.value then
+        option.default
+            |> Maybe.map .text
+            |> Maybe.withDefault ""
+
+    else
+        option.value
+
+
+getOptionValue : String -> List Option -> String
+getOptionValue name options =
+    options
+        |> List.filter (\opt -> opt.name == name)
+        |> List.head
+        |> Maybe.map optionValue
+        |> Maybe.withDefault "no-value"
+
+
+getGroupSortOrder : String -> String -> Int
+getGroupSortOrder category prefix =
+    case category of
+        "packages" ->
+            case String.toLower prefix of
+                "source" ->
+                    1
+
+                "build" ->
+                    2
+
+                "test" ->
+                    3
+
+                "development" ->
+                    4
+
+                _ ->
+                    99
+
+        "apps" ->
+            case String.toLower prefix of
+                "programs" ->
+                    1
+
+                "containers" ->
+                    2
+
+                "vm" ->
+                    3
+
+                _ ->
+                    99
+
+        _ ->
+            99
 
 
 optionHtml : Option -> Maybe Option -> Html Msg
@@ -297,6 +440,9 @@ optionHtml option selectedOption =
                     |> String.lines
                     |> List.head
                     |> Maybe.withDefault ""
+
+        hasRecipeValue =
+            not (String.isEmpty option.value)
     in
     a
         [ href ("#option-" ++ option.name)
@@ -306,6 +452,11 @@ optionHtml option selectedOption =
         ]
         [ div [ class "d-flex w-100 justify-content-between" ]
             [ h5 [ class "mb-1" ] [ text (cleanOptionName option.name) ]
+            , if hasRecipeValue then
+                span [ class "badge bg-warning text-dark", style "font-size" "1.2em" ] [ text "✓" ]
+
+              else
+                text ""
             ]
         , p [ class "mb-1" ] [ text shortDesc ]
         , small [] [ text ("Type: " ++ option.optionType) ]
@@ -335,43 +486,6 @@ optionsHtml options selectedOption filter categoryFilter =
             filteredOptions
                 |> List.filter (\option -> String.contains "." (cleanOptionName option.name))
 
-        -- Define sort order for option groups based on category filter
-        getGroupSortOrder prefix =
-            case categoryFilter of
-                "packages" ->
-                    case String.toLower prefix of
-                        "source" ->
-                            1
-
-                        "build" ->
-                            2
-
-                        "test" ->
-                            3
-
-                        "development" ->
-                            4
-
-                        _ ->
-                            99
-
-                "apps" ->
-                    case String.toLower prefix of
-                        "programs" ->
-                            1
-
-                        "containers" ->
-                            2
-
-                        "vm" ->
-                            3
-
-                        _ ->
-                            99
-
-                _ ->
-                    99
-
         -- Group specific options by their prefix (before first dot)
         groupedOptions =
             specificOptions
@@ -397,7 +511,7 @@ optionsHtml options selectedOption filter categoryFilter =
                     )
                     Dict.empty
                 |> Dict.toList
-                |> List.sortBy (\( prefix, _ ) -> getGroupSortOrder prefix)
+                |> List.sortBy (\( prefix, _ ) -> getGroupSortOrder categoryFilter prefix)
 
         renderGroup ( prefix, groupOptions ) =
             [ div [ class "fw-bold text-muted small px-3 pt-3 pb-1" ]
@@ -450,6 +564,16 @@ optionDetailsHtml option =
 
             Nothing ->
                 text ""
+        , hr [] []
+        , p [ class "mb-1 fw-bold" ] [ text "Value:" ]
+        , textarea
+            [ class "form-control text-warning border-secondary"
+            , style "background-color" "#2d2d2d"
+            , value option.value
+            , onInput UpdateRecipeValue
+            , rows 3
+            ]
+            []
         ]
 
 
@@ -467,6 +591,96 @@ codeBlock content =
 
 
 
+-- INSTRUCTIONS FUNCTIONS
+
+
+generateRecipeContent : String -> List Option -> String
+generateRecipeContent category options =
+    let
+        filteredOptions =
+            options
+                |> List.filter (\opt -> getOptionCategory opt == category && not (String.isEmpty opt.value))
+
+        ( topLevel, specific ) =
+            filteredOptions
+                |> List.partition (\opt -> not (String.contains "." (cleanOptionName opt.name)))
+
+        grouped =
+            specific
+                |> List.foldl
+                    (\opt acc ->
+                        let
+                            prefix =
+                                cleanOptionName opt.name |> String.split "." |> List.head |> Maybe.withDefault ""
+                        in
+                        Dict.update prefix (\ml -> Just (opt :: Maybe.withDefault [] ml)) acc
+                    )
+                    Dict.empty
+                |> Dict.toList
+                |> List.sortBy (\( prefix, _ ) -> getGroupSortOrder category prefix)
+                |> List.concatMap (Tuple.second >> List.reverse)
+
+        -- `*` in option name will be replaced by `default` string
+        format opt =
+            "  " ++ String.replace "*" "default" (cleanOptionName opt.name) ++ " = " ++ opt.value ++ ";"
+    in
+    (topLevel ++ grouped)
+        |> List.map format
+        |> String.join "\n"
+
+
+newPackageName : List Option -> String
+newPackageName options =
+    String.replace "\"" "" (getOptionValue "packages.*.name" options)
+
+
+newAppName : List Option -> String
+newAppName options =
+    String.replace "\"" "" (getOptionValue "apps.*.name" options)
+
+
+newDirectoryCmd : String -> String
+newDirectoryCmd directory =
+    format """mkdir -p {0}
+touch {0}/recipe.nix
+""" [ directory ]
+
+
+newRecipeFile : String -> String -> String
+newRecipeFile filename recipeContent =
+    format """# {0}
+
+{ config, lib, pkgs, mypkgs, ... }:
+
+{
+{1}
+}
+""" [ filename, recipeContent ]
+
+
+addFileToGitCmd : String -> String
+addFileToGitCmd filename =
+    "git add " ++ filename
+
+
+buildPackageCmd : String -> String
+buildPackageCmd package =
+    "nix build .#" ++ package ++ " -L"
+
+
+runPackageTestCmd : String -> String
+runPackageTestCmd package =
+    "nix build .#" ++ package ++ ".test -L"
+
+
+submitPRCmd : String -> String
+submitPRCmd package =
+    format """git commit -m "Add new {0} recipe"
+gh pr create
+""" [ package ]
+
+
+
 -- MAIN
 
 
@@ -474,7 +688,7 @@ main : Program () Model Msg
 main =
     Browser.application
         { init = init
-        , view = \model -> { title = "Nix Forge - Options", body = [ view model ] }
+        , view = \model -> { title = "Nix Forge - Recipe builder", body = [ view model ] }
         , update = update
         , subscriptions = \_ -> Sub.none
         , onUrlRequest = LinkClicked
