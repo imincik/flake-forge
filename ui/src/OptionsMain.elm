@@ -4,7 +4,7 @@ import Browser
 import Browser.Navigation as Nav
 import ConfigDecoder exposing (Config, OptionsFilter, configDecoder)
 import Dict
-import Html exposing (Html, a, button, code, div, h5, hr, input, p, pre, small, span, text, textarea)
+import Html exposing (Html, a, br, button, code, div, h2, h5, hr, input, p, pre, small, span, text, textarea)
 import Html.Attributes exposing (class, href, placeholder, rows, style, value)
 import Html.Events exposing (onClick, onInput)
 import Http
@@ -263,7 +263,7 @@ view model =
                             optionDetailsHtml option
 
                         Nothing ->
-                            text "Select an option to set its value. Click 'Create recipe' when done."
+                            initialInstructionsHtml
                 ]
             ]
         ]
@@ -310,6 +310,17 @@ httpErrorToString err =
 
 
 -- HTML FUNCTIONS
+
+
+initialInstructionsHtml : Html Msg
+initialInstructionsHtml =
+    div []
+        [ h2 [] [ text "CREATE RECIPE" ]
+        , p [ style "margin-bottom" "0em" ] [ text "A. Browse available configuration options, set values and click on 'Create recipe' when done"]
+        , br [] []
+        , p [ style "margin-bottom" "0em" ] [ text "B. Or, generate package recipe using LLM" ]
+        , codeBlock llmPromptText
+        ]
 
 
 instructionsHtml : String -> List Option -> Html Msg
@@ -766,6 +777,12 @@ generateRecipeContent category options =
     (topLevel ++ grouped)
         |> List.map format
         |> String.join "\n"
+
+
+llmPromptText : String
+llmPromptText =
+    """Based on ./LLM-spec.md file,
+create Nix Forge package recipe for <SOURCE-CODE-REPOSITORY> ."""
 
 
 newPackageName : List Option -> String
