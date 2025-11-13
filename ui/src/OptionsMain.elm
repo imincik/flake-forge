@@ -318,7 +318,7 @@ initialInstructionsHtml =
         [ h2 [] [ text "CREATE RECIPE" ]
         , p [ style "margin-bottom" "0em" ] [ text "A. Browse available configuration options, set values and click on 'Create recipe' when done" ]
         , br [] []
-        , p [ style "margin-bottom" "0em" ] [ text "B. Or, generate package recipe using LLM" ]
+        , p [ style "margin-bottom" "0em" ] [ text "B. Or, generate package or application recipe using LLM" ]
         , codeBlock llmPromptText
         ]
 
