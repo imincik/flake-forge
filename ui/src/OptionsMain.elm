@@ -316,7 +316,7 @@ initialInstructionsHtml : Html Msg
 initialInstructionsHtml =
     div []
         [ h2 [] [ text "CREATE RECIPE" ]
-        , p [ style "margin-bottom" "0em" ] [ text "A. Browse available configuration options, set values and click on 'Create recipe' when done"]
+        , p [ style "margin-bottom" "0em" ] [ text "A. Browse available configuration options, set values and click on 'Create recipe' when done" ]
         , br [] []
         , p [ style "margin-bottom" "0em" ] [ text "B. Or, generate package recipe using LLM" ]
         , codeBlock llmPromptText
@@ -781,8 +781,8 @@ generateRecipeContent category options =
 
 llmPromptText : String
 llmPromptText =
-    """Based on ./LLM-spec.md file,
-create Nix Forge package recipe for <SOURCE-CODE-REPOSITORY> ."""
+    """Based on ./LLM-spec.md file, create Nix Forge package/application
+recipe for <SOURCE-CODE-REPOSITORY> ."""
 
 
 newPackageName : List Option -> String
