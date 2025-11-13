@@ -40,7 +40,8 @@ in
                   "apps.*.vm.enable"
                   "apps.*.vm.name"
                   "apps.*.vm.requirements"
-                  "apps.*.vm.config"
+                  "apps.*.vm.config.system"
+                  "apps.*.vm.config.ports"
                 ];
               };
               description = "Defines which options are relevant for each app output type.";
