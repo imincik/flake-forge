@@ -14,7 +14,7 @@ superpowers of Nix.
 
 * [Web UI](https://imincik.github.io/nix-forge)
 
-* [Configuration browser](https://imincik.github.io/nix-forge/options.html)
+* [Recipe builder](https://imincik.github.io/nix-forge/options.html)
 
 ### Packages outputs
 
@@ -82,3 +82,4 @@ nix build .#<package>.test -L
 
 * Many more language speciffic builders and configuration options
 
+* Firecracker microVM support
