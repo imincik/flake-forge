@@ -21,6 +21,22 @@ This specification guides LLMs in generating Nix Forge recipes - declarative con
 
 **Note**: The function parameters are REQUIRED and should always be included, even if not used.
 
+### Important: Git Tracking Required
+
+**CRITICAL**: All new recipe files MUST be added to git before they can be used by the Nix flake system.
+
+After creating a new recipe file, you must run:
+```bash
+git add outputs/packages/<package-name>/recipe.nix
+# or for apps:
+git add outputs/apps/<app-name>/recipe.nix
+```
+
+The flake uses `import-tree` to automatically discover recipes, but it only sees files tracked by git. Without adding the file to git, the package will not be recognized and `nix build .#<package-name>` will fail with an error like:
+```
+error: flake does not provide attribute 'packages.x86_64-linux.<package-name>'
+```
+
 ## Package Recipes
 
 ### Required Fields
