@@ -1,12 +1,18 @@
-module ConfigDecoder exposing (App, Config, Package, configDecoder, packageDecoder)
+module ConfigDecoder exposing (App, Config, OptionsFilter, Package, configDecoder, packageDecoder)
 
 import Dict
 import Json.Decode as Decode
 
 
+type alias OptionsFilter =
+    Dict.Dict String (List String)
+
+
 type alias Config =
     { apps : List App
     , packages : List Package
+    , packagesFilter : OptionsFilter
+    , appsFilter : OptionsFilter
     }
 
 
@@ -34,11 +40,18 @@ type alias Package =
     }
 
 
+optionsFilterDecoder : Decode.Decoder OptionsFilter
+optionsFilterDecoder =
+    Decode.dict (Decode.list Decode.string)
+
+
 configDecoder : Decode.Decoder Config
 configDecoder =
-    Decode.map2 Config
+    Decode.map4 Config
         (Decode.field "apps" (Decode.list appDecoder))
         (Decode.field "packages" (Decode.list packageDecoder))
+        (Decode.field "packagesFilter" optionsFilterDecoder)
+        (Decode.field "appsFilter" optionsFilterDecoder)
 
 
 appDecoder : Decode.Decoder App

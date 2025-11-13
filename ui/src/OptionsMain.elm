@@ -2,6 +2,7 @@ port module OptionsMain exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
+import ConfigDecoder exposing (Config, OptionsFilter, configDecoder)
 import Dict
 import Html exposing (Html, a, button, code, div, h5, hr, input, p, pre, small, span, text, textarea)
 import Html.Attributes exposing (class, href, placeholder, rows, style, value)
@@ -25,9 +26,13 @@ port copyToClipboard : String -> Cmd msg
 
 type alias Model =
     { options : List Option
+    , packagesFilter : OptionsFilter
+    , appsFilter : OptionsFilter
     , selectedOption : Maybe Option
     , searchString : String
-    , categoryFilter : String
+    , category : String
+    , packagesSelectedFilter : Maybe String
+    , appsSelectedFilter : Maybe String
     , showInstructions : Bool
     , error : Maybe String
     , navKey : Nav.Key
@@ -38,15 +43,19 @@ type alias Model =
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     ( { options = []
+      , packagesFilter = Dict.empty
+      , appsFilter = Dict.empty
       , selectedOption = Nothing
       , searchString = ""
-      , categoryFilter = "packages"
+      , category = "packages"
+      , packagesSelectedFilter = Nothing
+      , appsSelectedFilter = Nothing
       , showInstructions = False
       , error = Nothing
       , navKey = key
       , url = url
       }
-    , getOptions
+    , Cmd.batch [ getOptions, getConfig ]
     )
 
 
@@ -56,9 +65,11 @@ init _ url key =
 
 type Msg
     = GetOptions (Result Http.Error OptionsData)
+    | GetConfig (Result Http.Error Config)
     | SelectOption Option
     | Search String
-    | FilterCategory String
+    | SelectCategory String
+    | SelectFilter (Maybe String)
     | CopyCode String
     | UpdateRecipeValue String
     | CreateRecipe
@@ -83,6 +94,12 @@ update msg model =
         GetOptions (Err err) ->
             ( { model | error = Just (httpErrorToString err) }, Cmd.none )
 
+        GetConfig (Ok config) ->
+            ( { model | packagesFilter = config.packagesFilter, appsFilter = config.appsFilter }, Cmd.none )
+
+        GetConfig (Err err) ->
+            ( { model | error = Just (httpErrorToString err) }, Cmd.none )
+
         SelectOption option ->
             ( { model | selectedOption = Just option, showInstructions = False }
             , Nav.pushUrl model.navKey ("#option-" ++ option.name)
@@ -91,8 +108,15 @@ update msg model =
         Search string ->
             ( { model | searchString = string }, Cmd.none )
 
-        FilterCategory category ->
-            ( { model | categoryFilter = category, selectedOption = Nothing, showInstructions = False }, Cmd.none )
+        SelectCategory category ->
+            ( { model | category = category, selectedOption = Nothing, showInstructions = False }, Cmd.none )
+
+        SelectFilter filter ->
+            if model.category == "packages" then
+                ( { model | packagesSelectedFilter = filter }, Cmd.none )
+
+            else
+                ( { model | appsSelectedFilter = filter }, Cmd.none )
 
         CopyCode code ->
             ( model, copyToClipboard code )
@@ -144,7 +168,7 @@ selectFromUrl model =
                     Just option ->
                         { model
                             | selectedOption = Just option
-                            , categoryFilter = getOptionCategory option
+                            , category = getOptionCategory option
                             , showInstructions = False
                         }
 
@@ -174,14 +198,50 @@ view model =
                     , button [ class "btn btn-primary", onClick CreateRecipe ] [ text "Create recipe" ]
                     ]
                 , div [ class "d-flex btn-group align-items-center my-2" ]
-                    (categoryTabsHtml model.categoryFilter)
+                    (categoryTabsHtml model.category)
+
+                -- options filter buttons
+                , div []
+                    [ hr [] []
+                    , div [ class "d-flex flex-wrap gap-2 my-2" ]
+                        (optionsFilterHtml
+                            (if model.category == "packages" then
+                                model.packagesSelectedFilter
+
+                             else
+                                model.appsSelectedFilter
+                            )
+                            (if model.category == "packages" then
+                                model.packagesFilter
+
+                             else
+                                model.appsFilter
+                            )
+                        )
+                    ]
 
                 -- separator
                 , div [] [ hr [] [] ]
 
                 -- options list
                 , div [ class "list-group" ]
-                    (optionsHtml model.options model.selectedOption model.searchString model.categoryFilter)
+                    (optionsHtml model.options
+                        model.selectedOption
+                        model.searchString
+                        model.category
+                        (if model.category == "packages" then
+                            model.packagesSelectedFilter
+
+                         else
+                            model.appsSelectedFilter
+                        )
+                        (if model.category == "packages" then
+                            model.packagesFilter
+
+                         else
+                            model.appsFilter
+                        )
+                    )
 
                 -- error message
                 , case model.error of
@@ -195,7 +255,7 @@ view model =
             -- option details or instructions panel
             , div [ class "col-lg-6 bg-dark text-white py-3 my-3" ]
                 [ if model.showInstructions then
-                    instructionsHtml model.categoryFilter model.options
+                    instructionsHtml model.category model.options
 
                   else
                     case model.selectedOption of
@@ -218,6 +278,14 @@ getOptions =
     Http.get
         { url = "options.json"
         , expect = Http.expectJson GetOptions optionsDecoder
+        }
+
+
+getConfig : Cmd Msg
+getConfig =
+    Http.get
+        { url = "forge-config.json"
+        , expect = Http.expectJson GetConfig configDecoder
         }
 
 
@@ -326,11 +394,47 @@ categoryTabsHtml activeCategory =
                                 "btn-secondary"
                            )
                     )
-                , onClick (FilterCategory value)
+                , onClick (SelectCategory value)
                 ]
                 [ text label ]
     in
     List.map buttonItem categories
+
+
+optionsFilterHtml : Maybe String -> OptionsFilter -> List (Html Msg)
+optionsFilterHtml activeFilter filters =
+    let
+        allButton =
+            button
+                [ class
+                    ("btn btn-sm "
+                        ++ (if activeFilter == Nothing then
+                                "btn-warning"
+
+                            else
+                                "btn-outline-warning"
+                           )
+                    )
+                , onClick (SelectFilter Nothing)
+                ]
+                [ text "All" ]
+
+        filterButton ( optionName, _ ) =
+            button
+                [ class
+                    ("btn btn-sm "
+                        ++ (if activeFilter == Just optionName then
+                                "btn-warning"
+
+                            else
+                                "btn-outline-warning"
+                           )
+                    )
+                , onClick (SelectFilter (Just optionName))
+                ]
+                [ text optionName ]
+    in
+    allButton :: List.map filterButton (Dict.toList filters)
 
 
 optionActiveState : Option -> Maybe Option -> String
@@ -463,9 +567,27 @@ optionHtml option selectedOption =
         ]
 
 
-optionsHtml : List Option -> Maybe Option -> String -> String -> List (Html Msg)
-optionsHtml options selectedOption filter categoryFilter =
+optionsHtml : List Option -> Maybe Option -> String -> String -> Maybe String -> OptionsFilter -> List (Html Msg)
+optionsHtml options selectedOption filter category selectedFilter filters =
     let
+        -- Get list of option names for the selected filter
+        selectedFilterNames =
+            case selectedFilter of
+                Nothing ->
+                    Nothing
+
+                Just filterName ->
+                    Dict.get filterName filters
+
+        -- Check if option should be included based on selected filter
+        matchesFilter option =
+            case selectedFilterNames of
+                Nothing ->
+                    True
+
+                Just names ->
+                    List.member option.name names
+
         filteredOptions =
             options
                 |> List.filter
@@ -473,9 +595,10 @@ optionsHtml options selectedOption filter categoryFilter =
                         (String.contains (String.toLower filter) (String.toLower option.name)
                             || String.contains (String.toLower filter) (String.toLower option.description)
                         )
-                            && (getOptionCategory option == categoryFilter)
+                            && (getOptionCategory option == category)
                             && (option.name /= "packages")
                             && (option.name /= "apps")
+                            && matchesFilter option
                     )
 
         topLevelOptions =
@@ -511,7 +634,7 @@ optionsHtml options selectedOption filter categoryFilter =
                     )
                     Dict.empty
                 |> Dict.toList
-                |> List.sortBy (\( prefix, _ ) -> getGroupSortOrder categoryFilter prefix)
+                |> List.sortBy (\( prefix, _ ) -> getGroupSortOrder category prefix)
 
         renderGroup ( prefix, groupOptions ) =
             [ div [ class "fw-bold text-muted small px-3 pt-3 pb-1" ]
@@ -688,7 +811,7 @@ main : Program () Model Msg
 main =
     Browser.application
         { init = init
-        , view = \model -> { title = "Nix Forge - Recipe builder", body = [ view model ] }
+        , view = \model -> { title = "Nix Forge - recipe builder", body = [ view model ] }
         , update = update
         , subscriptions = \_ -> Sub.none
         , onUrlRequest = LinkClicked
