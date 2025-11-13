@@ -734,7 +734,7 @@
     "description": "This option has no description.",
     "example": {
       "_type": "literalExpression",
-      "text": "\"my-user/my-repo/v1.0.0\""
+      "text": "\"github:my-user/my-repo/v1.0.0\""
     },
     "loc": [
       "perSystem",

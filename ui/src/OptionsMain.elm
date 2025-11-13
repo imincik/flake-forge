@@ -688,7 +688,23 @@ optionDetailsHtml option =
             Nothing ->
                 text ""
         , hr [] []
-        , p [ class "mb-1 fw-bold" ] [ text "Value:" ]
+        , div [ class "d-flex justify-content-between align-items-center mb-1" ]
+            [ p [ class "mb-0 fw-bold" ] [ text "Value:" ]
+            , case option.example of
+                Just exampleVal ->
+                    if String.isEmpty exampleVal.text then
+                        text ""
+
+                    else
+                        button
+                            [ class "btn btn-sm btn-outline-warning"
+                            , onClick (UpdateRecipeValue exampleVal.text)
+                            ]
+                            [ text "Copy example" ]
+
+                Nothing ->
+                    text ""
+            ]
         , textarea
             [ class "form-control text-warning border-secondary"
             , style "background-color" "#2d2d2d"
