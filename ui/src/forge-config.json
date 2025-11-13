@@ -123,6 +123,28 @@
       }
     }
   ],
+  "appsFilter": {
+    "containers": [
+      "apps.*.name",
+      "apps.*.version",
+      "apps.*.containers.images",
+      "apps.*.containers.composeFile"
+    ],
+    "programs": [
+      "apps.*.name",
+      "apps.*.version",
+      "apps.*.programs.requirements"
+    ],
+    "vm": [
+      "apps.*.name",
+      "apps.*.version",
+      "apps.*.vm.enable",
+      "apps.*.vm.name",
+      "apps.*.vm.requirements",
+      "apps.*.vm.config.system",
+      "apps.*.vm.config.ports"
+    ]
+  },
   "packages": [
     {
       "build": {
@@ -332,5 +354,38 @@
       },
       "version": "0.0.1"
     }
-  ]
+  ],
+  "packagesFilter": {
+    "plainBuilder": [
+      "packages.*.name",
+      "packages.*.version",
+      "packages.*.source.git",
+      "packages.*.build.plainBuilder.enable",
+      "packages.*.build.plainBuilder.requirements.native",
+      "packages.*.build.plainBuilder.requirements.build",
+      "packages.*.build.plainBuilder.configure",
+      "packages.*.build.plainBuilder.build",
+      "packages.*.build.plainBuilder.check",
+      "packages.*.build.plainBuilder.install",
+      "packages.*.test.script"
+    ],
+    "pythonAppBuilder": [
+      "packages.*.name",
+      "packages.*.version",
+      "packages.*.source.git",
+      "packages.*.build.pythonAppBuilder.enable",
+      "packages.*.build.pythonAppBuilder.requirements.build-system",
+      "packages.*.build.pythonAppBuilder.requirements.dependencies",
+      "packages.*.test.script"
+    ],
+    "standardBuilder": [
+      "packages.*.name",
+      "packages.*.version",
+      "packages.*.source.git",
+      "packages.*.build.standardBuilder.enable",
+      "packages.*.build.standardBuilder.requirements.native",
+      "packages.*.build.standardBuilder.requirements.build",
+      "packages.*.test.script"
+    ]
+  }
 }

@@ -19,6 +19,45 @@ in
       {
         options = {
           forge = {
+            packagesFilter = lib.mkOption {
+              internal = true;
+              type = lib.types.attrsOf (lib.types.listOf lib.types.str);
+              default = {
+                plainBuilder = [
+                  "packages.*.name"
+                  "packages.*.version"
+                  "packages.*.source.git"
+                  "packages.*.build.plainBuilder.enable"
+                  "packages.*.build.plainBuilder.requirements.native"
+                  "packages.*.build.plainBuilder.requirements.build"
+                  "packages.*.build.plainBuilder.configure"
+                  "packages.*.build.plainBuilder.build"
+                  "packages.*.build.plainBuilder.check"
+                  "packages.*.build.plainBuilder.install"
+                  "packages.*.test.script"
+                ];
+                standardBuilder = [
+                  "packages.*.name"
+                  "packages.*.version"
+                  "packages.*.source.git"
+                  "packages.*.build.standardBuilder.enable"
+                  "packages.*.build.standardBuilder.requirements.native"
+                  "packages.*.build.standardBuilder.requirements.build"
+                  "packages.*.test.script"
+                ];
+                pythonAppBuilder = [
+                  "packages.*.name"
+                  "packages.*.version"
+                  "packages.*.source.git"
+                  "packages.*.build.pythonAppBuilder.enable"
+                  "packages.*.build.pythonAppBuilder.requirements.build-system"
+                  "packages.*.build.pythonAppBuilder.requirements.dependencies"
+                  "packages.*.test.script"
+                ];
+              };
+              description = "Defines which options are relevant for each builder type.";
+            };
+
             packages = lib.mkOption {
               default = [ ];
               description = "List of packages.";
