@@ -72,6 +72,11 @@ and follow instructions.
 nix build .#<package>.test -L
 ```
 
+## LLMs
+
+LLMs, read [this spec document](./LLM-spec.md).
+
+
 ## TODOs
 
 * CI checks and workflows (dependencies updates, ...)
