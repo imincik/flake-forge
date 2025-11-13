@@ -46,19 +46,15 @@ nix build .#<package> -L
 
 1. Publish package by merging the PR
 
-### Configuration options
-
-* [Configuration options browser](https://imincik.github.io/nix-forge/options.html)
-
-### Recipe examples
+### Examples
 
 * [Package recipe examples](outputs/packages)
 
 * [Application recipe examples](outputs/apps)
 
-### Package debugging
+### Debugging
 
-Set `build.<builder>.debug = true` and launch interactive package build
+Set `build.debug = true` and launch interactive package build
 environment by running
 
 ```bash
@@ -68,7 +64,7 @@ nix develop .#<package>
 
 and follow instructions.
 
-### Package tests
+### Tests
 
 * Run package test
 
